@@ -14,11 +14,11 @@ import nanobeepa from '../assets/nanobeepa.png'
 
 import TopBanner from "../components/TopBanner"
 
-const currencies = ['CAD', 'USD', 'AUD', 'EUR', 'GBP']
 const navigation = {
     categories: [
         {
-            name: 'Categories',
+            id: 'women',
+            name: 'Women',
             featured: [
                 {
                     name: 'New Arrivals',
@@ -32,55 +32,108 @@ const navigation = {
                     imageSrc: 'https://tailwindui.com/img/ecommerce-images/mega-menu-category-02.jpg',
                     imageAlt: 'Close up of Basic Tee fall bundle with off-white, ochre, olive, and black tees.',
                 },
+            ],
+            sections: [
                 {
-                    name: 'Accessories',
-                    href: '#',
-                    imageSrc: 'https://tailwindui.com/img/ecommerce-images/mega-menu-category-03.jpg',
-                    imageAlt: 'Model wearing minimalist watch with black wristband and white watch face.',
+                    id: 'clothing',
+                    name: 'Clothing',
+                    items: [
+                        { name: 'Tops', href: '#' },
+                        { name: 'Dresses', href: '#' },
+                        { name: 'Pants', href: '#' },
+                        { name: 'Denim', href: '#' },
+                        { name: 'Sweaters', href: '#' },
+                        { name: 'T-Shirts', href: '#' },
+                        { name: 'Jackets', href: '#' },
+                        { name: 'Activewear', href: '#' },
+                        { name: 'Browse All', href: '#' },
+                    ],
                 },
                 {
-                    name: 'Carry',
-                    href: '#',
-                    imageSrc: 'https://tailwindui.com/img/ecommerce-images/mega-menu-category-04.jpg',
-                    imageAlt: 'Model opening tan leather long wallet with credit card pockets and cash pouch.',
+                    id: 'accessories',
+                    name: 'Accessories',
+                    items: [
+                        { name: 'Watches', href: '#' },
+                        { name: 'Wallets', href: '#' },
+                        { name: 'Bags', href: '#' },
+                        { name: 'Sunglasses', href: '#' },
+                        { name: 'Hats', href: '#' },
+                        { name: 'Belts', href: '#' },
+                    ],
+                },
+                {
+                    id: 'brands',
+                    name: 'Brands',
+                    items: [
+                        { name: 'Full Nelson', href: '#' },
+                        { name: 'My Way', href: '#' },
+                        { name: 'Re-Arranged', href: '#' },
+                        { name: 'Counterfeit', href: '#' },
+                        { name: 'Significant Other', href: '#' },
+                    ],
                 },
             ],
         },
         {
-            name: 'Brands',
+            id: 'men',
+            name: 'Men',
             featured: [
                 {
                     name: 'New Arrivals',
                     href: '#',
-                    imageSrc: 'https://tailwindui.com/img/ecommerce-images/mega-menu-01-men-category-01.jpg',
-                    imageAlt: 'Hats and sweaters on wood shelves next to various colors of t-shirts on hangers.',
+                    imageSrc: 'https://tailwindui.com/img/ecommerce-images/product-page-04-detail-product-shot-01.jpg',
+                    imageAlt: 'Drawstring top with elastic loop closure and textured interior padding.',
                 },
                 {
-                    name: 'Basic Tees',
+                    name: 'Artwork Tees',
                     href: '#',
-                    imageSrc: 'https://tailwindui.com/img/ecommerce-images/mega-menu-01-men-category-02.jpg',
-                    imageAlt: 'Model wearing light heather gray t-shirt.',
-                },
-                {
-                    name: 'Accessories',
-                    href: '#',
-                    imageSrc: 'https://tailwindui.com/img/ecommerce-images/mega-menu-01-men-category-03.jpg',
+                    imageSrc: 'https://tailwindui.com/img/ecommerce-images/category-page-02-image-card-06.jpg',
                     imageAlt:
-                        'Grey 6-panel baseball hat with black brim, black mountain graphic on front, and light heather gray body.',
+                        'Three shirts in gray, white, and blue arranged on table with same line drawing of hands and shapes overlapping on front of shirt.',
+                },
+            ],
+            sections: [
+                {
+                    id: 'clothing',
+                    name: 'Clothing',
+                    items: [
+                        { name: 'Tops', href: '#' },
+                        { name: 'Pants', href: '#' },
+                        { name: 'Sweaters', href: '#' },
+                        { name: 'T-Shirts', href: '#' },
+                        { name: 'Jackets', href: '#' },
+                        { name: 'Activewear', href: '#' },
+                        { name: 'Browse All', href: '#' },
+                    ],
                 },
                 {
-                    name: 'Carry',
-                    href: '#',
-                    imageSrc: 'https://tailwindui.com/img/ecommerce-images/mega-menu-01-men-category-04.jpg',
-                    imageAlt: 'Model putting folded cash into slim card holder olive leather wallet with hand stitching.',
+                    id: 'accessories',
+                    name: 'Accessories',
+                    items: [
+                        { name: 'Watches', href: '#' },
+                        { name: 'Wallets', href: '#' },
+                        { name: 'Bags', href: '#' },
+                        { name: 'Sunglasses', href: '#' },
+                        { name: 'Hats', href: '#' },
+                        { name: 'Belts', href: '#' },
+                    ],
+                },
+                {
+                    id: 'brands',
+                    name: 'Brands',
+                    items: [
+                        { name: 'Re-Arranged', href: '#' },
+                        { name: 'Counterfeit', href: '#' },
+                        { name: 'Full Nelson', href: '#' },
+                        { name: 'My Way', href: '#' },
+                    ],
                 },
             ],
         },
     ],
     pages: [
-        { name: 'New', href: '#' },
-        { name: 'Promotions', href: '#' },
-        { name: 'Articles', href: '#' },
+        { name: 'Company', href: '#' },
+        { name: 'Stores', href: '#' },
     ],
 }
 
@@ -152,23 +205,43 @@ const Navbar = () => {
                                     </div>
                                     <Tab.Panels as={Fragment}>
                                         {navigation.categories.map((category) => (
-                                            <Tab.Panel key={category.name} className="space-y-12 px-4 py-6">
-                                                <div className="grid grid-cols-2 gap-x-4 gap-y-10">
+                                            <Tab.Panel key={category.name} className="space-y-10 px-4 pb-8 pt-10">
+                                                <div className="grid grid-cols-2 gap-x-4">
                                                     {category.featured.map((item) => (
-                                                        <div key={item.name} className="group relative">
-                                                            <div className="aspect-h-1 aspect-w-1 overflow-hidden rounded-md bg-gray-100 group-hover:opacity-75">
+                                                        <div key={item.name} className="group relative text-sm">
+                                                            <div className="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg bg-gray-100 group-hover:opacity-75">
                                                                 <img src={item.imageSrc} alt={item.imageAlt} className="object-cover object-center" />
                                                             </div>
-                                                            <a href={item.href} className="mt-6 block text-sm font-medium text-gray-900">
+                                                            <a href={item.href} className="mt-6 block font-medium text-gray-900">
                                                                 <span className="absolute inset-0 z-10" aria-hidden="true" />
                                                                 {item.name}
                                                             </a>
-                                                            <p aria-hidden="true" className="mt-1 text-sm text-gray-500">
+                                                            <p aria-hidden="true" className="mt-1">
                                                                 Shop now
                                                             </p>
                                                         </div>
                                                     ))}
                                                 </div>
+                                                {category.sections.map((section) => (
+                                                    <div key={section.name}>
+                                                        <p id={`${category.id}-${section.id}-heading-mobile`} className="font-medium text-gray-900">
+                                                            {section.name}
+                                                        </p>
+                                                        <ul
+                                                            role="list"
+                                                            aria-labelledby={`${category.id}-${section.id}-heading-mobile`}
+                                                            className="mt-6 flex flex-col space-y-6"
+                                                        >
+                                                            {section.items.map((item) => (
+                                                                <li key={item.name} className="flow-root">
+                                                                    <a href={item.href} className="-m-2 block p-2 text-gray-500">
+                                                                        {item.name}
+                                                                    </a>
+                                                                </li>
+                                                            ))}
+                                                        </ul>
+                                                    </div>
+                                                ))}
                                             </Tab.Panel>
                                         ))}
                                     </Tab.Panels>
@@ -187,45 +260,33 @@ const Navbar = () => {
                                 <div className="space-y-6 border-t border-gray-200 px-4 py-6">
                                     <div className="flow-root">
                                         <a href="#" className="-m-2 block p-2 font-medium text-gray-900">
-                                            Create an account
+                                            Sign in
                                         </a>
                                     </div>
                                     <div className="flow-root">
                                         <a href="#" className="-m-2 block p-2 font-medium text-gray-900">
-                                            Sign in
+                                            Create account
                                         </a>
                                     </div>
                                 </div>
 
-                                <div className="space-y-6 border-t border-gray-200 px-4 py-6">
-                                    {/* Currency selector */}
-                                    <form>
-                                        <div className="inline-block">
-                                            <label htmlFor="mobile-currency" className="sr-only">
-                                                Currency
-                                            </label>
-                                            <div className="group relative -ml-2 rounded-md border-transparent focus-within:ring-2 focus-within:ring-white">
-                                                <select
-                                                    id="mobile-currency"
-                                                    name="currency"
-                                                    className="flex items-center rounded-md border-transparent bg-none py-0.5 pl-2 pr-5 text-sm font-medium text-gray-700 focus:border-transparent focus:outline-none focus:ring-0 group-hover:text-gray-800"
-                                                >
-                                                    {currencies.map((currency) => (
-                                                        <option key={currency}>{currency}</option>
-                                                    ))}
-                                                </select>
-                                                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center">
-                                                    <ChevronDownIcon className="h-5 w-5 text-gray-500" aria-hidden="true" />
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </form>
+                                <div className="border-t border-gray-200 px-4 py-6">
+                                    <a href="#" className="-m-2 flex items-center p-2">
+                                        <img
+                                            src="https://tailwindui.com/img/flags/flag-canada.svg"
+                                            alt=""
+                                            className="block h-auto w-5 flex-shrink-0"
+                                        />
+                                        <span className="ml-3 block text-base font-medium text-gray-900">CAD</span>
+                                        <span className="sr-only">, change currency</span>
+                                    </a>
                                 </div>
                             </Dialog.Panel>
                         </Transition.Child>
                     </div>
                 </Dialog>
             </Transition.Root>
+            {/* End mobile menu */}
 
             <header className="w-full z-40 top-0 fixed">
 
@@ -250,6 +311,7 @@ const Navbar = () => {
                                     <h1 className='text-xl pt-2 ml-3'>NanoBeepa</h1>
                                 </div>
 
+                                {/* Wide search field */}
                                 <div className="hidden h-full lg:flex mr-20">
                                     <div className="flex items-center py-4 md:mx-auto md:max-w-3xl lg:mx-0 lg:max-w-sm xl:px-0">
                                         <a href="#" className="hidden lg:block lg:mr-4 p-2 rounded-full bg-gray-100 text-gray-600 hover:text-gray-800">
@@ -266,7 +328,9 @@ const Navbar = () => {
                                             <input
                                                 id="search"
                                                 name="search"
-                                                className="block w-[400px] rounded-full border-0 bg-gray-100 py-1.5 pl-10 pr-3 text-gray-900 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-gray-400 focus:bg-white sm:text-sm sm:leading-6"
+                                                className="block w-[400px] rounded-full border-0 bg-gray-100 py-1.5 pl-10 pr-3 text-gray-900
+                                                 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-gray-400 focus:bg-white
+                                                  sm:text-sm sm:leading-6 hover:bg-white hover:ring-1 hover:ring-inset hover:ring-gray-400"
                                                 placeholder="Search anything"
                                                 type="search"
                                             />
@@ -348,7 +412,7 @@ const Navbar = () => {
                         </div>
 
                         {/* Second menu */}
-                        <div className="hidden h-full lg:flex mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                        {/* <div className="hidden h-full lg:flex mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                             <div className="flex h-full justify-center space-x-8">
                                 {navigation.categories.map((category) => (
                                     <div key={category.name} className="relative flex">
@@ -373,7 +437,106 @@ const Navbar = () => {
                                     </a>
                                 ))}
                             </div>
-                        </div>
+                        </div> */}
+
+                        {/* Flyout menus */}
+                        <Popover.Group className="hidden h-full lg:flex mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                            <div className="flex h-full space-x-8">
+                                {navigation.categories.map((category) => (
+                                    <Popover key={category.name} className="flex">
+                                        {({ open }) => (
+                                            <>
+                                                <div className="relative flex">
+                                                    <Popover.Button
+                                                        className={classNames(
+                                                            open ? 'border-b-indigo-600 text-indigo-600' : 'border-b-transparent text-gray-700 hover:text-gray-800',
+                                                            'relative z-10 py-3 flex items-center border-b-2  text-sm font-medium transition-colors duration-200 ease-out'
+                                                        )}
+                                                    >
+                                                        {category.name}
+                                                    </Popover.Button>
+                                                </div>
+
+                                                <Transition
+                                                    as={Fragment}
+                                                    enter="transition ease-out duration-200"
+                                                    enterFrom="opacity-0"
+                                                    enterTo="opacity-100"
+                                                    leave="transition ease-in duration-150"
+                                                    leaveFrom="opacity-100"
+                                                    leaveTo="opacity-0"
+                                                >
+                                                    <Popover.Panel className="absolute inset-x-0 top-full text-sm text-gray-500">
+                                                        {/* Presentational element used to render the bottom shadow, if we put the shadow on the actual panel it pokes out the top, so we use this shorter element to hide the top of the shadow */}
+                                                        <div className="absolute inset-0 top-1/2 bg-white shadow" aria-hidden="true" />
+
+                                                        <div className="relative bg-white">
+                                                            <div className="mx-auto max-w-7xl px-8">
+                                                                <div className="grid grid-cols-2 gap-x-8 gap-y-10 py-16">
+                                                                    <div className="col-start-2 grid grid-cols-2 gap-x-8">
+                                                                        {category.featured.map((item) => (
+                                                                            <div key={item.name} className="group relative text-base sm:text-sm">
+                                                                                <div className="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg bg-gray-100 group-hover:opacity-75">
+                                                                                    <img
+                                                                                        src={item.imageSrc}
+                                                                                        alt={item.imageAlt}
+                                                                                        className="object-cover object-center"
+                                                                                    />
+                                                                                </div>
+                                                                                <a href={item.href} className="mt-6 block font-medium text-gray-900">
+                                                                                    <span className="absolute inset-0 z-10" aria-hidden="true" />
+                                                                                    {item.name}
+                                                                                </a>
+                                                                                <p aria-hidden="true" className="mt-1">
+                                                                                    Shop now
+                                                                                </p>
+                                                                            </div>
+                                                                        ))}
+                                                                    </div>
+                                                                    <div className="row-start-1 grid grid-cols-3 gap-x-8 gap-y-10 text-sm">
+                                                                        {category.sections.map((section) => (
+                                                                            <div key={section.name}>
+                                                                                <p id={`${section.name}-heading`} className="font-medium text-gray-900">
+                                                                                    {section.name}
+                                                                                </p>
+                                                                                <ul
+                                                                                    role="list"
+                                                                                    aria-labelledby={`${section.name}-heading`}
+                                                                                    className="mt-6 space-y-6 sm:mt-4 sm:space-y-4"
+                                                                                >
+                                                                                    {section.items.map((item) => (
+                                                                                        <li key={item.name} className="flex">
+                                                                                            <a href={item.href} className="hover:text-gray-800">
+                                                                                                {item.name}
+                                                                                            </a>
+                                                                                        </li>
+                                                                                    ))}
+                                                                                </ul>
+                                                                            </div>
+                                                                        ))}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </Popover.Panel>
+                                                </Transition>
+                                            </>
+                                        )}
+                                    </Popover>
+                                ))}
+
+                                {navigation.pages.map((page) => (
+                                    <a
+                                        key={page.name}
+                                        href={page.href}
+                                        className="flex items-center text-sm font-medium text-gray-700 hover:text-gray-800"
+                                    >
+                                        {page.name}
+                                    </a>
+                                ))}
+                            </div>
+                        </Popover.Group>
+                        {/* End flyout menu */}
                     </div>
                 </nav>
             </header>
