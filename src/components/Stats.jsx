@@ -1,4 +1,4 @@
-export const Stats = () => {
+const Stats = () => {
     const stats = [
         { id: 1, name: 'Best quality products', value: '1,000+', more: 'See all product', url: '#' },
         { id: 2, name: 'Top brands', value: '50+', more: 'See all brand', url: '#' },
@@ -33,3 +33,5 @@ export const Stats = () => {
         </div>
     )
 }
+
+export default Stats

@@ -1,4 +1,4 @@
-export const TopPromo = () => {
+const TopPromo = () => {
     return (
         <div className="bg-white lg:py-16 py-16">
             <div className="mx-auto max-w-7xl px-4 lg:px-8">
@@ -30,3 +30,5 @@ export const TopPromo = () => {
         </div>
     )
 }
+
+export default TopPromo
