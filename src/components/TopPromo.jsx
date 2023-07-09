@@ -26,6 +26,11 @@ const TopPromo = () => {
                         />
                     </div>
                 </div>
+                <div className="flex justify-center mt-8 w-full">
+                    <a href="#" className="bg-black py-2 px-5 text-sm text-white rounded-full">
+                        See all promo
+                    </a>
+                </div>
             </div>
         </div>
     )

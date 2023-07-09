@@ -86,8 +86,8 @@ const Navbar = ({ open, setOpen, classNames, navigation, socials }) => {
 
                                     {/* Search */}
                                     <a href="#" className="ml-2 p-2 text-gray-400 hover:text-gray-500">
-                                        <span className="sr-only">Search</span>
-                                        <MagnifyingGlassIcon className="h-6 w-6" aria-hidden="true" />
+                                        <span className="sr-only">Help</span>
+                                        <QuestionMarkCircleIcon className="h-6 w-6" aria-hidden="true" />
                                     </a>
                                 </div>
 
@@ -104,7 +104,7 @@ const Navbar = ({ open, setOpen, classNames, navigation, socials }) => {
                                 <div className="flex flex-1 items-center justify-end">
                                     <div className="flex items-center lg:ml-8">
                                         {/* Help */}
-                                        <a href="#" className="p-2 flex text-gray-700 hover:text-yellow-600">
+                                        <a href="#" className="hidden p-2 lg:flex text-gray-700 hover:text-yellow-600">
                                             <span className="sr-only">Help</span>
                                             <QuestionMarkCircleIcon className="h-5 w-5" aria-hidden="true" />
                                             <span className="text-sm font-medium ml-2"> Help </span>
@@ -118,17 +118,17 @@ const Navbar = ({ open, setOpen, classNames, navigation, socials }) => {
                                         </a>
 
                                         {/* Login */}
-                                        <a href="#" className="hidden lg:flex lg:ml-6 text-gray-700 hover:text-yellow-600">
+                                        <a href="#" className="flex lg:ml-6 text-gray-400 lg:text-gray-700 hover:text-yellow-600">
                                             <span className="sr-only">Login</span>
-                                            <UserIcon className="h-5 w-5" aria-hidden="true" />
-                                            <span className="text-sm font-medium ml-2"> Login </span>
+                                            <UserIcon className="h-6 w-6 lg:h-5 lg:w-5" aria-hidden="true" />
+                                            <span className="hidden lg:block text-sm font-medium ml-2"> Login </span>
                                         </a>
 
                                         {/* Cart */}
                                         <div className="ml-4 flow-root lg:ml-8">
                                             <a href="#" className="group -m-2 flex items-center p-2">
                                                 <ShoppingBagIcon
-                                                    className="h-6 w-6 flex-shrink-0 text-gray-900 group-hover:text-yellow-600"
+                                                    className="h-6 w-6 lg:h-5 lg:w-5 flex-shrink-0 text-gray-900 group-hover:text-yellow-600"
                                                     aria-hidden="true"
                                                 />
                                                 <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-yellow-600">0</span>
@@ -237,7 +237,7 @@ const Navbar = ({ open, setOpen, classNames, navigation, socials }) => {
                                         </a>
                                     ))}
                                 </div>
-                                <div className="flex space-x-6 ml-4">
+                                <div className="flex space-x-6 ml-6">
                                     <div className="my-2.5 ml-6 mr-8 border-l"></div>
                                     {socials.map((social) => (
                                         <a
@@ -253,6 +253,33 @@ const Navbar = ({ open, setOpen, classNames, navigation, socials }) => {
                             </div>
                         </Popover.Group>
                         {/* End flyout menu */}
+
+                        {/* Search Mobile Version */}
+                        <div className="d-flex h-full border-t lg:border-t-0 w-full lg:hidden px-4 py-3">
+                            <div className="flex items-center">
+                                <a href="#" className="p-2 mr-3 rounded-full bg-gray-100 text-gray-600 hover:text-gray-800">
+                                    <span className="sr-only">Speech</span>
+                                    <MicrophoneIcon className="h-5 w-5" aria-hidden="true" />
+                                </a>
+                                <label htmlFor="search" className="sr-only">
+                                    Search
+                                </label>
+                                <div className="relative w-full">
+                                    <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                                        <MagnifyingGlassIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
+                                    </div>
+                                    <input
+                                        id="search"
+                                        name="search"
+                                        className="w-full rounded-full border-0 bg-gray-100 py-1.5 pl-10 pr-3 text-gray-900
+                                                 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-gray-400 focus:bg-white
+                                                  sm:text-sm sm:leading-6 hover:bg-white hover:ring-1 hover:ring-inset hover:ring-gray-400"
+                                        placeholder="Search anything"
+                                        type="search"
+                                    />
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </nav>
             </header>

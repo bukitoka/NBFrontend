@@ -7,7 +7,7 @@ const Carousel = () => {
     register();
 
     return (
-        <div className="bg-gray-100 pt-[86px] border-b border-b-gray-200">
+        <div className="bg-gray-100 pt-[130px] lg:pt-[86px] border-b border-b-gray-200">
             <div className="mx-auto max-w-7xl px-4 pt-16 pb-8 sm:px-6 sm:pt-24 lg:px-8">
                 <swiper-container
                     rewind="true"
@@ -43,6 +43,7 @@ const Carousel = () => {
                     <ChevronRightIcon aria-hidden="true" className="swiper-button-next h-10 w-10 text-lg bg-white rounded-full p-2 shadow-lg text-gray-600 hover:text-black" />
 
                 </swiper-container>
+
             </div>
         </div>
     )
