@@ -8,7 +8,7 @@ const TopPromo = () => {
                             Special promo for you!
                         </h2>
                         <p className="mt-4 text-lg leading-8 text-gray-600">
-                            Shopping becomes more beautiful with exclusive promos. Happy shopping!
+                            Beauty shopping with exclusive promos everyday. Happy shopping!
                         </p>
                     </div>
                     <div className="mt-12 relative flex flex-nowrap flex-row space-x-2 lg:space-x-8 overflow-auto rounded-lg">
@@ -27,8 +27,8 @@ const TopPromo = () => {
                     </div>
                 </div>
                 <div className="flex justify-center mt-8 w-full">
-                    <a href="#" className="bg-black py-2 px-5 text-sm text-white rounded-full">
-                        See all promo
+                    <a href="#" className="bg-black hover:bg-yellow-600 py-2 px-8 text-sm text-white rounded-full">
+                        See all promo  &nbsp; <span aria-hidden="true">&rarr;</span>
                     </a>
                 </div>
             </div>
