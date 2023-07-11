@@ -11,24 +11,30 @@ const TopPromo = () => {
                             Beauty shopping with exclusive promos everyday. Happy shopping!
                         </p>
                     </div>
-                    <div className="mt-12 relative flex flex-nowrap flex-row space-x-2 lg:space-x-8 overflow-auto rounded-lg">
-                        <img src="https://images.unsplash.com/photo-1607082349566-187342175e2f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80"
-                            alt=""
-                            className="flex-1 flex-shrink-0 h-56 object-cover rounded-lg"
-                        />
-                        <img src="https://images.unsplash.com/photo-1607082349566-187342175e2f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80"
-                            alt=""
-                            className="flex-1 flex-shrink-0 h-56 object-cover rounded-lg"
-                        />
-                        <img src="https://images.unsplash.com/photo-1607082349566-187342175e2f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80"
-                            alt=""
-                            className="flex-1 flex-shrink-0 h-56 object-cover rounded-lg"
-                        />
+                    <div className="mt-12 flex flex-row space-x-4 lg:grid lg:grid-cols-3 lg:gap-x-8 lg:space-x-0 overflow-x-auto rounded-lg">
+                        <a href="#" className="flex flex-shrink-0">
+                            <img src="https://images.unsplash.com/photo-1607082349566-187342175e2f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80"
+                                alt=""
+                                className="h-60 w-80 lg:w-96 object-cover rounded-lg"
+                            />
+                        </a>
+                        <a href="#" className="flex flex-shrink-0">
+                            <img src="https://images.unsplash.com/photo-1607082349566-187342175e2f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80"
+                                alt=""
+                                className="h-60 w-80 lg:w-96 object-cover rounded-lg"
+                            />
+                        </a>
+                        <a href="#" className="flex flex-shrink-0">
+                            <img src="https://images.unsplash.com/photo-1607082349566-187342175e2f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80"
+                                alt=""
+                                className="h-60 w-80 lg:w-96 object-cover rounded-lg"
+                            />
+                        </a>
                     </div>
                 </div>
                 <div className="flex justify-center mt-8 w-full">
-                    <a href="#" className="bg-black hover:bg-yellow-600 py-2 px-8 text-sm text-white rounded-full">
-                        See all promo  &nbsp; <span aria-hidden="true">&rarr;</span>
+                    <a href="#" className="bg-black hover:bg-yellow-600 py-2 px-6 text-sm text-white rounded-full">
+                        Browse all promo  &nbsp; <span aria-hidden="true">&rarr;</span>
                     </a>
                 </div>
             </div>
