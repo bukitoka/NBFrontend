@@ -151,8 +151,8 @@ const Navbar = ({ open, setOpen, classNames, navigation, socials }) => {
                                                     <div className="relative flex">
                                                         <Popover.Button
                                                             className={classNames(
-                                                                open ? 'border-b-indigo-600 text-indigo-600' : 'border-b-transparent text-gray-700 hover:text-yellow-600',
-                                                                'relative z-10 py-3 flex items-center border-b-2  text-sm font-medium transition-colors duration-200 ease-out'
+                                                                open ? 'border-b-yellow-600 text-yellow-600' : 'border-b-transparent text-gray-700 hover:text-yellow-600',
+                                                                'relative z-10 py-3 flex items-center border-b-2 focus:outline-0 text-sm font-medium transition-colors duration-200 ease-out'
                                                             )}
                                                         >
                                                             {category.name}
