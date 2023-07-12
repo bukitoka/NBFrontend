@@ -1,3 +1,5 @@
+import { ChevronRightIcon } from "@heroicons/react/20/solid"
+
 const TopPromo = () => {
     return (
         <div className="bg-white lg:py-16 py-16">
@@ -33,8 +35,8 @@ const TopPromo = () => {
                     </div>
                 </div>
                 <div className="flex justify-center mt-8 w-full">
-                    <a href="#" className="bg-black hover:bg-yellow-600 py-2 px-6 text-sm text-white rounded-full">
-                        Browse all promo  &nbsp; <span aria-hidden="true">&rarr;</span>
+                    <a href="#" className="bg-black hover:bg-yellow-600 flex py-2 px-6 text-sm text-white rounded-full">
+                        Browse all promo  <ChevronRightIcon className="w-5 h-5 ml-3" />
                     </a>
                 </div>
             </div>
