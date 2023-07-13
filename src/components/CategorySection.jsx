@@ -11,31 +11,24 @@ const CategorySection = ({ categories }) => {
                 </a>
             </div>
 
-            <div className="mt-4 flow-root">
-                <div className="-my-2">
-                    <div className="mx-auto max-w-7xl px-4 lg:px-8">
-                        <div className="mx-auto max-w-2xl lg:max-w-none">
-                            <div className="relative box-content h-80 overflow-x-auto py-2 xl:overflow-visible">
-                                <div className="absolute flex space-x-8 xl:relative xl:grid xl:grid-cols-5 xl:gap-x-8 xl:space-x-0 xl:px-0 rounded-lg">
-                                    {categories.map((category) => (
-                                        <a
-                                            key={category.name}
-                                            href={category.href}
-                                            className="relative flex h-80 w-56 flex-col overflow-hidden rounded-lg p-6 hover:opacity-75 xl:w-auto"
-                                        >
-                                            <span aria-hidden="true" className="absolute inset-0">
-                                                <img src={category.imageSrc} alt="" className="h-full w-full object-cover object-center" />
-                                            </span>
-                                            <span
-                                                aria-hidden="true"
-                                                className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-gray-800 opacity-50"
-                                            />
-                                            <span className="relative mt-auto text-center text-xl font-bold text-white">{category.name}</span>
-                                        </a>
-                                    ))}
-                                </div>
-                            </div>
-                        </div>
+            <div className="mx-auto max-w-7xl px-4 lg:px-0">
+                <div className="mx-auto max-w-2xl lg:max-w-none">
+                    <div className="mt-12 flex flex-row space-x-4 lg:grid lg:grid-cols-5 lg:gap-x-8 lg:space-x-0 overflow-x-auto rounded-lg">
+                        {categories.map((category) => (
+                            <a
+                                key={category.name}
+                                href={category.href}
+                                className="flex flex-shrink-0"
+                            >
+                                <img src={category.imageSrc} alt="" className="h-80 w-full object-cover rounded-lg" />
+                                <span
+                                    aria-hidden="true"
+                                    className="relative z-20 h-2/3 bg-gradient-to-t from-gray-800 opacity-10"
+                                />
+                                <span className="relative mt-auto text-center text-xl font-bold text-black">{category.name}</span>
+
+                            </a>
+                        ))}
                     </div>
                 </div>
             </div>
