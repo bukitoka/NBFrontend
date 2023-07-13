@@ -170,24 +170,28 @@ const categories = [
     {
         name: 'New Arrivals',
         href: '#',
-        imageSrc: 'https://tailwindui.com/img/ecommerce-images/home-page-01-category-01.jpg',
+        imageSrc: 'https://images.unsplash.com/photo-1485178575877-1a13bf489dfe?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1701&q=80',
     },
     {
-        name: 'Productivity',
+        name: 'Skin Care',
         href: '#',
-        imageSrc: 'https://tailwindui.com/img/ecommerce-images/home-page-01-category-02.jpg',
+        imageSrc: 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8c2tpbiUyMGNhcmV8ZW58MHwwfDB8fHww&auto=format&fit=crop&w=800&q=60'
     },
     {
-        name: 'Workspace',
+        name: 'Make Up',
         href: '#',
-        imageSrc: 'https://tailwindui.com/img/ecommerce-images/home-page-01-category-04.jpg',
+        imageSrc: 'https://images.unsplash.com/photo-1614006659838-d4ca51cbd117?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80',
     },
     {
-        name: 'Accessories',
+        name: 'Body Care',
         href: '#',
-        imageSrc: 'https://tailwindui.com/img/ecommerce-images/home-page-01-category-05.jpg',
+        imageSrc: 'https://plus.unsplash.com/premium_photo-1663040561508-33c57a05059c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80',
     },
-    { name: 'Sale', href: '#', imageSrc: 'https://tailwindui.com/img/ecommerce-images/home-page-01-category-03.jpg' },
+    {
+        name: 'Hair Care',
+        href: '#',
+        imageSrc: 'https://images.unsplash.com/photo-1556229165-8aa0ceaa93a7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1787&q=80',
+    },
 ]
 
 const collections = [
