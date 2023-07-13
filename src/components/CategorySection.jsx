@@ -15,7 +15,7 @@ const CategorySection = ({ categories }) => {
 
             <div className="mx-auto max-w-7xl px-4 lg:px-0">
                 <div className="mx-auto max-w-2xl lg:max-w-none w-full">
-                    <div className="mt-12 flex flex-row space-x-4 lg:grid lg:grid-cols-5 lg:gap-x-8 lg:space-x-0 overflow-x-auto rounded-lg">
+                    <div className="mt-8 flex flex-row space-x-4 lg:grid lg:grid-cols-5 lg:gap-x-8 lg:space-x-0 overflow-x-auto rounded-lg">
                         {categories.map((category) => (
                             <div
                                 key={category.name}
@@ -51,7 +51,7 @@ const CategorySection = ({ categories }) => {
 
             <div className="flex lg:hidden justify-center mt-8 w-full">
                 <a href="#" className="bg-black hover:bg-yellow-600 flex py-2 px-6 text-sm text-white rounded-full">
-                    Browse all promo  <ChevronRightIcon className="w-5 h-5 ml-3" />
+                    Browse all categories  <ChevronRightIcon className="w-5 h-5 ml-3" />
                 </a>
             </div>
         </section>

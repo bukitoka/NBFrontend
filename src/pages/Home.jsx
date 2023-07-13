@@ -14,6 +14,8 @@ import Stats from "../components/Stats"
 import TopPromo from "../components/TopPromo"
 import MobileMenu from "../components/MobileMenu"
 import CategorySection from '../components/CategorySection'
+import BrandSection from '../components/BrandSection'
+import CollectionSection from '../components/CollectionSection'
 
 const navigation = {
     categories: [
@@ -194,6 +196,34 @@ const categories = [
     },
 ]
 
+const brands = [
+    {
+        name: 'Loreal',
+        href: '#',
+        imageSrc: 'https://images.unsplash.com/photo-1602037299890-c593f4c81d47?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80',
+    },
+    {
+        name: 'Maybelline',
+        href: '#',
+        imageSrc: 'https://images.unsplash.com/photo-1627384113817-b0180ad643c9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80',
+    },
+    {
+        name: 'Revlon',
+        href: '#',
+        imageSrc: 'https://images.unsplash.com/photo-1599022484226-2cd40d53a027?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1755&q=80',
+    },
+    {
+        name: 'NYX',
+        href: '#',
+        imageSrc: 'https://images.unsplash.com/photo-1605204376600-72ed73f1f9ec?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1771&q=80',
+    },
+    {
+        name: 'Wet n Wild',
+        href: '#',
+        imageSrc: 'https://images.unsplash.com/photo-1588514899099-e2df6951dde6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1769&q=80',
+    },
+]
+
 const collections = [
     {
         name: 'Handcrafted Collection',
@@ -269,72 +299,11 @@ const Home = () => {
                 {/* Category section */}
                 <CategorySection categories={categories} />
 
-                {/* Featured section */}
-                <section
-                    aria-labelledby="social-impact-heading"
-                    className="mx-auto max-w-7xl px-4 pt-24 sm:px-6 sm:pt-32 lg:px-8"
-                >
-                    <div className="relative overflow-hidden rounded-lg">
-                        <div className="absolute inset-0">
-                            <img
-                                src="https://tailwindui.com/img/ecommerce-images/home-page-01-feature-section-01.jpg"
-                                alt=""
-                                className="h-full w-full object-cover object-center"
-                            />
-                        </div>
-                        <div className="relative bg-gray-900 bg-opacity-75 px-6 py-32 sm:px-12 sm:py-40 lg:px-16">
-                            <div className="relative mx-auto flex max-w-3xl flex-col items-center text-center">
-                                <h2 id="social-impact-heading" className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
-                                    <span className="block sm:inline">Level up</span>
-                                    <span className="block sm:inline">your desk</span>
-                                </h2>
-                                <p className="mt-3 text-xl text-white">
-                                    Make your desk beautiful and organized. Post a picture to social media and watch it get more likes
-                                    than life-changing announcements. Reflect on the shallow nature of existence. At least you have a
-                                    really nice desk setup.
-                                </p>
-                                <a
-                                    href="#"
-                                    className="mt-8 block w-full rounded-md border border-transparent bg-white px-8 py-3 text-base font-medium text-gray-900 hover:bg-gray-100 sm:w-auto"
-                                >
-                                    Shop Workspace
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </section>
+                {/* Brand section */}
+                <BrandSection brands={brands} />
 
                 {/* Collection section */}
-                <section
-                    aria-labelledby="collection-heading"
-                    className="mx-auto max-w-xl px-4 pt-24 sm:px-6 sm:pt-32 lg:max-w-7xl lg:px-8"
-                >
-                    <h2 id="collection-heading" className="text-2xl font-bold tracking-tight text-gray-900">
-                        Shop by Collection
-                    </h2>
-                    <p className="mt-4 text-base text-gray-500">
-                        Each season, we collaborate with world-class designers to create a collection inspired by the natural world.
-                    </p>
-
-                    <div className="mt-10 space-y-12 lg:grid lg:grid-cols-3 lg:gap-x-8 lg:space-y-0">
-                        {collections.map((collection) => (
-                            <a key={collection.name} href={collection.href} className="group block">
-                                <div
-                                    aria-hidden="true"
-                                    className="aspect-h-2 aspect-w-3 overflow-hidden rounded-lg lg:aspect-h-6 lg:aspect-w-5 group-hover:opacity-75"
-                                >
-                                    <img
-                                        src={collection.imageSrc}
-                                        alt={collection.imageAlt}
-                                        className="h-full w-full object-cover object-center"
-                                    />
-                                </div>
-                                <h3 className="mt-4 text-base font-semibold text-gray-900">{collection.name}</h3>
-                                <p className="mt-2 text-sm text-gray-500">{collection.description}</p>
-                            </a>
-                        ))}
-                    </div>
-                </section>
+                <CollectionSection />
 
                 {/* Featured section */}
                 <section aria-labelledby="comfort-heading" className="mx-auto max-w-7xl px-4 py-24 sm:px-6 sm:py-32 lg:px-8">

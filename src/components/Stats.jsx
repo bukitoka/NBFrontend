@@ -6,7 +6,7 @@ const Stats = () => {
         { id: 4, name: 'Money back guarantee', value: '100%', more: 'Learn more', url: '#' },
     ]
     return (
-        <div className="bg-white lg:py-16 py-16">
+        <div className="bg-white pb-24">
             <div className="mx-auto max-w-7xl px-6 lg:px-8">
                 <div className="mx-auto max-w-2xl lg:max-w-none">
                     <div className="text-center">
