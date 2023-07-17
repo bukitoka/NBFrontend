@@ -14,22 +14,22 @@ const TopPromo = () => {
                         </p>
                     </div>
                     <div className="mt-12 flex flex-row space-x-4 lg:grid lg:grid-cols-3 lg:gap-x-8 lg:space-x-0 overflow-x-auto rounded-lg">
-                        <a href="#" className="flex flex-shrink-0">
+                        <a href="#" className="flex flex-shrink-0 overflow-hidden rounded-lg">
                             <img src="https://images.unsplash.com/photo-1607082349566-187342175e2f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80"
                                 alt=""
-                                className="h-60 w-80 lg:w-96 object-cover rounded-lg"
+                                className="h-60 w-80 lg:w-96 object-cover rounded-lg hover:scale-110 ease-in duration-150"
                             />
                         </a>
-                        <a href="#" className="flex flex-shrink-0">
+                        <a href="#" className="flex flex-shrink-0 overflow-hidden rounded-lg">
                             <img src="https://images.unsplash.com/photo-1607082349566-187342175e2f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80"
                                 alt=""
-                                className="h-60 w-80 lg:w-96 object-cover rounded-lg"
+                                className="h-60 w-80 lg:w-96 object-cover rounded-lg hover:scale-110 ease-in duration-150"
                             />
                         </a>
-                        <a href="#" className="flex flex-shrink-0">
+                        <a href="#" className="flex flex-shrink-0 overflow-hidden rounded-lg">
                             <img src="https://images.unsplash.com/photo-1607082349566-187342175e2f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80"
                                 alt=""
-                                className="h-60 w-80 lg:w-96 object-cover rounded-lg"
+                                className="h-60 w-80 lg:w-96 object-cover rounded-lg hover:scale-110 ease-in duration-150"
                             />
                         </a>
                     </div>
