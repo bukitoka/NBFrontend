@@ -35,8 +35,8 @@ const TopPromo = () => {
                     </div>
                 </div>
                 <div className="flex justify-center mt-8 w-full">
-                    <a href="#" className="bg-black hover:bg-yellow-600 flex py-2 px-6 text-sm text-white rounded-full">
-                        Browse all promo  <ChevronRightIcon className="w-5 h-5 ml-3" />
+                    <a href="#" className="bg-black group hover:bg-yellow-600 flex py-2 px-6 text-sm text-white rounded-full">
+                        Browse all promo  <ChevronRightIcon className="w-5 h-5 ml-2 group-hover:ml-4 ease-linear duration-150" />
                     </a>
                 </div>
             </div>
