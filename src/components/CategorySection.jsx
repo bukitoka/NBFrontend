@@ -7,9 +7,9 @@ const CategorySection = ({ categories }) => {
                 <h2 id="category-heading" className="text-2xl font-bold tracking-tight text-gray-900">
                     Popular Categories
                 </h2>
-                <a href="#" className="hidden text-sm font-semibold text-gray-800 hover:text-yellow-600 lg:block">
-                    Browse all categories
-                    <span aria-hidden="true"> &rarr;</span>
+                <a href="#" className="hidden lg:flex group py-2 px-6 rounded-full bg-gray-100 text-sm font-semibold text-gray-800 hover:text-yellow-600">
+                    <span className="">Browse all categories</span>
+                    <ChevronRightIcon className="w-5 h-5 ml-2 group-hover:ml-4 ease-linear duration-150" />
                 </a>
             </div>
 
@@ -27,7 +27,7 @@ const CategorySection = ({ categories }) => {
                                             <img
                                                 src={category.imageSrc}
                                                 alt={category.name}
-                                                className="h-80 w-56 object-cover object-center"
+                                                className="h-80 w-56 object-cover object-center group-hover:scale-110 ease-in duration-150"
                                             />
                                         </div>
                                         <div className="absolute rounded-lg h-full mt-auto inset-0 bg-gradient-to-b from-transparent to-black opacity-50" />
@@ -50,8 +50,8 @@ const CategorySection = ({ categories }) => {
             </div>
 
             <div className="flex lg:hidden justify-center mt-8 w-full">
-                <a href="#" className="bg-black hover:bg-yellow-600 flex py-2 px-6 text-sm text-white rounded-full">
-                    Browse all categories  <ChevronRightIcon className="w-5 h-5 ml-3" />
+                <a href="#" className="bg-black hover:bg-yellow-600 group flex py-2 px-6 text-sm text-white rounded-full">
+                    Browse all categories  <ChevronRightIcon className="w-5 h-5 ml-2 group-hover:ml-4 ease-linear duration-150" />
                 </a>
             </div>
         </section>

@@ -1,16 +1,16 @@
 import { ChevronRightIcon } from "@heroicons/react/20/solid"
 
-const CollectionSection = () => {
+const StorySection = () => {
     return (
         <section aria-labelledby="category-heading" className="bg-white">
             <div className="mx-auto max-w-7xl px-4 pt-24 sm:px-6 lg:px-8">
                 <div className="sm:flex sm:items-baseline sm:justify-between">
                     <h2 id="category-heading" className="text-2xl font-bold tracking-tight text-gray-900">
-                        Beauty Collections
+                        Beauty Stories
                     </h2>
-                    <a href="#" className="hidden text-sm font-semibold text-gray-800 hover:text-yellow-600 lg:block">
-                        Browse all collections
-                        <span aria-hidden="true"> &rarr;</span>
+                    <a href="#" className="hidden lg:flex group py-2 px-6 rounded-full text-sm bg-gray-100 font-semibold text-gray-800 hover:text-yellow-600">
+                        Browse all stories
+                        <ChevronRightIcon className="w-5 h-5 ml-2 group-hover:ml-4 ease-linear duration-150" />
                     </a>
                 </div>
 
@@ -27,11 +27,11 @@ const CollectionSection = () => {
                                 <h3 className="font-semibold text-white">
                                     <a href="#">
                                         <span className="absolute inset-0" />
-                                        Beauty daily
+                                        Beauty daily with Laura
                                     </a>
                                 </h3>
                                 <p aria-hidden="true" className="mt-1 text-sm text-white">
-                                    Shop now
+                                    6 min read
                                 </p>
                             </div>
                         </div>
@@ -51,11 +51,11 @@ const CollectionSection = () => {
                                 <h3 className="font-semibold text-white">
                                     <a href="#">
                                         <span className="absolute inset-0" />
-                                        Beach Relax
+                                        Melisa's beach story
                                     </a>
                                 </h3>
                                 <p aria-hidden="true" className="mt-1 text-sm text-white">
-                                    Shop now
+                                    4 min read
                                 </p>
                             </div>
                         </div>
@@ -75,11 +75,11 @@ const CollectionSection = () => {
                                 <h3 className="font-semibold text-white">
                                     <a href="#">
                                         <span className="absolute inset-0" />
-                                        Special Moments
+                                        Special Moments, Tips and trick!
                                     </a>
                                 </h3>
                                 <p aria-hidden="true" className="mt-1 text-sm text-white">
-                                    Shop now
+                                    5 min read
                                 </p>
                             </div>
                         </div>
@@ -87,8 +87,8 @@ const CollectionSection = () => {
                 </div>
 
                 <div className="flex lg:hidden justify-center mt-8 w-full">
-                    <a href="#" className="bg-black hover:bg-yellow-600 flex py-2 px-6 text-sm text-white rounded-full">
-                        Browse all collections  <ChevronRightIcon className="w-5 h-5 ml-3" />
+                    <a href="#" className="bg-black hover:bg-yellow-600 flex py-2 px-6 text-sm text-white rounded-full group">
+                        Browse all stories  <ChevronRightIcon className="w-5 h-5 ml-2 group-hover:ml-4 ease-linear duration-150" />
                     </a>
                 </div>
             </div>
@@ -96,4 +96,4 @@ const CollectionSection = () => {
     )
 }
 
-export default CollectionSection
+export default StorySection
