@@ -21,9 +21,11 @@ const OtherPromo = () => {
                         </p>
                         <a
                             href="#"
-                            className="mt-8 flex items-center w-full rounded-full border border-transparent bg-white px-10 py-2.5 text-base font-medium text-gray-900 hover:bg-gray-100 sm:w-auto"
+                            className="mt-8 flex justify-center items-center w-full lg:w-auto rounded-full border 
+                            border-transparent bg-white px-6 py-2 font-medium text-gray-700 
+                            hover:text-yellow-600 group"
                         >
-                            Register now <HeartIcon className="ml-2 h-5 w-5 text-red-600" aria-hidden="true" />
+                            Register now <HeartIcon className="ml-2 h-5 w-5 text-red-600 group-hover:scale-110 ease-in duration-150" aria-hidden="true" />
                         </a>
                     </div>
                 </div>
