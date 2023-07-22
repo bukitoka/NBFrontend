@@ -13,7 +13,7 @@ const OtherPromo = () => {
                 </div>
                 <div className="relative bg-gray-900 bg-opacity-80 px-6 py-32 sm:px-12 sm:py-40 lg:px-16">
                     <div className="relative mx-auto flex max-w-3xl flex-col items-center text-center">
-                        <h2 id="comfort-heading" className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
+                        <h2 id="comfort-heading" className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-t from-yellow-500 to-yellow-50">
                             Beauty Treatment Webinar
                         </h2>
                         <p className="mt-3 text-xl text-white">
@@ -22,7 +22,7 @@ const OtherPromo = () => {
                         <a
                             href="#"
                             className="mt-8 flex justify-center items-center w-full lg:w-auto rounded-full border 
-                            border-transparent bg-white px-6 py-2 font-medium text-gray-700 
+                            border-transparent backdrop-blur-[10px] bg-black/50 px-6 py-2 font-medium text-gray-100 
                             hover:text-yellow-600 group"
                         >
                             Register now <HeartIcon className="ml-2 h-5 w-5 text-red-600 group-hover:scale-110 ease-in duration-150" aria-hidden="true" />
