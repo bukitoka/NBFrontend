@@ -17,6 +17,7 @@ import CategorySection from '../components/CategorySection'
 import BrandSection from '../components/BrandSection'
 import StorySection from '../components/StorySection'
 import OtherPromo from '../components/OtherPromo'
+import Footer from '../components/Footer'
 
 const navigation = {
     categories: [
@@ -28,52 +29,115 @@ const navigation = {
                     name: 'New Arrivals',
                     href: '#',
                     imageSrc: 'https://tailwindui.com/img/ecommerce-images/mega-menu-category-01.jpg',
-                    imageAlt: 'Models sitting back to back, wearing Basic Tee in black and bone.',
+                    imageAlt: 'New arrivals on display.',
                 },
                 {
-                    name: 'Basic Tees',
+                    name: 'Top Sales',
                     href: '#',
                     imageSrc: 'https://tailwindui.com/img/ecommerce-images/mega-menu-category-02.jpg',
-                    imageAlt: 'Close up of Basic Tee fall bundle with off-white, ochre, olive, and black tees.',
+                    imageAlt: 'Top sale items on display.',
                 },
             ],
             sections: [
                 {
-                    id: 'clothing',
-                    name: 'Clothing',
+                    id: 'skin_care',
+                    name: 'Skin Care',
                     items: [
-                        { name: 'Tops', href: '#' },
-                        { name: 'Dresses', href: '#' },
-                        { name: 'Pants', href: '#' },
-                        { name: 'Denim', href: '#' },
-                        { name: 'Sweaters', href: '#' },
-                        { name: 'T-Shirts', href: '#' },
-                        { name: 'Jackets', href: '#' },
-                        { name: 'Activewear', href: '#' },
-                        { name: 'Browse All', href: '#' },
+                        {
+                            name: 'Cleanser',
+                            href: '#',
+                            subItems: [
+                                { name: 'Cleanser', href: '#' },
+                                { name: 'Exfoliator', href: '#' },
+                                { name: 'Face Wash', href: '#' },
+                                { name: 'Face Wipes', href: '#' },
+                                { name: 'Makeup Remover', href: '#' },
+                                { name: 'Toner', href: '#' },
+                            ],
+                        },
+                        {
+                            name: 'Eye Care',
+                            href: '#',
+                            subItems: [
+                                { name: 'Eye Cream', href: '#' },
+                                { name: 'Eye Serum', href: '#' },
+                                { name: 'Eye Lash Serum', href: '#' },
+                                { name: 'Eye Mask', href: '#' },
+                            ],
+                        },
+                        {
+                            name: 'Lip Care',
+                            href: '#',
+                            subItems: [
+                                { name: 'Lip Balm', href: '#' },
+                                { name: 'Lip Mask', href: '#' },
+                                { name: 'Lip Scrub', href: '#' },
+                            ],
+                        },
+                        {
+                            name: 'Moisturizer',
+                            href: '#',
+                            subItems: [
+                                { name: 'Day Cream', href: '#' },
+                                { name: 'Face Oil', href: '#' },
+                                { name: 'Face Mist', href: '#' },
+                                { name: 'Night Cream', href: '#' },
+                                { name: 'Neck Cream', href: '#' },
+                            ],
+                        },
+                        {
+                            name: 'Sun Care',
+                            href: '#',
+                            subItems: [
+                                { name: 'After-Sun Care', href: '#' },
+                                { name: 'Body Sunscreen', href: '#' },
+                                { name: 'Face Sunscreen', href: '#' },
+                            ],
+                        },
+                        {
+                            name: 'Treatment & Mask',
+                            href: '#',
+                            subItems: [
+                                { name: 'Acne & Blemish', href: '#' },
+                                { name: 'Face Serum', href: '#' },
+                                { name: 'Mask', href: '#' },
+                                { name: 'Peel', href: '#' },
+                            ],
+                        },
                     ],
                 },
                 {
-                    id: 'accessories',
-                    name: 'Accessories',
+                    id: 'makeup',
+                    name: 'Makeup',
                     items: [
-                        { name: 'Watches', href: '#' },
-                        { name: 'Wallets', href: '#' },
-                        { name: 'Bags', href: '#' },
-                        { name: 'Sunglasses', href: '#' },
-                        { name: 'Hats', href: '#' },
-                        { name: 'Belts', href: '#' },
-                    ],
-                },
-                {
-                    id: 'brands',
-                    name: 'Brands',
-                    items: [
-                        { name: 'Full Nelson', href: '#' },
-                        { name: 'My Way', href: '#' },
-                        { name: 'Re-Arranged', href: '#' },
-                        { name: 'Counterfeit', href: '#' },
-                        { name: 'Significant Other', href: '#' },
+                        {
+                            name: 'Face',
+                            href: '#',
+                            subItems: [
+                                { name: 'Bb & Cc Cream', href: '#' },
+                                { name: 'Blush', href: '#' },
+                                { name: 'Contour & Bronzer', href: '#' },
+                                { name: 'Concealer & Corrector', href: '#' },
+                                { name: 'Face Sets & Palettes', href: '#' },
+                                { name: 'Foundation', href: '#' },
+                                { name: 'Highlighter', href: '#' },
+                                { name: 'Powder', href: '#' },
+                                { name: 'Setting Spray', href: '#' },
+                                { name: 'Tinted Moisturizer', href: '#' },
+                            ],
+                        },
+                        {
+                            name: 'Eyes',
+                            href: '#',
+                            subItems: [
+                                { name: 'Eye Brow', href: '#' },
+                                { name: 'Eye Liner', href: '#' },
+                                { name: 'Eyelashes & Brow Serum', href: '#' },
+                                { name: 'Eye Shadow', href: '#' },
+                                { name: 'Eye Sets', href: '#' },
+                                { name: 'Mascara', href: '#' },
+                            ],
+                        },
                     ],
                 },
             ],
@@ -86,58 +150,83 @@ const navigation = {
                     name: 'New Arrivals',
                     href: '#',
                     imageSrc: 'https://tailwindui.com/img/ecommerce-images/product-page-04-detail-product-shot-01.jpg',
-                    imageAlt: 'Drawstring top with elastic loop closure and textured interior padding.',
+                    imageAlt: 'New arrivals on display.',
                 },
                 {
-                    name: 'Artwork Tees',
+                    name: 'Top Brands',
                     href: '#',
                     imageSrc: 'https://tailwindui.com/img/ecommerce-images/category-page-02-image-card-06.jpg',
-                    imageAlt:
-                        'Three shirts in gray, white, and blue arranged on table with same line drawing of hands and shapes overlapping on front of shirt.',
+                    imageAlt: 'Top brands in display.',
                 },
             ],
             sections: [
                 {
-                    id: 'clothing',
-                    name: 'Clothing',
+                    id: 'abc',
+                    name: 'A - C',
                     items: [
-                        { name: 'Tops', href: '#' },
-                        { name: 'Pants', href: '#' },
-                        { name: 'Sweaters', href: '#' },
-                        { name: 'T-Shirts', href: '#' },
-                        { name: 'Jackets', href: '#' },
-                        { name: 'Activewear', href: '#' },
-                        { name: 'Browse All', href: '#' },
+                        {
+                            name: 'A',
+                            href: '#',
+                            subItems: [
+                                { name: 'Aesop', href: '#' },
+                                { name: 'All Birds', href: '#' },
+                                { name: 'Arq', href: '#' },
+                            ]
+                        },
+                        {
+                            name: 'B',
+                            href: '#',
+                            subItems: [
+                                { name: 'Baggu', href: '#' },
+                                { name: 'Berg & Betts', href: '#' },
+                                { name: 'Blume', href: '#' },
+                                { name: 'Briogeo', href: '#' },
+                                { name: 'By Humankind', href: '#' },
+                            ]
+                        },
+                        {
+                            name: 'C',
+                            href: '#',
+                            subItems: [
+                                { name: 'Carmen', href: '#' },
+                                { name: 'Champion', href: '#' },
+                                { name: 'Common Goods', href: '#' },
+                                { name: 'Craighill', href: '#' },
+                            ]
+                        }
                     ],
                 },
                 {
-                    id: 'accessories',
-                    name: 'Accessories',
+                    id: 'def',
+                    name: 'D - F',
                     items: [
-                        { name: 'Watches', href: '#' },
-                        { name: 'Wallets', href: '#' },
-                        { name: 'Bags', href: '#' },
-                        { name: 'Sunglasses', href: '#' },
-                        { name: 'Hats', href: '#' },
-                        { name: 'Belts', href: '#' },
-                    ],
-                },
-                {
-                    id: 'brands',
-                    name: 'Brands',
-                    items: [
-                        { name: 'Re-Arranged', href: '#' },
-                        { name: 'Counterfeit', href: '#' },
-                        { name: 'Full Nelson', href: '#' },
-                        { name: 'My Way', href: '#' },
+                        {
+                            name: 'D',
+                            href: '#',
+                            subItems: [
+                                { name: 'Danner', href: '#' },
+                                { name: 'Darn Tough', href: '#' },
+                                { name: 'Dr Martens', href: '#' },
+                                { name: 'Driftime', href: '#' },
+                            ]
+                        },
+                        {
+                            name: 'E',
+                            href: '#',
+                            subItems: []
+                        },
+                        {
+                            name: 'F',
+                            href: '#',
+                            subItems: []
+                        },
                     ],
                 },
             ],
         },
     ],
     pages: [
-        { name: 'Collections', href: '#' },
-        { name: 'Blog', href: '#' },
+        { name: 'Beauty Story', href: '#' },
         { name: 'Promo', href: '#' },
     ],
 }
@@ -146,22 +235,22 @@ const socials = [
     {
         name: 'Whatsapp',
         href: '#',
-        icon: <SiWhatsapp className='h-[18px] w-[18px] text-gray-500 hover:text-green-600' />,
+        icon: <SiWhatsapp className='h-[18px] w-[18px] text-gray-100 hover:text-green-600' />,
     },
     {
         name: 'Instagram',
         href: '#',
-        icon: <SiInstagram className='h-[18px] w-[18px] text-gray-500 hover:text-red-400' />,
+        icon: <SiInstagram className='h-[18px] w-[18px] text-gray-100 hover:text-red-400' />,
     },
     {
         name: 'Facebook',
         href: '#',
-        icon: <SiFacebook className='h-[18px] w-[18px] text-gray-500 hover:text-blue-500' />,
+        icon: <SiFacebook className='h-[18px] w-[18px] text-gray-100 hover:text-blue-500' />,
     },
     {
         name: 'Tiktok',
         href: '#',
-        icon: <SiTiktok className='h-[18px] w-[18px] text-gray-500 hover:text-black' />,
+        icon: <SiTiktok className='h-[18px] w-[18px] text-gray-100 hover:text-gray-800' />,
     },
 ]
 
@@ -225,58 +314,6 @@ const brands = [
     },
 ]
 
-const collections = [
-    {
-        name: 'Handcrafted Collection',
-        href: '#',
-        imageSrc: 'https://tailwindui.com/img/ecommerce-images/home-page-01-collection-01.jpg',
-        imageAlt: 'Brown leather key ring with brass metal loops and rivets on wood table.',
-        description: 'Keep your phone, keys, and wallet together, so you can lose everything at once.',
-    },
-    {
-        name: 'Organized Desk Collection',
-        href: '#',
-        imageSrc: 'https://tailwindui.com/img/ecommerce-images/home-page-01-collection-02.jpg',
-        imageAlt: 'Natural leather mouse pad on white desk next to porcelain mug and keyboard.',
-        description: 'The rest of the house will still be a mess, but your desk will look great.',
-    },
-    {
-        name: 'Focus Collection',
-        href: '#',
-        imageSrc: 'https://tailwindui.com/img/ecommerce-images/home-page-01-collection-03.jpg',
-        imageAlt: 'Person placing task list card into walnut card holder next to felt carrying case on leather desk pad.',
-        description: 'Be more productive than enterprise project managers with a single piece of paper.',
-    },
-]
-const footerNavigation = {
-    shop: [
-        { name: 'Bags', href: '#' },
-        { name: 'Tees', href: '#' },
-        { name: 'Objects', href: '#' },
-        { name: 'Home Goods', href: '#' },
-        { name: 'Accessories', href: '#' },
-    ],
-    company: [
-        { name: 'Who we are', href: '#' },
-        { name: 'Sustainability', href: '#' },
-        { name: 'Press', href: '#' },
-        { name: 'Careers', href: '#' },
-        { name: 'Terms & Conditions', href: '#' },
-        { name: 'Privacy', href: '#' },
-    ],
-    account: [
-        { name: 'Manage Account', href: '#' },
-        { name: 'Returns & Exchanges', href: '#' },
-        { name: 'Redeem a Gift Card', href: '#' },
-    ],
-    connect: [
-        { name: 'Contact Us', href: '#' },
-        { name: 'Twitter', href: '#' },
-        { name: 'Instagram', href: '#' },
-        { name: 'Pinterest', href: '#' },
-    ],
-}
-
 const Home = () => {
     const [open, setOpen] = useState(false)
 
@@ -312,99 +349,12 @@ const Home = () => {
                 {/* Stats */}
                 <Stats />
 
+
             </main>
 
-            <footer aria-labelledby="footer-heading" className="bg-gray-900">
-                <h2 id="footer-heading" className="sr-only">
-                    Footer
-                </h2>
-                <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                    <div className="py-20 xl:grid xl:grid-cols-3 xl:gap-8">
-                        <div className="grid grid-cols-2 gap-8 xl:col-span-2">
-                            <div className="space-y-12 md:grid md:grid-cols-2 md:gap-8 md:space-y-0">
-                                <div>
-                                    <h3 className="text-sm font-medium text-white">Shop</h3>
-                                    <ul role="list" className="mt-6 space-y-6">
-                                        {footerNavigation.shop.map((item) => (
-                                            <li key={item.name} className="text-sm">
-                                                <a href={item.href} className="text-gray-300 hover:text-white">
-                                                    {item.name}
-                                                </a>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </div>
-                                <div>
-                                    <h3 className="text-sm font-medium text-white">Company</h3>
-                                    <ul role="list" className="mt-6 space-y-6">
-                                        {footerNavigation.company.map((item) => (
-                                            <li key={item.name} className="text-sm">
-                                                <a href={item.href} className="text-gray-300 hover:text-white">
-                                                    {item.name}
-                                                </a>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </div>
-                            </div>
-                            <div className="space-y-12 md:grid md:grid-cols-2 md:gap-8 md:space-y-0">
-                                <div>
-                                    <h3 className="text-sm font-medium text-white">Account</h3>
-                                    <ul role="list" className="mt-6 space-y-6">
-                                        {footerNavigation.account.map((item) => (
-                                            <li key={item.name} className="text-sm">
-                                                <a href={item.href} className="text-gray-300 hover:text-white">
-                                                    {item.name}
-                                                </a>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </div>
-                                <div>
-                                    <h3 className="text-sm font-medium text-white">Connect</h3>
-                                    <ul role="list" className="mt-6 space-y-6">
-                                        {footerNavigation.connect.map((item) => (
-                                            <li key={item.name} className="text-sm">
-                                                <a href={item.href} className="text-gray-300 hover:text-white">
-                                                    {item.name}
-                                                </a>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="mt-12 md:mt-16 xl:mt-0">
-                            <h3 className="text-sm font-medium text-white">Sign up for our newsletter</h3>
-                            <p className="mt-6 text-sm text-gray-300">The latest deals and savings, sent to your inbox weekly.</p>
-                            <form className="mt-2 flex sm:max-w-md">
-                                <label htmlFor="email-address" className="sr-only">
-                                    Email address
-                                </label>
-                                <input
-                                    id="email-address"
-                                    type="text"
-                                    autoComplete="email"
-                                    required
-                                    className="w-full min-w-0 appearance-none rounded-md border border-white bg-white px-4 py-2 text-base text-gray-900 placeholder-gray-500 shadow-sm focus:border-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-900"
-                                />
-                                <div className="ml-4 flex-shrink-0">
-                                    <button
-                                        type="submit"
-                                        className="flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-900"
-                                    >
-                                        Sign up
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
+            {/* Footer */}
+            <Footer />
 
-                    <div className="border-t border-gray-800 py-10">
-                        <p className="text-sm text-gray-400">Copyright &copy; 2021 Your Company, Inc.</p>
-                    </div>
-                </div>
-            </footer>
         </div>
     )
 }
