@@ -1,16 +1,16 @@
 import { SiGoogle } from "@icons-pack/react-simple-icons"
 import { nanobeepa } from "../assets"
 
-const Register = () => {
+const Signup = () => {
     return (
         <div className="bg-white h-screen block lg:grid lg:grid-cols-2">
             <div className="w-full px-8 md:px-24 lg:px-16">
                 <div className="py-12 sm:px-12">
                     <div className="mb-3">
-                        <div className="flex justify-center">
+                        <a href="/" className="flex justify-center">
                             <img className="h-8 w-auto" src={nanobeepa} alt="nanobeepa.com" />
                             <h2 className='text-2xl font-bold leading-9 tracking-tight bg-clip-text text-transparent bg-gradient-to-t from-yellow-600 to-yellow-200 ml-3'>NanoBeepa</h2>
-                        </div>
+                        </a>
                         <h2 className="mb-6 mt-3 text-2xl text-center font-bold leading-9 tracking-tight text-zinc-800">
                             Create an account
                         </h2>
@@ -149,8 +149,8 @@ const Register = () => {
                         <div className="mt-6">
                             <p className="text-center text-sm text-gray-500">
                                 Already have an account ?{' '}
-                                <a href="#" className="font-semibold leading-6 text-yellow-600 hover:text-yellow-800">
-                                    Login here
+                                <a href="/signin" className="font-semibold leading-6 text-yellow-600 hover:text-yellow-800">
+                                    Sign in here
                                 </a>
                             </p>
                         </div>
@@ -178,4 +178,4 @@ const Register = () => {
     )
 }
 
-export default Register
+export default Signup

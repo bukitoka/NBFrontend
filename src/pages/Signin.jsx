@@ -1,18 +1,18 @@
 import { SiGoogle } from "@icons-pack/react-simple-icons"
 import { nanobeepa } from "../assets"
 
-const Login = () => {
+const Signin = () => {
     return (
         <div className="bg-white h-screen block lg:grid lg:grid-cols-2">
             <div className="w-full px-8 md:px-32 lg:px-24 pt-16">
                 <div className="py-12 sm:px-12">
                     <div className="mb-3">
-                        <div className="flex justify-center">
+                        <a href="/" className="flex justify-center">
                             <img className="h-8 w-auto" src={nanobeepa} alt="nanobeepa.com" />
                             <h2 className='text-2xl font-bold leading-9 tracking-tight bg-clip-text text-transparent bg-gradient-to-t from-yellow-600 to-yellow-200 ml-3'>NanoBeepa</h2>
-                        </div>
+                        </a>
                         <h2 className="mb-6 mt-3 text-2xl text-center font-bold leading-9 tracking-tight text-zinc-800">
-                            Login to your account
+                            Sign in to your account
                         </h2>
                     </div>
                     <form className="space-y-6" action="#" method="POST">
@@ -96,14 +96,14 @@ const Login = () => {
                                 className="flex w-full items-center justify-center gap-3 rounded-lg px-3 py-3 bg-white hover:bg-zinc-800 text-gray-800 hover:text-zinc-100 ring-1 ring-inset ring-gray-300 hover:ring-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-600"
                             >
                                 <SiGoogle className="w-4 h-4" />
-                                <span className="text-sm font-semibold leading-6">Login with Google</span>
+                                <span className="text-sm font-semibold leading-6">Sign in with Google</span>
                             </a>
                         </div>
                         <div className="mt-6">
                             <p className="text-center text-sm text-gray-500">
                                 Not a member?{' '}
-                                <a href="#" className="font-semibold leading-6 text-yellow-600 hover:text-yellow-800">
-                                    Register here
+                                <a href="/signup" className="font-semibold leading-6 text-yellow-600 hover:text-yellow-800">
+                                    Sign up here
                                 </a>
                             </p>
                         </div>
@@ -131,4 +131,4 @@ const Login = () => {
     )
 }
 
-export default Login
+export default Signin
