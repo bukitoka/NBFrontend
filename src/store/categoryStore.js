@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import { devtools, persist, createJSONStorage } from 'zustand/middleware'
-import apiInstance from './api';
+import apiInstance from '../tools/api';
 
 const categoryStore = (set) => ({
     categories: [],
@@ -19,7 +19,7 @@ const categoryStore = (set) => ({
     },
 });
 
-const useCategory = create(
+const useCategoryStore = create(
     devtools(
         persist(categoryStore, {
             name: 'category-store',
@@ -28,4 +28,4 @@ const useCategory = create(
     )
 );
 
-export default useCategory
+export default useCategoryStore

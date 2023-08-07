@@ -1,7 +1,40 @@
+import React, { useState, useEffect } from 'react';
+import { login } from '../tools/auth';
+import { useNavigate } from 'react-router-dom';
+import useAuthStore from '../store/authStore';
+
 import { SiGoogle } from "@icons-pack/react-simple-icons"
 import { nanobeepa } from "../assets"
 
 const Signin = () => {
+
+    const navigate = useNavigate();
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
+
+    useEffect(() => {
+        if (isLoggedIn()) {
+            navigate('/');
+        }
+    }, []);
+
+    const resetForm = () => {
+        setEmail('');
+        setPassword('');
+    };
+
+    const handleLogin = async (e) => {
+        e.preventDefault();
+        const { error } = await login(email, password);
+        if (error) {
+            alert(error);
+        } else {
+            navigate('/');
+            resetForm();
+        }
+    };
+
     return (
         <div className="bg-white h-screen block lg:grid lg:grid-cols-2">
             <div className="w-full px-8 md:px-32 lg:px-24 pt-16">
@@ -15,7 +48,7 @@ const Signin = () => {
                             Sign in to your account
                         </h2>
                     </div>
-                    <form className="space-y-6" action="#" method="POST">
+                    <form className="space-y-6" action="#" method="POST" onSubmit={handleLogin}>
                         <div>
                             <label htmlFor="email" className="block text-sm font-medium leading-6 text-zinc-900">
                                 Email address
@@ -29,6 +62,8 @@ const Signin = () => {
                                     required
                                     className="block w-full rounded-lg border-0 py-3 px-4 bg-zinc-50 focus:bg-white text-zinc-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-yellow-600 sm:text-sm sm:leading-6"
                                     placeholder="youremail@domain.com"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
                                 />
                             </div>
                         </div>
@@ -46,6 +81,8 @@ const Signin = () => {
                                     required
                                     className="block w-full rounded-lg border-0 py-3 px-4 bg-zinc-50 focus:bg-white text-zinc-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-yellow-600 sm:text-sm sm:leading-6"
                                     placeholder="••••••••"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
                                 />
                             </div>
                         </div>

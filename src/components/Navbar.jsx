@@ -1,4 +1,4 @@
-import { Fragment, useState } from 'react'
+import { Fragment, useState, useEffect } from 'react'
 import { Popover, Transition } from '@headlessui/react'
 
 // hero icons
@@ -14,15 +14,18 @@ import {
 import { ShoppingBagIcon } from '@heroicons/react/20/solid'
 
 // images
-import nanobeepa from '../assets/nbwhite.png'
+import { nbwhite } from '../assets'
 
 // components
 import TopBanner from "../components/TopBanner"
 
+// store
+import useCategoryStore from '../store/categoryStore';
 
-const Navbar = ({ setOpen, classNames, navigation, socials }) => {
 
-    const [isShowingArray, setIsShowingArray] = useState(navigation.categories.map(() => false));
+const Navbar = ({ setOpen, classNames }) => {
+
+    const [isShowingArray, setIsShowingArray] = useState([]);
 
     const handlePanel = (index) => {
         setIsShowingArray((prevArray) => {
@@ -31,6 +34,12 @@ const Navbar = ({ setOpen, classNames, navigation, socials }) => {
             return newArray;
         });
     };
+
+    const { categories, loading, error, fetchCategories } = useCategoryStore();
+
+    useEffect(() => {
+        fetchCategories();
+    }, []);
 
     return (
         <div className="bg-transparent">
@@ -51,7 +60,7 @@ const Navbar = ({ setOpen, classNames, navigation, socials }) => {
                                         <span className="sr-only">NanoBeepa</span>
                                         <img
                                             className="h-8 w-auto"
-                                            src={nanobeepa}
+                                            src={nbwhite}
                                             alt="NanoBeepa"
                                         />
                                     </a>
@@ -99,7 +108,7 @@ const Navbar = ({ setOpen, classNames, navigation, socials }) => {
                                     <a href="#" className="ml-6 flex">
                                         <span className="sr-only">NanoBeepa</span>
                                         <img
-                                            src={nanobeepa}
+                                            src={nbwhite}
                                             alt="NanoBeepa"
                                             className="h-8 w-auto"
                                         />
@@ -150,7 +159,14 @@ const Navbar = ({ setOpen, classNames, navigation, socials }) => {
                         <Popover.Group className="hidden h-full lg:flex mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                             <div className="flex w-full h-full">
                                 <div className="flex space-x-8">
-                                    {navigation.categories.map((category, index) => (
+                                    <a
+                                        href="#"
+                                        className="flex items-center text-sm font-medium text-gray-200 hover:text-yellow-500"
+                                    >
+                                        NEW ARRIVALS
+                                    </a>
+
+                                    {categories.map((category, index) => (
                                         <Popover key={category.id} className="flex">
                                             <div>
                                                 <div className="relative flex">
@@ -187,49 +203,27 @@ const Navbar = ({ setOpen, classNames, navigation, socials }) => {
 
                                                         <div className="relative bg-white">
                                                             <div className="mx-auto max-w-7xl px-8">
-                                                                <div className="grid grid-cols-2 gap-x-8 gap-y-10 py-16">
-                                                                    <div className="col-start-2 grid grid-cols-2 gap-x-8">
-                                                                        {category.featured.map((item) => (
-                                                                            <div key={item.name} className="group relative text-base sm:text-sm">
-                                                                                <div className="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg bg-gray-200 group-hover:opacity-75">
-                                                                                    <img
-                                                                                        src={item.imageSrc}
-                                                                                        alt={item.imageAlt}
-                                                                                        className="object-cover object-center"
-                                                                                    />
-                                                                                </div>
-                                                                                <a href={item.href} className="mt-6 block font-medium text-gray-900">
-                                                                                    <span className="absolute inset-0 z-10" aria-hidden="true" />
-                                                                                    {item.name}
-                                                                                </a>
-                                                                                <p aria-hidden="true" className="mt-1">
-                                                                                    Shop now
-                                                                                </p>
-                                                                            </div>
-                                                                        ))}
-                                                                    </div>
-                                                                    <div className="row-start-1 grid grid-cols-3 gap-x-8 gap-y-10 text-sm">
-                                                                        {category.sections.map((section) => (
-                                                                            <div key={section.name}>
-                                                                                <p id={`${section.name}-heading`} className="font-medium text-gray-900">
-                                                                                    {section.name}
-                                                                                </p>
-                                                                                <ul
-                                                                                    role="list"
-                                                                                    aria-labelledby={`${section.name}-heading`}
-                                                                                    className="mt-6 space-y-6 sm:mt-4 sm:space-y-4"
-                                                                                >
-                                                                                    {section.items.map((item) => (
-                                                                                        <li key={item.name} className="flex">
-                                                                                            <a href={item.href} className="hover:text-gray-800">
-                                                                                                {item.name}
-                                                                                            </a>
-                                                                                        </li>
-                                                                                    ))}
-                                                                                </ul>
-                                                                            </div>
-                                                                        ))}
-                                                                    </div>
+                                                                <div className="grid grid-cols-4 gap-x-8 gap-y-10 py-16">
+                                                                    {category.subcategory.map((section) => (
+                                                                        <div key={section.name}>
+                                                                            <p id={`${section.name}-heading`} className="font-medium text-gray-900">
+                                                                                {section.name}
+                                                                            </p>
+                                                                            <ul
+                                                                                role="list"
+                                                                                aria-labelledby={`${section.name}-heading`}
+                                                                                className="mt-6 space-y-6 sm:mt-4 sm:space-y-4"
+                                                                            >
+                                                                                {section.subsubcategory.map((item) => (
+                                                                                    <li key={item.name} className="flex">
+                                                                                        <a href={category.slug + '/' + section.slug + '/' + item.slug} className="hover:text-gray-800">
+                                                                                            {item.name}
+                                                                                        </a>
+                                                                                    </li>
+                                                                                ))}
+                                                                            </ul>
+                                                                        </div>
+                                                                    ))}
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -240,29 +234,26 @@ const Navbar = ({ setOpen, classNames, navigation, socials }) => {
                                     )
                                     )}
 
-                                    {navigation.pages.map((page) => (
-                                        <a
-                                            key={page.name}
-                                            href={page.href}
-                                            className="flex items-center text-sm font-medium text-gray-200 hover:text-yellow-500"
-                                        >
-                                            {page.name}
-                                        </a>
-                                    ))}
-                                </div>
-                                <div className="flex space-x-6 ml-6">
-                                    <div className="my-2.5 ml-6 mr-8 border-l border-gray-800"></div>
-                                    {socials.map((social) => (
-                                        <a
-                                            key={social.name}
-                                            href={social.href}
-                                            className="flex items-center text-sm font-medium text-gray-200 hover:text-yellow-500"
-                                        >
-                                            {social.icon}
-                                        </a>
-                                    ))}
-                                </div>
+                                    <a
+                                        href="#"
+                                        className="flex items-center text-sm font-medium text-gray-200 hover:text-yellow-500"
+                                    >
+                                        BRANDS
+                                    </a>
+                                    <a
+                                        href="#"
+                                        className="flex items-center text-sm font-medium text-gray-200 hover:text-yellow-500"
+                                    >
+                                        BEAUTY STORIES
+                                    </a>
+                                    <a
+                                        href="#"
+                                        className="flex items-center text-sm font-medium text-gray-200 hover:text-yellow-500"
+                                    >
+                                        SALES & PROMO
+                                    </a>
 
+                                </div>
                             </div>
                         </Popover.Group>
                         {/* End flyout menu */}
