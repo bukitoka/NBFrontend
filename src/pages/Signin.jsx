@@ -11,6 +11,7 @@ const Signin = () => {
     const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [rememberMe, setRememberMe] = useState(false);
     const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
 
     useEffect(() => {
@@ -22,11 +23,12 @@ const Signin = () => {
     const resetForm = () => {
         setEmail('');
         setPassword('');
+        setRememberMe(false);
     };
 
     const handleLogin = async (e) => {
         e.preventDefault();
-        const { error } = await login(email, password);
+        const { error } = await login(email, password, rememberMe);
         if (error) {
             alert(error);
         } else {
@@ -94,6 +96,8 @@ const Signin = () => {
                                     name="remember-me"
                                     type="checkbox"
                                     className="h-4 w-4 rounded border-gray-300 text-yellow-600 focus:ring-yellow-600"
+                                    checked={rememberMe}
+                                    onChange={(e) => setRememberMe(e.target.checked)}
                                 />
                                 <label htmlFor="remember-me" className="ml-3 block text-sm leading-6 text-gray-900">
                                     Remember me
