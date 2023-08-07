@@ -2,19 +2,19 @@ import useAuthStore from '../store/authStore';
 import authApiInstance from './authApi';
 import jwt_decode from 'jwt-decode';
 import Cookies from 'js-cookie';
+import dayjs from 'dayjs';
 
-export const login = async (email, password) => {
+export const login = async (email, password, rememberMe) => {
     try {
         const { data, status } = await authApiInstance.post('jwt/create/', {
             email,
             password,
         });
         if (status === 200) {
-            setAuthUser(data.access, data.refresh);
+            setAuthUser(data.access, data.refresh, rememberMe);
         }
         return { data, error: null };
     } catch (error) {
-        console.log(error);
         return {
             data: null,
             error: error.response.data?.detail || 'Something went wrong',
@@ -60,14 +60,19 @@ export const setUser = async () => {
     }
 };
 
-export const setAuthUser = (access_token, refresh_token) => {
+export const setAuthUser = (access_token, refresh_token, rememberMe) => {
+
+    const accessExpirationMinutes = rememberMe ? 1 * 24 * 60 : 15; // 1 days if rememberMe, otherwise 15 minutes
+    const AccessExpirationDate = dayjs().add(accessExpirationMinutes, 'minutes');
     Cookies.set('access_token', access_token, {
-        expires: 1,
+        expires: AccessExpirationDate.toDate(),
         secure: true,
     });
 
+    const RefreshExpirationMinutes = rememberMe ? 3 : 1; // 3 days if rememberMe, otherwise 1 day
+    const RefreshExpirationDate = dayjs().add(RefreshExpirationMinutes, 'days');
     Cookies.set('refresh_token', refresh_token, {
-        expires: 7,
+        expires: RefreshExpirationDate.toDate(),
         secure: true,
     });
 
@@ -90,7 +95,8 @@ export const getRefreshToken = async () => {
 export const isAccessTokenExpired = (accessToken) => {
     try {
         const decodedToken = jwt_decode(accessToken);
-        return decodedToken.exp < Date.now() / 1000;
+        const expirationTime = dayjs.unix(decodedToken.exp);
+        return dayjs().isAfter(expirationTime); // Check if current time is after token's expiration time
     } catch (err) {
         return true; // Token is invalid or expired
     }
