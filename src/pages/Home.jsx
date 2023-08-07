@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 // simple icons
 import {
@@ -8,6 +8,7 @@ import {
     SiTiktok,
 } from '@icons-pack/react-simple-icons'
 
+// components
 import Navbar from "../components/Navbar"
 import Carousel from "../components/Carousel"
 import Stats from "../components/Stats"
@@ -258,7 +259,7 @@ function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
 
-const categories = [
+const popularCategories = [
     {
         name: 'New Arrivals',
         href: '#',
@@ -335,7 +336,7 @@ const Home = () => {
             <main>
 
                 {/* Category section */}
-                <CategorySection categories={categories} />
+                <CategorySection categories={popularCategories} />
 
                 {/* Brand section */}
                 <BrandSection brands={brands} />
