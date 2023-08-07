@@ -6,6 +6,11 @@ import useAuthStore from '../store/authStore';
 import { SiGoogle } from "@icons-pack/react-simple-icons"
 import { nanobeepa } from "../assets"
 
+import {
+    EyeIcon,
+    EyeSlashIcon,
+} from '@heroicons/react/24/outline'
+
 const Signin = () => {
 
     const navigate = useNavigate();
@@ -35,6 +40,13 @@ const Signin = () => {
             navigate('/');
             resetForm();
         }
+    };
+
+    const [showPassword, setShowPassword] = useState(false);
+
+    const handleTogglePassword = () => {
+        console.log("clicked")
+      setShowPassword(!showPassword);
     };
 
     return (
@@ -75,17 +87,25 @@ const Signin = () => {
                                 Password
                             </label>
                             <div className="mt-2">
-                                <input
-                                    id="password"
-                                    name="password"
-                                    type="password"
-                                    autoComplete="current-password"
-                                    required
-                                    className="block w-full rounded-lg border-0 py-3 px-4 bg-zinc-50 focus:bg-white text-zinc-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-yellow-600 sm:text-sm sm:leading-6"
-                                    placeholder="••••••••"
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
-                                />
+                                <div className='relative'>
+                                    <input
+                                        id="password"
+                                        name="password"
+                                        type= {showPassword ? "text": "password"}
+                                        autoComplete="current-password"
+                                        required
+                                        className="block w-full rounded-lg border-0 py-3 px-4 bg-zinc-50 focus:bg-white text-zinc-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-yellow-600 sm:text-sm sm:leading-6"
+                                        placeholder="••••••••"
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
+                                    />
+                                    <button 
+                                        type="button"
+                                        onClick={handleTogglePassword}
+                                        className="absolute inset-y-0 right-0 pr-3 flex items-center">
+                                        {showPassword ?  <EyeIcon  className="h-5 w-5" aria-hidden="true"/> : <EyeSlashIcon className="h-5 w-5" aria-hidden="true"/> }
+                                    </button>
+                                 </div>
                             </div>
                         </div>
 
