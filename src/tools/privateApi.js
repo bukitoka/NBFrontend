@@ -3,7 +3,7 @@ import { getRefreshToken, isAccessTokenExpired, setAuthUser } from './auth';
 import { API_BASE_URL } from './constants';
 import Cookies from 'js-cookie';
 
-const useAxios = () => {
+const privateApi = () => {
     const accessToken = Cookies.get('access_token');
     const refreshToken = Cookies.get('refresh_token');
 
@@ -26,4 +26,4 @@ const useAxios = () => {
     return axiosInstance;
 };
 
-export default useAxios;
+export default privateApi;
