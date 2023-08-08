@@ -49,12 +49,16 @@ export const setUser = async () => {
     // ON PAGE LOAD
     const accessToken = Cookies.get('access_token');
     const refreshToken = Cookies.get('refresh_token');
-    if (!accessToken || !refreshToken) {
+    if (!refreshToken) {
         return;
     }
-    if (isAccessTokenExpired(accessToken)) {
-        const response = await getRefreshToken(refreshToken);
-        setAuthUser(response.access, response.refresh);
+    if (!accessToken || isAccessTokenExpired(accessToken)) {
+        try {
+            const response = await getRefreshToken(refreshToken);
+            setAuthUser(response.access, response.refresh);
+        } catch (error) {
+            console.error('Error refreshing access token:', error);
+        }
     } else {
         setAuthUser(accessToken, refreshToken);
     }

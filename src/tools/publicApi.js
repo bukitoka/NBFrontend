@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { API_BASE_URL } from './constants';
 
-const apiInstance = axios.create({
+const publicApi = axios.create({
     baseURL: API_BASE_URL + 'api/v1/',
     timeout: 5000,
     headers: {
@@ -10,4 +10,4 @@ const apiInstance = axios.create({
     },
 });
 
-export default apiInstance;
+export default publicApi;

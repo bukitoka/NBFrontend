@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { devtools, persist, createJSONStorage } from 'zustand/middleware'
+import { devtools } from 'zustand/middleware'
 
 const authStore = (set, get) => ({
     allUserData: null, // Use this to store all user data
@@ -14,12 +14,7 @@ const authStore = (set, get) => ({
 });
 
 const useAuthStore = create(
-    devtools(
-        persist(authStore, {
-            name: 'auth-store',
-            storage: createJSONStorage(() => localStorage),
-        })
-    )
+    devtools(authStore)
 );
 
 export default useAuthStore;
