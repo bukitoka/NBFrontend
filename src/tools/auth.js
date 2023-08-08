@@ -49,13 +49,13 @@ export const setUser = async () => {
     // ON PAGE LOAD
     const accessToken = Cookies.get('access_token');
     const refreshToken = Cookies.get('refresh_token');
-    if (!refreshToken) {
-        return;
-    }
-    if (!accessToken || isAccessTokenExpired(accessToken)) {
+
+    if (!refreshToken || isRefreshTokenExpired(refreshToken)) {
+        return; // If no refresh token or refresh token is expired, ask user to login
+    } else if (!accessToken || isAccessTokenExpired(accessToken)) {
         try {
-            const response = await getRefreshToken(refreshToken);
-            setAuthUser(response.access, response.refresh);
+            const response = await refreshAccessToken(refreshToken);
+            setAuthUser(response.access, refreshToken);
         } catch (error) {
             console.error('Error refreshing access token:', error);
         }
@@ -67,16 +67,18 @@ export const setUser = async () => {
 export const setAuthUser = (access_token, refresh_token, rememberMe) => {
 
     const accessExpirationMinutes = rememberMe ? 1 * 24 * 60 : 15; // 1 days if rememberMe, otherwise 15 minutes
-    const AccessExpirationDate = dayjs().add(accessExpirationMinutes, 'minutes');
+    const accessExpirationDate = dayjs().add(accessExpirationMinutes, 'minutes');
+
     Cookies.set('access_token', access_token, {
-        expires: AccessExpirationDate.toDate(),
+        expires: accessExpirationDate.toDate(),
         secure: true,
     });
 
-    const RefreshExpirationMinutes = rememberMe ? 3 : 1; // 3 days if rememberMe, otherwise 1 day
-    const RefreshExpirationDate = dayjs().add(RefreshExpirationMinutes, 'days');
+    const refreshExpirationDays = rememberMe ? 3 : 1; // 3 days if rememberMe, otherwise 1 day
+    const refreshExpirationDate = dayjs().add(refreshExpirationDays, 'days');
+
     Cookies.set('refresh_token', refresh_token, {
-        expires: RefreshExpirationDate.toDate(),
+        expires: refreshExpirationDate.toDate(),
         secure: true,
     });
 
@@ -85,14 +87,16 @@ export const setAuthUser = (access_token, refresh_token, rememberMe) => {
     if (user) {
         useAuthStore.getState().setUser(user);
     }
+
     useAuthStore.getState().setLoading(false);
 };
 
-export const getRefreshToken = async () => {
+export const refreshAccessToken = async () => {
     const refresh_token = Cookies.get('refresh_token');
     const response = await authApiInstance.post('jwt/refresh/', {
         refresh: refresh_token,
     });
+
     return response.data;
 };
 
@@ -105,3 +109,13 @@ export const isAccessTokenExpired = (accessToken) => {
         return true; // Token is invalid or expired
     }
 };
+
+export const isRefreshTokenExpired = (refreshToken) => {
+    try {
+        const decodedToken = jwt_decode(refreshToken);
+        const expirationTime = dayjs.unix(decodedToken.exp);
+        return dayjs().isAfter(expirationTime); // Check if current time is after token's expiration time
+    } catch (err) {
+        return true; // Token is invalid or expired
+    }
+}
