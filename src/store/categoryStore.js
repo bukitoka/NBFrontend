@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import { devtools, persist, createJSONStorage } from 'zustand/middleware'
-import publicApi from '../tools/publicApi';
+import api from '../tools/api';
 
 const categoryStore = (set) => ({
     categories: [],
@@ -11,7 +11,7 @@ const categoryStore = (set) => ({
         set({ loading: true, error: null });
 
         try {
-            const { data } = await publicApi.get('category/');
+            const { data } = await api.get('api/v1/category/');
             set({ categories: data.results, loading: false });
         } catch (error) {
             set({ error: 'Error fetching categories', loading: false });
