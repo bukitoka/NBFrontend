@@ -1,7 +1,10 @@
 import { SiGoogle } from "@icons-pack/react-simple-icons"
 import { nanobeepa } from "../assets"
+import { GoogleOAuthProvider } from '@react-oauth/google';
+import { GoogleLogin } from '@react-oauth/google';
 
 const Signup = () => {
+    console.log(process.env.REACT_APP_GOOGLE_CLIENT_ID);
     return (
         <div className="bg-white h-screen block lg:grid lg:grid-cols-2">
             <div className="w-full px-8 md:px-24 lg:px-16">
@@ -145,6 +148,16 @@ const Signup = () => {
                                 <SiGoogle className="w-4 h-4" />
                                 <span className="text-sm font-semibold leading-6">Sign up with Google</span>
                             </a>
+                            <GoogleOAuthProvider clientId='${process.env.REACT_APP_GOOGLE_CLIENT_ID}'>
+                            <GoogleLogin
+                                    onSuccess={credentialResponse => {
+                                            console.log(credentialResponse);
+                                      }}
+                                      onError={() => {
+                                        console.log('Login Failed');
+                                      }}
+                                    />
+                                </GoogleOAuthProvider>
                         </div>
                         <div className="mt-6">
                             <p className="text-center text-sm text-gray-500">
