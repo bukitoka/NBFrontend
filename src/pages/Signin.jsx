@@ -45,7 +45,6 @@ const Signin = () => {
     const [showPassword, setShowPassword] = useState(false);
 
     const handleTogglePassword = () => {
-        console.log("clicked")
       setShowPassword(!showPassword);
     };
 

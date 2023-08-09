@@ -2,7 +2,6 @@ import { SiGoogle } from "@icons-pack/react-simple-icons"
 import { nanobeepa } from "../assets"
 import { register } from '../tools/auth';
 import React, { useState } from "react";
-// import { HiEye, HiEyeOff } from "react-icons/hi";
 import {
     EyeIcon,
     EyeSlashIcon,
