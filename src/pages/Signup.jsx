@@ -1,10 +1,20 @@
 import { SiGoogle } from "@icons-pack/react-simple-icons"
 import { nanobeepa } from "../assets"
-import { GoogleOAuthProvider } from '@react-oauth/google';
-import { GoogleLogin } from '@react-oauth/google';
+import React  from "react";
+import api from '../tools/api';
 
 const Signup = () => {
-    console.log(process.env.REACT_APP_GOOGLE_CLIENT_ID);
+const handleGoogleSignIn = async () => {
+    try {
+        const res= await api.get('/auth/o/google-oauth2/?redirect_uri=http://localhost:3000/google');
+        window.location.replace(res.data.authorization_url);
+    } catch (err) {
+
+    }
+}
+
+    // const envdata = process.env.REACT_APP_API_GOOGLE_CLIENT_ID;
+    // console.log(envdata);
     return (
         <div className="bg-white h-screen block lg:grid lg:grid-cols-2">
             <div className="w-full px-8 md:px-24 lg:px-16">
@@ -143,21 +153,12 @@ const Signup = () => {
                         <div className="mt-6 flex">
                             <a
                                 href="#"
+                                onClick={handleGoogleSignIn}
                                 className="flex w-full items-center justify-center gap-3 rounded-lg px-3 py-3 bg-white hover:bg-zinc-800 text-zinc-800 hover:text-zinc-100 ring-1 hover:ring-0 ring-inset ring-zinc-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-600"
                             >
                                 <SiGoogle className="w-4 h-4" />
                                 <span className="text-sm font-semibold leading-6">Sign up with Google</span>
                             </a>
-                            <GoogleOAuthProvider clientId='${process.env.REACT_APP_GOOGLE_CLIENT_ID}'>
-                            <GoogleLogin
-                                    onSuccess={credentialResponse => {
-                                            console.log(credentialResponse);
-                                      }}
-                                      onError={() => {
-                                        console.log('Login Failed');
-                                      }}
-                                    />
-                                </GoogleOAuthProvider>
                         </div>
                         <div className="mt-6">
                             <p className="text-center text-sm text-gray-500">

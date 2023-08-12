@@ -3,6 +3,7 @@ import jwt_decode from 'jwt-decode';
 import Cookies from 'js-cookie';
 import dayjs from 'dayjs';
 import api from './api';
+import apigoogle from './apigoogle';
 
 export const login = async (email, password, rememberMe) => {
     try {
@@ -139,3 +140,20 @@ export const isRefreshTokenExpired = (refreshToken) => {
         return true; // Token is invalid or expired
     }
 }
+
+// store user info from google auth
+export const googleAuthenticate = async (state, code) => {
+  if (state && code) {
+     const details = { code, state };
+
+    const formBody = Object.keys(details)
+      .map(
+        (key) =>
+          encodeURIComponent(key) + "=" + encodeURIComponent(details[key])
+      )
+      .join("&");
+
+   let respone =  await apigoogle.post(`/auth/o/google-oauth2/?${formBody}`, {});
+   return respone;
+  }
+};
