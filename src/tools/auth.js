@@ -4,6 +4,7 @@ import Cookies from 'js-cookie';
 import dayjs from 'dayjs';
 import api from './api';
 import apigoogle from './apigoogle';
+import axios from 'axios';
 
 export const login = async (email, password, rememberMe) => {
     try {
@@ -142,18 +143,59 @@ export const isRefreshTokenExpired = (refreshToken) => {
 }
 
 // store user info from google auth
-export const googleAuthenticate = async (state, code) => {
-  if (state && code) {
-     const details = { code, state };
+export const googleAuthenticate = async ( code) => {
+    try {
+        await api.post('dj-rest-auth/google/', {
+            code
+        })
+    } catch (err) {
+        console.log(err)
+    }
+}
 
-    const formBody = Object.keys(details)
-      .map(
-        (key) =>
-          encodeURIComponent(key) + "=" + encodeURIComponent(details[key])
-      )
-      .join("&");
 
-   let respone =  await apigoogle.post(`/auth/o/google-oauth2/?${formBody}`, {});
-   return respone;
-  }
-};
+
+    //  const headers = {
+    //   "Content-Type": "application/x-www-form-urlencoded",
+    // };
+
+    // const details = { code, state };
+
+    // const formBody = Object.keys(details)
+    //   .map(
+    //     (key) =>
+    //       encodeURIComponent(key) + "=" + encodeURIComponent(details[key])
+    //   )
+    //   .join("&");
+
+    // try {
+    //   const response = await axios.post(`http://localhost:8000/auth/o/google-oauth2/?${formBody}`, null, {
+    //     headers,
+    //   });
+
+    //     console.log(response)
+
+    // //   dispatch(authSuccess(response.data));
+    // //   dispatch(loadUser());
+    // } catch (error) {
+    //     console.log(error)
+    // //   dispatch(authFailed(error));
+    // }
+    // if (state && code) {
+
+        // console.log('state', state)
+        // console.log('code', code)
+//      const details = { code, state };
+// const formBody = Object.keys(details)
+//       .map(
+//         (key) =>
+//           encodeURIComponent(key) + "=" + encodeURIComponent(details[key])
+//       )
+//     .join("&");
+
+
+
+//    let respone =  await apigoogle.post(`/auth/o/google-oauth2/?${formBody}`, {});
+//    return respone;
+//   }
+// };

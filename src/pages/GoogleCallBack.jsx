@@ -15,15 +15,14 @@ const GoogleCallBack = () => {
 
   useEffect(() => {
     const values = queryString.parse(location.search);
-    const state = values.state ? values.state : null;
     const code = values.code ? values.code : null;
     console.log(values);
 
 
-    console.log(state, code);
+    // console.log(state, code);
 
-    if (state && code) {
-     const response =  googleAuthenticate(state, code);
+    if (code) {
+     const response =  googleAuthenticate(code);
      console.log(response);
     }
 
@@ -36,7 +35,7 @@ const GoogleCallBack = () => {
         <h1 className="text-body-emphasis">Welcome to Auth System!</h1>
         <p className="col-lg-8 mx-auto fs-5 text-muted">
           This is an incredible auth system with production level features!
-        </p>
+</p>
 
         {!isAuthenticated && (
           <>

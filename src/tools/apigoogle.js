@@ -7,7 +7,7 @@ const apigoogle = axios.create({
     timeout: 5000,
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
-        Accept: 'application/json',
+        // Accept: 'application/json',
     },
 });
 

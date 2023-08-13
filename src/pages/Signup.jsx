@@ -6,8 +6,11 @@ import api from '../tools/api';
 const Signup = () => {
 const handleGoogleSignIn = async () => {
     try {
-        const res= await api.get('/auth/o/google-oauth2/?redirect_uri=http://localhost:3000/google');
-        window.location.replace(res.data.authorization_url);
+
+        const data = "https://accounts.google.com/o/oauth2/v2/auth?redirect_uri=http://localhost:3000/google/&prompt=consent&response_type=code&client_id=448486893001-t28l8sqi774u60uhkhnqrkv8urqfnc4c.apps.googleusercontent.com&scope=openid%20email%20profile&access_type=online";
+       window.location.href = data;
+        // const res = await api.get('/auth/o/google-oauth2/?redirect_uri=http://localhost:3000/google');
+        // window.location.replace(res.data.authorization_url);
     } catch (err) {
 
     }
