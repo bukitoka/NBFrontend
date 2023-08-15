@@ -11,6 +11,7 @@ import Signup from "./pages/Signup"
 import UserProfile from "./pages/UserProfile"
 import Logout from "./pages/Logout"
 import Products from "./pages/Product"
+import Detail from "./pages/ProductDetail"
 
 const App = () => {
     return (
@@ -30,6 +31,7 @@ const App = () => {
                     <Route path="/signup" element={<Signup />} />
                     <Route path="/logout" element={<Logout />} />
                     <Route path="/products" element={<Products />} />
+                    <Route path="/products/detail" element={<Detail />} />
                 </Routes>
             </MainWrapper>
         </BrowserRouter>

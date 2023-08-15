@@ -262,6 +262,9 @@ const Products = () => {
     const [arrproducts, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [nextPage, setNextPage] = useState(null);
+    const [prevPage, setPrevPage] = useState(null);
+    const [count, setCount] = useState(0);
 
     useEffect(() => { 
         getProducts();
@@ -269,14 +272,21 @@ const Products = () => {
 
     const getProducts = async () => { 
         try {
-        const productsData = await fetchProducts();
-        setProducts(productsData.results);  
-        setLoading(false);
+            const productsData = await fetchProducts();
+            setProducts(productsData.results);  
+            setNextPage(productsData.next);
+            setPrevPage(productsData.previous);
+            setCount(productsData.count);
+            setLoading(false);
       } catch (error) {
-        setError(error);
-        setLoading(false);
+            setError(error);
+            setLoading(false);
       }
     
+    }
+
+    const handleItemClick = (id) => {
+        console.log(id);
     }
     
     return (
@@ -287,15 +297,14 @@ const Products = () => {
             {/* Navbar */}
             <Navbar open={open} setOpen={setOpen} classNames={classNames} navigation={navigation} socials={socials} />
             <main>
-
                 <div className="bg-white pt-[130px] lg:pt-[86px] ">
                   <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
                     <h2 className="text-xl font-bold text-gray-900">Top Selling</h2>
 
                     <div className="mt-8 grid grid-cols-1 gap-y-12 sm:grid-cols-2 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8">
                       {arrproducts.map((product) => (
-                        <div key={product.id}>
-                          <div className="relative">
+                        <div key={product.id}> 
+                              <div className="relative" onClick={()=> handleItemClick(product.id)}>
                             <div className="relative h-72 w-full overflow-hidden rounded-lg">
                               <img
                                 src="https://tailwindui.com/img/ecommerce-images/product-page-03-related-product-01.jpg"
@@ -326,6 +335,21 @@ const Products = () => {
                         </div>
                       ))}
                     </div>
+                        
+                    {/* <div class="flex">
+                     <a href="#" class="flex items-center justify-center px-3 h-8 mr-3 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                       <svg class="w-3.5 h-3.5 mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5H1m0 0 4 4M1 5l4-4"/>
+                       </svg>
+                       Previous
+                     </a>
+                     <a href="#" class="flex items-center justify-center px-3 h-8 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                       Next
+                       <svg class="w-3.5 h-3.5 ml-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
+                       </svg>
+                     </a>
+                    </div>   */}
                   </div>
                 </div>
             </main>
