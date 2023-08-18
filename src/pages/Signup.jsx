@@ -7,6 +7,11 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { register } from "../tools/auth";
 
+import {
+    EyeIcon,
+    EyeSlashIcon,
+} from '@heroicons/react/24/outline'
+
 const Signup = () => {
 
     const navigate = useNavigate();
@@ -60,7 +65,14 @@ const Signup = () => {
             return response;
         }
     };
+  
+    const [showPassword, setShowPassword] = useState(false);
 
+    const handleTogglePassword = () => {
+      setShowPassword(!showPassword);
+    };
+  
+ 
     return (
         <div className="bg-white h-screen block lg:grid lg:grid-cols-2">
             <div className="w-full px-8 md:px-24 lg:px-16">
@@ -81,6 +93,7 @@ const Signup = () => {
                             Create an account
                         </h2>
                     </div>
+
                     <form className="space-y-6" method="POST" onSubmit={handleRegister}>
                         <div className="flex flex-col lg:flex-row lg:space-x-4">
                             <div className="w-full">
@@ -143,16 +156,25 @@ const Signup = () => {
                                     Password
                                 </label>
                                 <div className="mt-2">
+                                    <div className="relative">
                                     <input
                                         id="password"
                                         name="password"
-                                        type="password"
+                                        type= {showPassword ? "text": "password"}
                                         required
                                         className="block w-full rounded-lg border-0 py-3 px-4 bg-zinc-50 focus:bg-white text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-yellow-600 sm:text-sm sm:leading-6"
                                         placeholder="••••••••"
                                         value={password1}
                                         onChange={(e) => setPassword1(e.target.value)}
                                     />
+                                    <button 
+                                        type="button"
+                                        onClick={handleTogglePassword}
+                                        className="absolute inset-y-0 right-0 pr-3 flex items-center">
+                                        {showPassword ?  <EyeIcon  className="h-5 w-5" aria-hidden="true"/> : <EyeSlashIcon className="h-5 w-5" aria-hidden="true"/> }
+                                    </button>
+
+                                    </div>
                                 </div>
                             </div>
                             <div className="w-full mt-6 lg:mt-0">
@@ -160,16 +182,27 @@ const Signup = () => {
                                     Confirm Password
                                 </label>
                                 <div className="mt-2">
+                                    <div className="relative">
                                     <input
                                         id="confirm-password"
                                         name="confirm-password"
-                                        type="password"
+                                        type= {showPassword ? "text":"password"}
+                                        autoComplete="confirm-password"
                                         required
                                         className="block w-full rounded-lg border-0 py-3 px-4 bg-zinc-50 focus:bg-white text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-yellow-600 sm:text-sm sm:leading-6"
                                         placeholder="••••••••"
                                         value={password2}
                                         onChange={(e) => setPassword2(e.target.value)}
                                     />
+                                     <button 
+                                        type="button"
+                                        onClick={handleTogglePassword}
+                                        className="absolute inset-y-0 right-0 pr-3 flex items-center">
+                                        {showPassword ?  <EyeIcon  className="h-5 w-5" aria-hidden="true"/> : <EyeSlashIcon className="h-5 w-5" aria-hidden="true"/> }
+                                    </button>
+
+                                    </div>
+                                   
                                 </div>
                             </div>
                         </div>
