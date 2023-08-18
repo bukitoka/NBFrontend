@@ -1,26 +1,76 @@
-import { SiGoogle } from "@icons-pack/react-simple-icons"
-import { nanobeepa } from "../assets"
-import React  from "react";
-import api from '../tools/api';
+import { nanobeepa, google } from "../assets"
+
+import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import useAuthStore from "../store/authStore";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { register } from "../tools/auth";
 
 const Signup = () => {
-const handleGoogleSignIn = async () => {
-    try {
 
-        const data = "https://accounts.google.com/o/oauth2/v2/auth?redirect_uri=http://localhost:3000/google/&prompt=consent&response_type=code&client_id=448486893001-t28l8sqi774u60uhkhnqrkv8urqfnc4c.apps.googleusercontent.com&scope=openid%20email%20profile&access_type=online";
-       window.location.href = data;
-        // const res = await api.get('/auth/o/google-oauth2/?redirect_uri=http://localhost:3000/google');
-        // window.location.replace(res.data.authorization_url);
-    } catch (err) {
+    const navigate = useNavigate();
+    const [first_name, setFirstname] = useState('');
+    const [last_name, setLastname] = useState('');
+    const [email, setEmail] = useState('');
+    const [password1, setPassword1] = useState('');
+    const [password2, setPassword2] = useState('');
+    const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
 
-    }
-}
+    useEffect(() => {
+        if (isLoggedIn()) {
+            navigate('/');
+        }
+    }, []);
 
-    // const envdata = process.env.REACT_APP_API_GOOGLE_CLIENT_ID;
-    // console.log(envdata);
+    const resetForm = () => {
+        setFirstname('');
+        setLastname('');
+        setEmail('');
+        setPassword1('');
+        setPassword2('');
+    };
+
+    const handleRegister = async (e) => {
+
+        e.preventDefault();
+
+        const { error } = await register(first_name, last_name, email, password1, password2);
+
+        if (error) {
+            toast.error(error);
+        } else {
+            toast.success("Email Verification Sent! Please check your email.");
+            resetForm();
+        }
+    };
+
+    const handleGoogleSignUp = async () => {
+        try {
+            const googleid = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+            const googleurl = `https://accounts.google.com/o/oauth2/v2/auth?redirect_uri=http://localhost:3000/google/&prompt=consent&response_type=code&client_id=${googleid}&scope=openid%20email%20profile&access_type=offline`;
+            const response = window.open(googleurl, "_self");
+
+            return response;
+
+        } catch (err) {
+            console.log(err);
+            const response = "Unable to Sign Up with Google";
+
+            return response;
+        }
+    };
+
     return (
         <div className="bg-white h-screen block lg:grid lg:grid-cols-2">
             <div className="w-full px-8 md:px-24 lg:px-16">
+
+                <ToastContainer
+                    toastClassName="rounded-lg"
+                    bodyClassName="text-sm font-semibold"
+                    position="top-center"
+                />
+
                 <div className="py-12 sm:px-12">
                     <div className="mb-3">
                         <a href="/" className="flex justify-center">
@@ -31,7 +81,7 @@ const handleGoogleSignIn = async () => {
                             Create an account
                         </h2>
                     </div>
-                    <form className="space-y-6" action="#" method="POST">
+                    <form className="space-y-6" method="POST" onSubmit={handleRegister}>
                         <div className="flex flex-col lg:flex-row lg:space-x-4">
                             <div className="w-full">
                                 <label htmlFor="firstname" className="block text-sm font-medium leading-6 text-gray-900">
@@ -42,15 +92,16 @@ const handleGoogleSignIn = async () => {
                                         id="firstname"
                                         name="firstname"
                                         type="text"
-                                        autoComplete="firstname"
                                         required
                                         className="w-full rounded-lg border-0 py-3 px-4 bg-zinc-50 focus:bg-white text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-yellow-600 sm:text-sm sm:leading-6"
                                         placeholder="First Name"
+                                        value={first_name}
+                                        onChange={(e) => setFirstname(e.target.value)}
                                     />
                                 </div>
                             </div>
                             <div className="w-full mt-6 lg:mt-0">
-                                <label htmlFor="firstname" className="block text-sm font-medium leading-6 text-gray-900">
+                                <label htmlFor="lastname" className="block text-sm font-medium leading-6 text-gray-900">
                                     Last Name
                                 </label>
                                 <div className="mt-2">
@@ -58,10 +109,11 @@ const handleGoogleSignIn = async () => {
                                         id="lastname"
                                         name="lastname"
                                         type="text"
-                                        autoComplete="lastname"
                                         required
                                         className="w-full rounded-lg border-0 py-3 px-4 bg-zinc-50 focus:bg-white text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-yellow-600 sm:text-sm sm:leading-6"
                                         placeholder="Last Name"
+                                        value={last_name}
+                                        onChange={(e) => setLastname(e.target.value)}
                                     />
                                 </div>
                             </div>
@@ -76,10 +128,11 @@ const handleGoogleSignIn = async () => {
                                     id="email"
                                     name="email"
                                     type="email"
-                                    autoComplete="email"
                                     required
                                     className="block w-full rounded-lg border-0 py-3 px-4 bg-zinc-50 focus:bg-white text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-yellow-600 sm:text-sm sm:leading-6"
                                     placeholder="youremail@domain.com"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
                                 />
                             </div>
                         </div>
@@ -94,10 +147,11 @@ const handleGoogleSignIn = async () => {
                                         id="password"
                                         name="password"
                                         type="password"
-                                        autoComplete="current-password"
                                         required
                                         className="block w-full rounded-lg border-0 py-3 px-4 bg-zinc-50 focus:bg-white text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-yellow-600 sm:text-sm sm:leading-6"
                                         placeholder="••••••••"
+                                        value={password1}
+                                        onChange={(e) => setPassword1(e.target.value)}
                                     />
                                 </div>
                             </div>
@@ -110,10 +164,11 @@ const handleGoogleSignIn = async () => {
                                         id="confirm-password"
                                         name="confirm-password"
                                         type="password"
-                                        autoComplete="confirm-password"
                                         required
                                         className="block w-full rounded-lg border-0 py-3 px-4 bg-zinc-50 focus:bg-white text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-yellow-600 sm:text-sm sm:leading-6"
                                         placeholder="••••••••"
+                                        value={password2}
+                                        onChange={(e) => setPassword2(e.target.value)}
                                     />
                                 </div>
                             </div>
@@ -127,7 +182,7 @@ const handleGoogleSignIn = async () => {
                                     type="checkbox"
                                     className="h-4 w-4 rounded border-gray-300 text-yellow-600 focus:ring-yellow-600"
                                 />
-                                <label htmlFor="privacy-policy" className="ml-3 block text-sm leading-6 text-gray-900">
+                                <label htmlFor="term-condition" className="ml-3 block text-sm leading-6 text-gray-900">
                                     I accept the <a href="#" className="font-semibold text-yellow-600 hover:text-yellow-800">Terms and Conditions</a>
                                 </label>
                             </div>
@@ -156,11 +211,15 @@ const handleGoogleSignIn = async () => {
                         <div className="mt-6 flex">
                             <a
                                 href="#"
-                                onClick={handleGoogleSignIn}
-                                className="flex w-full items-center justify-center gap-3 rounded-lg px-3 py-3 bg-white hover:bg-zinc-800 text-zinc-800 hover:text-zinc-100 ring-1 hover:ring-0 ring-inset ring-zinc-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-600"
+                                onClick={handleGoogleSignUp}
+                                className="relative flex w-full items-center justify-start rounded-lg py-3 bg-white hover:bg-zinc-800 text-zinc-800 hover:text-zinc-100 ring-1 hover:ring-0 ring-inset ring-zinc-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-600 overflow-hidden"
                             >
-                                <SiGoogle className="w-4 h-4" />
-                                <span className="text-sm font-semibold leading-6">Sign up with Google</span>
+                                <div className="px-4 absolute py-3 m-1 bg-white rounded-md">
+                                    <img src={google} className="w-4 h-4" />
+                                </div>
+                                <div className="text-sm w-full flex justify-center font-semibold leading-6">
+                                    Sign up with Google
+                                </div>
                             </a>
                         </div>
                         <div className="mt-6">

@@ -11,9 +11,6 @@ import Signup from "./pages/Signup"
 import UserProfile from "./pages/UserProfile"
 import Logout from "./pages/Logout"
 import Google from "./pages/GoogleCallBack"
-import dotenv from 'dotenv';
-
-// dotenv.config();
 
 const App = () => {
     return (
@@ -26,13 +23,13 @@ const App = () => {
                             <PrivateRoute>
                                 <UserProfile />
                             </PrivateRoute>
-                            }
+                        }
                     />
                     <Route path="/" element={<Home />} />
                     <Route path="/signin" element={<Signin />} />
                     <Route path="/signup" element={<Signup />} />
                     <Route path="/logout" element={<Logout />} />
-                    <Route path="/google" element={<Google/>} />
+                    <Route path="/google" element={<Google />} />
                 </Routes>
             </MainWrapper>
         </BrowserRouter>

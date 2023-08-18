@@ -1,5 +1,6 @@
 import { Fragment, useState, useEffect } from 'react'
 import { Popover, Transition } from '@headlessui/react'
+import { NavLink } from 'react-router-dom'
 
 // hero icons
 import {
@@ -21,6 +22,7 @@ import TopBanner from "../components/TopBanner"
 
 // store
 import useCategoryStore from '../store/categoryStore';
+import useAuthStore from '../store/authStore'
 
 
 const Navbar = ({ setOpen, classNames }) => {
@@ -36,6 +38,7 @@ const Navbar = ({ setOpen, classNames }) => {
     };
 
     const { categories, loading, error, fetchCategories } = useCategoryStore();
+    const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
 
     useEffect(() => {
         fetchCategories();
@@ -133,10 +136,13 @@ const Navbar = ({ setOpen, classNames }) => {
                                         </a>
 
                                         {/* Login */}
-                                        <a href="#" className="hidden lg:flex lg:ml-6 text-gray-400 lg:text-gray-200 hover:text-yellow-500">
-                                            <span className="sr-only">Login</span>
+                                        <a href={isLoggedIn ? 'profile' : 'signin'} className="hidden lg:flex lg:ml-6 text-gray-400 lg:text-gray-200 hover:text-yellow-500">
+                                            <span className="sr-only">Signin</span>
                                             <UserIcon className="h-6 w-6 lg:h-5 lg:w-5" aria-hidden="true" />
-                                            <span className="hidden lg:block text-sm font-medium ml-2"> Login </span>
+
+                                            {/* Show profile if user logged in */}
+                                            <span className="hidden lg:block text-sm font-medium ml-2"> {isLoggedIn ? 'Account' : 'Sign In'} </span>
+
                                         </a>
 
                                         {/* Cart */}
@@ -265,7 +271,7 @@ const Navbar = ({ setOpen, classNames }) => {
                                     <span className="sr-only">Speech</span>
                                     <MicrophoneIcon className="h-5 w-5" aria-hidden="true" />
                                 </a>
-                                <label htmlFor="search" className="sr-only">
+                                <label htmlFor="search_mobile" className="sr-only">
                                     Search
                                 </label>
                                 <div className="relative w-full">
@@ -273,7 +279,7 @@ const Navbar = ({ setOpen, classNames }) => {
                                         <MagnifyingGlassIcon className="h-5 w-5 text-gray-300" aria-hidden="true" />
                                     </div>
                                     <input
-                                        id="search"
+                                        id="search_mobile"
                                         name="search"
                                         className="w-full rounded-full border-0 bg-white/10 py-1.5 pl-10 pr-3 text-gray-100
                                             placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-gray-400 focus:bg-white/20
