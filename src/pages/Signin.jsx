@@ -3,8 +3,7 @@ import { login } from '../tools/auth';
 import { useNavigate } from 'react-router-dom';
 import useAuthStore from '../store/authStore';
 
-import { SiGoogle } from "@icons-pack/react-simple-icons"
-import { nanobeepa } from "../assets"
+import { nanobeepa, google } from "../assets"
 
 const Signin = () => {
 
@@ -37,6 +36,22 @@ const Signin = () => {
         }
     };
 
+    const handleGoogleSignIn = async () => {
+        try {
+            const googleid = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+            const googleurl = `https://accounts.google.com/o/oauth2/v2/auth?redirect_uri=http://localhost:3000/google/&prompt=consent&response_type=code&client_id=${googleid}&scope=openid%20email%20profile&access_type=offline`;
+            const response = window.open(googleurl, "_self");
+
+            return response;
+
+        } catch (err) {
+            console.log(err);
+            const response = "Unable to Sign In with Google";
+
+            return response;
+        }
+    };
+
     return (
         <div className="bg-white h-screen block lg:grid lg:grid-cols-2">
             <div className="w-full px-8 md:px-32 lg:px-24 pt-16">
@@ -50,7 +65,7 @@ const Signin = () => {
                             Sign in to your account
                         </h2>
                     </div>
-                    <form className="space-y-6" action="#" method="POST" onSubmit={handleLogin}>
+                    <form className="space-y-6" method="POST" onSubmit={handleLogin}>
                         <div>
                             <label htmlFor="email" className="block text-sm font-medium leading-6 text-zinc-900">
                                 Email address
@@ -134,10 +149,17 @@ const Signin = () => {
                         <div className="mt-6 flex">
                             <a
                                 href="#"
-                                className="flex w-full items-center justify-center gap-3 rounded-lg px-3 py-3 bg-white hover:bg-zinc-800 text-gray-800 hover:text-zinc-100 ring-1 ring-inset ring-gray-300 hover:ring-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-600"
+                                className="relative flex w-full items-center justify-start rounded-lg py-3 bg-white 
+                                hover:bg-zinc-800 text-zinc-800 hover:text-zinc-100 ring-1 hover:ring-0 ring-inset ring-zinc-300 focus-visible:outline 
+                                focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-600 overflow-hidden"
+                                onClick={handleGoogleSignIn}
                             >
-                                <SiGoogle className="w-4 h-4" />
-                                <span className="text-sm font-semibold leading-6">Sign in with Google</span>
+                                <div className="px-4 absolute py-3 m-1 bg-white rounded-md">
+                                    <img src={google} className="w-4 h-4" />
+                                </div>
+                                <div className="text-sm w-full flex justify-center font-semibold leading-6">
+                                    Sign in with Google
+                                </div>
                             </a>
                         </div>
                         <div className="mt-6">
