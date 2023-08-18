@@ -19,4 +19,16 @@ export const fetchProducts = async () => {
     }
 }
 
+export const fetchProduct = async (slug) => {
+    try {
+        const response = await api.get(`${API_MIDDLE_URL}product/${slug}/`);
+        if (response.status === 200) { 
+            return response.data;
+        }
+        return null;
+        } catch (error) {
+            throw error;
+    }
+}
+
  
