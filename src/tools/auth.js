@@ -1,12 +1,12 @@
 import useAuthStore from '../store/authStore';
-import authApiInstance from './authApi';
 import jwt_decode from 'jwt-decode';
 import Cookies from 'js-cookie';
 import dayjs from 'dayjs';
+import api from './api';
 
 export const login = async (email, password, rememberMe) => {
     try {
-        const { data, status } = await authApiInstance.post('jwt/create/', {
+        const { data, status } = await api.post('auth/login/', {
             email,
             password,
         });
@@ -22,14 +22,16 @@ export const login = async (email, password, rememberMe) => {
     }
 };
 
-export const register = async (email, password, re_password) => {
+export const register = async (first_name, last_name, email, password1, password2) => {
     try {
-        const { data } = await authApiInstance.post('users/', {
+        const { data } = await api.post('auth/registration/', {
+            first_name,
+            last_name,
             email,
-            password,
-            re_password,
+            password1,
+            password2,
         });
-        await login(email, password);
+
         return { data, error: null };
     } catch (error) {
         return {
@@ -39,10 +41,27 @@ export const register = async (email, password, re_password) => {
     }
 };
 
-export const logout = () => {
-    Cookies.remove('access_token');
-    Cookies.remove('refresh_token');
-    useAuthStore.getState().setUser(null);
+export const logout = async () => {
+    const refreshToken = Cookies.get('refresh_token');
+
+    try {
+        const { data, status } = await api.post('auth/logout/', {
+            refresh: refreshToken,
+        });
+
+        if (status === 200) {
+            Cookies.remove('access_token');
+            Cookies.remove('refresh_token');
+            useAuthStore.getState().setUser(null);
+        }
+
+        return { data, error: null };
+    } catch (error) {
+        return {
+            data: null,
+            error: error.response?.data?.detail || 'Something went wrong',
+        };
+    }
 };
 
 export const setUser = async () => {
@@ -74,13 +93,16 @@ export const setAuthUser = (access_token, refresh_token, rememberMe) => {
         secure: true,
     });
 
-    const refreshExpirationDays = rememberMe ? 3 : 1; // 3 days if rememberMe, otherwise 1 day
-    const refreshExpirationDate = dayjs().add(refreshExpirationDays, 'days');
+    const existingRefreshToken = Cookies.get('refresh_token');
+    if (!existingRefreshToken) {
+        const refreshExpirationDays = rememberMe ? 3 : 1; // 3 days if rememberMe, otherwise 1 days
+        const refreshExpirationDate = dayjs().add(refreshExpirationDays, 'days');
 
-    Cookies.set('refresh_token', refresh_token, {
-        expires: refreshExpirationDate.toDate(),
-        secure: true,
-    });
+        Cookies.set('refresh_token', refresh_token, {
+            expires: refreshExpirationDate.toDate(),
+            secure: true,
+        });
+    }
 
     const user = jwt_decode(access_token) ?? null;
 
@@ -93,7 +115,7 @@ export const setAuthUser = (access_token, refresh_token, rememberMe) => {
 
 export const refreshAccessToken = async () => {
     const refresh_token = Cookies.get('refresh_token');
-    const response = await authApiInstance.post('jwt/refresh/', {
+    const response = await api.post('auth/token/refresh/', {
         refresh: refresh_token,
     });
 
@@ -117,5 +139,28 @@ export const isRefreshTokenExpired = (refreshToken) => {
         return dayjs().isAfter(expirationTime); // Check if current time is after token's expiration time
     } catch (err) {
         return true; // Token is invalid or expired
+    }
+}
+
+// store user info from google auth
+export const googleAuthenticate = async (code) => {
+    try {
+        const res = await api.post('auth/google/', {
+            code
+        })
+
+        if (res.status === 200) {
+            setAuthUser(res.data.access, res.data.refresh, true);
+        }
+
+        return { data: res.data, error: null };
+
+    } catch (err) {
+        console.log(err)
+
+        return {
+            data: null,
+            error: err.response.data?.detail || 'Something went wrong',
+        };
     }
 }
