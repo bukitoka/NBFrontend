@@ -11,10 +11,11 @@ const UserProfile = () => {
 
     return (
         <>
-            <div>UserProfile</div>
+   <div>UserProfile</div>
             <button onClick={handleLogout}>logout</button>
         </>
     );
 }
 
 export default UserProfile
+

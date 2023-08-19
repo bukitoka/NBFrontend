@@ -6,7 +6,7 @@ import api from './api';
 
 export const login = async (email, password, rememberMe) => {
     try {
-        const { data, status } = await api.post('auth/jwt/create/', {
+        const { data, status } = await api.post('auth/login/', {
             email,
             password,
         });
@@ -22,14 +22,16 @@ export const login = async (email, password, rememberMe) => {
     }
 };
 
-export const register = async (email, password, re_password) => {
+export const register = async (first_name, last_name, email, password1, password2) => {
     try {
-        const { data } = await api.post('auth/users/', {
+        const { data } = await api.post('auth/registration/', {
+            first_name,
+            last_name,
             email,
-            password,
-            re_password,
+            password1,
+            password2,
         });
-        await login(email, password);
+
         return { data, error: null };
     } catch (error) {
         return {
@@ -43,7 +45,7 @@ export const logout = async () => {
     const refreshToken = Cookies.get('refresh_token');
 
     try {
-        const { data, status } = await api.post('auth/jwt/logout/', {
+        const { data, status } = await api.post('auth/logout/', {
             refresh: refreshToken,
         });
 
@@ -113,7 +115,7 @@ export const setAuthUser = (access_token, refresh_token, rememberMe) => {
 
 export const refreshAccessToken = async () => {
     const refresh_token = Cookies.get('refresh_token');
-    const response = await api.post('auth/jwt/refresh/', {
+    const response = await api.post('auth/token/refresh/', {
         refresh: refresh_token,
     });
 
@@ -137,5 +139,28 @@ export const isRefreshTokenExpired = (refreshToken) => {
         return dayjs().isAfter(expirationTime); // Check if current time is after token's expiration time
     } catch (err) {
         return true; // Token is invalid or expired
+    }
+}
+
+// store user info from google auth
+export const googleAuthenticate = async (code) => {
+    try {
+        const res = await api.post('auth/google/', {
+            code
+        })
+
+        if (res.status === 200) {
+            setAuthUser(res.data.access, res.data.refresh, true);
+        }
+
+        return { data: res.data, error: null };
+
+    } catch (err) {
+        console.log(err)
+
+        return {
+            data: null,
+            error: err.response.data?.detail || 'Something went wrong',
+        };
     }
 }
