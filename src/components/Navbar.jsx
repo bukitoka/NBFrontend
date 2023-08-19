@@ -136,8 +136,8 @@ const Navbar = ({ setOpen, classNames }) => {
                                         </a>
 
                                         {/* Login */}
-                                        <a href={isLoggedIn ? 'profile' : 'signin'} className="hidden lg:flex lg:ml-6 text-gray-400 lg:text-gray-200 hover:text-yellow-500">
-                                            <span className="sr-only">Signin</span>
+                                        <a href={isLoggedIn ? 'account' : 'signin'} className="hidden lg:flex lg:ml-6 text-gray-400 lg:text-gray-200 hover:text-yellow-500">
+                                            <span className="sr-only"> {isLoggedIn ? 'Account' : 'Sign In'} </span>
                                             <UserIcon className="h-6 w-6 lg:h-5 lg:w-5" aria-hidden="true" />
 
                                             {/* Show profile if user logged in */}
@@ -167,7 +167,7 @@ const Navbar = ({ setOpen, classNames }) => {
                                 <div className="flex space-x-8">
                                     <a
                                         href="#"
-                                        className="flex items-center text-sm font-medium text-gray-200 hover:text-yellow-500"
+                                        className="flex py-3 items-center text-sm font-medium text-gray-200 hover:text-yellow-500"
                                     >
                                         NEW ARRIVALS
                                     </a>
@@ -242,19 +242,19 @@ const Navbar = ({ setOpen, classNames }) => {
 
                                     <a
                                         href="#"
-                                        className="flex items-center text-sm font-medium text-gray-200 hover:text-yellow-500"
+                                        className="flex py-3 items-center text-sm font-medium text-gray-200 hover:text-yellow-500"
                                     >
                                         BRANDS
                                     </a>
                                     <a
                                         href="#"
-                                        className="flex items-center text-sm font-medium text-gray-200 hover:text-yellow-500"
+                                        className="flex py-3 items-center text-sm font-medium text-gray-200 hover:text-yellow-500"
                                     >
                                         BEAUTY STORIES
                                     </a>
                                     <a
                                         href="#"
-                                        className="flex items-center text-sm font-medium text-gray-200 hover:text-yellow-500"
+                                        className="flex py-3 items-center text-sm font-medium text-gray-200 hover:text-yellow-500"
                                     >
                                         SALES & PROMO
                                     </a>

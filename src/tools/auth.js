@@ -53,6 +53,7 @@ export const logout = async () => {
             Cookies.remove('access_token');
             Cookies.remove('refresh_token');
             useAuthStore.getState().setUser(null);
+            useAuthStore.getState().setIsLoggedIn(false);
         }
 
         return { data, error: null };
@@ -107,7 +108,9 @@ export const setAuthUser = (access_token, refresh_token, rememberMe) => {
     const user = jwt_decode(access_token) ?? null;
 
     if (user) {
-        useAuthStore.getState().setUser(user);
+        // store only the user_id in the authStore
+        useAuthStore.getState().setUser(user.user_id);
+        useAuthStore.getState().setIsLoggedIn(true);
     }
 
     useAuthStore.getState().setLoading(false);
@@ -151,6 +154,7 @@ export const googleAuthenticate = async (code) => {
 
         if (res.status === 200) {
             setAuthUser(res.data.access, res.data.refresh, true);
+            useAuthStore.getState().setIsLoggedIn(true);
         }
 
         return { data: res.data, error: null };

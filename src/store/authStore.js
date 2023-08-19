@@ -4,13 +4,11 @@ import { devtools } from 'zustand/middleware'
 const authStore = (set, get) => ({
     allUserData: null, // Use this to store all user data
     loading: false,
-    user: () => ({
-        user_id: get().allUserData?.user_id || null,
-        email: get().allUserData?.email || null,
-    }),
+    isLoggedIn: false,
+    user: () => ({ user_id: get().allUserData?.user_id || null, }),
     setUser: (user) => set({ allUserData: user }),
     setLoading: (loading) => set({ loading }),
-    isLoggedIn: () => get().allUserData !== null,
+    setIsLoggedIn: (isLoggedIn) => set({ isLoggedIn }),
 });
 
 const useAuthStore = create(

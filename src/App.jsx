@@ -18,7 +18,7 @@ const App = () => {
             <MainWrapper>
                 <Routes>
                     <Route
-                        path="/profile"
+                        path="/account"
                         element={
                             <PrivateRoute>
                                 <UserProfile />
