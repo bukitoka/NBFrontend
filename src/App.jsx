@@ -11,6 +11,7 @@ import Signup from "./pages/Signup"
 import UserProfile from "./pages/UserProfile"
 import Logout from "./pages/Logout"
 import Google from "./pages/GoogleCallBack"
+import VerifyEmail from "./pages/VerifyEmail"
 
 const App = () => {
     return (
@@ -30,6 +31,8 @@ const App = () => {
                     <Route path="/signup" element={<Signup />} />
                     <Route path="/logout" element={<Logout />} />
                     <Route path="/google" element={<Google />} />
+                    <Route path="/verify-email" element={<VerifyEmail />} />
+
                 </Routes>
             </MainWrapper>
         </BrowserRouter>

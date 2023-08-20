@@ -168,3 +168,22 @@ export const googleAuthenticate = async (code) => {
         };
     }
 }
+
+// email verification
+export const verifyEmail = async (key) => {
+    try {
+        const res = await api.post('auth/registration/verify-email/', {
+            key
+        })
+
+        return { data: res.data, error: null };
+
+    } catch (err) {
+        console.log(err)
+
+        return {
+            data: null,
+            error: err.response.data?.detail || 'Something went wrong',
+        };
+    }
+}
