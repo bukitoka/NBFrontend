@@ -3,6 +3,10 @@ import { Disclosure, RadioGroup, Tab } from '@headlessui/react'
 import { StarIcon } from '@heroicons/react/20/solid'
 import { HeartIcon, MinusIcon, PlusIcon } from '@heroicons/react/24/outline'
 import { useParams } from 'react-router-dom';
+import useAuthStore from '../store/authStore';
+import Cookies from 'js-cookie';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 // simple icons
@@ -299,29 +303,55 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function Example() {
-      const { slug } = useParams();
+export default function ProductDetail() {
+    const { slug } = useParams();
     const [selectedColor, setSelectedColor] = useState(product.colors[0])
     const [newProduct, setProduct] = useState({});
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    useEffect(() => { 
+
+  const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
+  // const alluserdata = useAuthStore((state) => state.alluserdata);
+
+
+
+   const allUserData = useAuthStore((state) => state.allUserData);
+
+    // console.log(allUserData);
+  console.log("isLoggedIn")
+  console.log(isLoggedIn);
+  console.log(allUserData)
+
+  const cookie = Cookies.get('access_token');
+  console.log(cookie);
+
+
+    useEffect(() => {
         getProductdetail(slug);
     }, [])
 
-     const getProductdetail = async (slug) => { 
+     const getProductdetail = async (slug) => {
         try {
             const productsData = await fetchProduct(slug);
-            setProduct(productsData.product);  
+            setProduct(productsData.product);
             setLoading(false);
       } catch (error) {
             setError(error);
             setLoading(false);
       }
-    
+
     }
-    
+  // function for adding to cart
+  const addToCart = async (e) => {
+    if (!isLoggedIn) {
+    toast.error("Please login to add to cart");
+    } else {
+
+    }
+  }
+
+  // open and close mobile menu
   const [open, setOpen] = useState(false)
     return (
         <div>
@@ -331,7 +361,12 @@ export default function Example() {
             {/* Navbar */}
             <Navbar open={open} setOpen={setOpen} classNames={classNames} navigation={navigation} socials={socials} />
             <main>
-             <div className="bg-white  pt-[130px] lg:pt-[86px] ">
+            <div className="bg-white  pt-[130px] lg:pt-[86px] ">
+              <ToastContainer
+                    toastClassName="rounded-lg"
+                    bodyClassName="text-sm font-semibold"
+                    position="top-center"
+                />
              <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
                <div className="lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-8">
                  {/* Image gallery */}
@@ -454,14 +489,15 @@ export default function Example() {
 
                      <div className="mt-10 flex">
                        <button
-                         type="submit"
+                        type="button"
+                        onClick={addToCart}
                          className="flex max-w-xs flex-1 items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50 sm:w-full"
                        >
-                         Add to bag
+                         Add to cart
                        </button>
 
                        <button
-                         type="button"
+                        type="button"
                          className="ml-4 flex items-center justify-center rounded-md px-3 py-3 text-gray-400 hover:bg-gray-100 hover:text-gray-500"
                        >
                          <HeartIcon className="h-6 w-6 flex-shrink-0" aria-hidden="true" />
@@ -518,7 +554,7 @@ export default function Example() {
                  </div>
                </div>
                  </div>
-                                
+
                    </div>
                      </main>
            {/* Footer */}

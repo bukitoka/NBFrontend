@@ -266,14 +266,14 @@ const Products = () => {
     const [prevPage, setPrevPage] = useState(null);
     const [count, setCount] = useState(0);
 
-    useEffect(() => { 
+    useEffect(() => {
         getProducts();
     }, [])
 
-    const getProducts = async () => { 
+    const getProducts = async () => {
         try {
             const productsData = await fetchProducts();
-            setProducts(productsData.results);  
+            setProducts(productsData.results);
             setNextPage(productsData.next);
             setPrevPage(productsData.previous);
             setCount(productsData.count);
@@ -282,14 +282,14 @@ const Products = () => {
             setError(error);
             setLoading(false);
       }
-    
+
     }
 
     const handleItemClick = (id) => {
 
         console.log(id);
     }
-    
+
     return (
         <div className="bg-white">
             {/* Mobile Navigation */}
@@ -300,11 +300,10 @@ const Products = () => {
             <main>
                 <div className="bg-white pt-[130px] lg:pt-[86px] ">
                   <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
-                    <h2 className="text-xl font-bold text-gray-900">Top Selling</h2>
 
                     <div className="mt-8 grid grid-cols-1 gap-y-12 sm:grid-cols-2 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8">
                       {arrproducts.map((product) => (
-                        <div key={product.id}> 
+                        <div key={product.id}>
                               <div className="relative">
                             <div className="relative h-72 w-full overflow-hidden rounded-lg">
                               <img
@@ -336,7 +335,7 @@ const Products = () => {
                         </div>
                       ))}
                     </div>
-                        
+
                     {/* <div class="flex">
                      <a href="#" class="flex items-center justify-center px-3 h-8 mr-3 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
                        <svg class="w-3.5 h-3.5 mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
