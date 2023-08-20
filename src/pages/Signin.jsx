@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import { login } from '../tools/auth';
 import { useNavigate } from 'react-router-dom';
 import useAuthStore from '../store/authStore';
@@ -19,7 +22,7 @@ const Signin = () => {
     const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
 
     useEffect(() => {
-        if (isLoggedIn()) {
+        if (isLoggedIn) {
             navigate('/');
         }
     }, []);
@@ -34,7 +37,7 @@ const Signin = () => {
         e.preventDefault();
         const { error } = await login(email, password, rememberMe);
         if (error) {
-            alert(error);
+            toast.error(error);
         } else {
             navigate('/');
             resetForm();
@@ -45,7 +48,7 @@ const Signin = () => {
     const [showPassword, setShowPassword] = useState(false);
 
     const handleTogglePassword = () => {
-      setShowPassword(!showPassword);
+        setShowPassword(!showPassword);
     }
 
     const handleGoogleSignIn = async () => {
@@ -58,15 +61,20 @@ const Signin = () => {
 
         } catch (err) {
             console.log(err);
-            const response = "Unable to Sign In with Google";
-
-            return response;
+            toast.error(err);
         }
     };
 
     return (
         <div className="bg-white h-screen block lg:grid lg:grid-cols-2">
             <div className="w-full px-8 md:px-32 lg:px-24 pt-16">
+
+                <ToastContainer
+                    toastClassName="rounded-lg"
+                    bodyClassName="text-sm font-semibold"
+                    position="top-center"
+                />
+
                 <div className="py-12 sm:px-12">
                     <div className="mb-3">
                         <a href="/" className="flex justify-center">
@@ -106,7 +114,7 @@ const Signin = () => {
                                     <input
                                         id="password"
                                         name="password"
-                                        type= {showPassword ? "text": "password"}
+                                        type={showPassword ? "text" : "password"}
                                         autoComplete="current-password"
                                         required
                                         className="block w-full rounded-lg border-0 py-3 px-4 bg-zinc-50 focus:bg-white text-zinc-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-yellow-600 sm:text-sm sm:leading-6"
@@ -114,13 +122,13 @@ const Signin = () => {
                                         value={password}
                                         onChange={(e) => setPassword(e.target.value)}
                                     />
-                                    <button 
+                                    <button
                                         type="button"
                                         onClick={handleTogglePassword}
                                         className="absolute inset-y-0 right-0 pr-3 flex items-center">
-                                        {showPassword ?  <EyeIcon  className="h-5 w-5" aria-hidden="true"/> : <EyeSlashIcon className="h-5 w-5" aria-hidden="true"/> }
+                                        {showPassword ? <EyeIcon className="h-5 w-5" aria-hidden="true" /> : <EyeSlashIcon className="h-5 w-5" aria-hidden="true" />}
                                     </button>
-                                 </div>
+                                </div>
                             </div>
                         </div>
 
