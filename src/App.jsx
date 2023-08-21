@@ -13,6 +13,7 @@ import Logout from "./pages/Logout"
 import Products from "./pages/Product"
 import Detail from "./pages/ProductDetail"
 import Google from "./pages/GoogleCallBack"
+import VerifyEmail from "./pages/VerifyEmail"
 
 const App = () => {
     return (
@@ -34,6 +35,8 @@ const App = () => {
                     <Route path="/products" element={<Products />} />
                     <Route path="/products/:slug" element={<Detail />} />
                     <Route path="/google" element={<Google />} />
+                    <Route path="/verify-email" element={<VerifyEmail />} />
+
                 </Routes>
             </MainWrapper>
         </BrowserRouter>
