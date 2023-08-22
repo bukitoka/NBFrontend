@@ -334,7 +334,7 @@ export default function ProductDetail() {
      const getProductdetail = async (slug) => {
         try {
             const productsData = await fetchProduct(slug);
-            setProduct(productsData.product);
+          setProduct(productsData.product);
             setLoading(false);
       } catch (error) {
             setError(error);
@@ -343,17 +343,20 @@ export default function ProductDetail() {
 
     }
   // function for adding to cart
-  const addToCart = async (e) => {
+  const addToCart = async (productid) => {
+    console.log(productid)
     if (!isLoggedIn) {
     toast.error("Please login to add to cart");
     } else {
+      
 
     }
+    // console.log(newProduct)
   }
 
   // open and close mobile menu
   const [open, setOpen] = useState(false)
-    return (
+  return (
         <div>
             {/* Mobile Navigation */}
             <MobileMenu open={open} setOpen={setOpen} classNames={classNames} navigation={navigation} socials={socials} />
@@ -490,7 +493,7 @@ export default function ProductDetail() {
                      <div className="mt-10 flex">
                        <button
                         type="button"
-                        onClick={addToCart}
+                        onClick={() => addToCart(newProduct.id)}
                          className="flex max-w-xs flex-1 items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50 sm:w-full"
                        >
                          Add to cart
