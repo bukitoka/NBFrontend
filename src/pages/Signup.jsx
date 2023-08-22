@@ -52,8 +52,7 @@ const Signup = () => {
 
     const handleGoogleSignUp = async () => {
         try {
-            const googleid = import.meta.env.VITE_GOOGLE_CLIENT_ID;
-            const googleurl = `https://accounts.google.com/o/oauth2/v2/auth?redirect_uri=http://localhost:3000/google/&prompt=consent&response_type=code&client_id=${googleid}&scope=openid%20email%20profile&access_type=offline`;
+            const googleurl = import.meta.env.VITE_GOOGLE_AUTH_URL;
             const response = window.open(googleurl, "_self");
 
             return response;

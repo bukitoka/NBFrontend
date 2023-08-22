@@ -13,7 +13,7 @@ const VerifyEmail = () => {
         const { error } = await verifyEmail(key);
 
         if (error) {
-            setMessage('Something went wrong, please try again later.', error);
+            setMessage('Something went wrong, please try again later. ' + error);
         } else {
             setMessage('Your email has been verified successfully, you will be redirected to sign in page automatically');
             setTimeout(() => {
