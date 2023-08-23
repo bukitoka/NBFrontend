@@ -7,6 +7,7 @@ import useAuthStore from '../store/authStore';
 import Cookies from 'js-cookie';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { getCartIdCookie, insertCartItem } from "../api/CartApi";
 
 
 // simple icons
@@ -306,7 +307,8 @@ function classNames(...classes) {
 export default function ProductDetail() {
     const { slug } = useParams();
     const [selectedColor, setSelectedColor] = useState(product.colors[0])
-    const [newProduct, setProduct] = useState({});
+  const [newProduct, setProduct] = useState({});
+  const [stocks, setStock] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -333,8 +335,10 @@ export default function ProductDetail() {
 
      const getProductdetail = async (slug) => {
         try {
-            const productsData = await fetchProduct(slug);
+          const productsData = await fetchProduct(slug);
+          console.log(productsData)
           setProduct(productsData.product);
+          setStock(productsData.stock);
             setLoading(false);
       } catch (error) {
             setError(error);
@@ -343,13 +347,16 @@ export default function ProductDetail() {
 
     }
   // function for adding to cart
-  const addToCart = async (productid) => {
-    console.log(productid)
+  const addToCart = async (productId, stcockId) => {
+    console.log(productId)
+    console.log(stcockId)
     if (!isLoggedIn) {
     toast.error("Please login to add to cart");
     } else {
-      
+      const cartId = getCartIdCookie();
 
+      const response = await insertCartItem(cartId, productId, stcockId, 2);
+      console.log(response);
     }
     // console.log(newProduct)
   }
@@ -421,7 +428,7 @@ export default function ProductDetail() {
 
                    <div className="mt-3">
                      <h2 className="sr-only">Product information</h2>
-                     <p className="text-3xl tracking-tight text-gray-900">{newProduct.price}</p>
+                     <p className="text-3xl tracking-tight text-gray-900">{newProduct.min_price}</p>
                    </div>
 
                    {/* Reviews */}
@@ -493,7 +500,7 @@ export default function ProductDetail() {
                      <div className="mt-10 flex">
                        <button
                         type="button"
-                        onClick={() => addToCart(newProduct.id)}
+                        onClick={() => addToCart(newProduct.id, stocks[0].id ?? null)}
                          className="flex max-w-xs flex-1 items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50 sm:w-full"
                        >
                          Add to cart

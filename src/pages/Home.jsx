@@ -19,6 +19,8 @@ import BrandSection from '../components/BrandSection'
 import StorySection from '../components/StorySection'
 import OtherPromo from '../components/OtherPromo'
 import Footer from '../components/Footer'
+import { fetchCartItems, setCartIdCookie } from "../api/CartApi";
+import useAuthStore from '../store/authStore';
 
 const navigation = {
     categories: [
@@ -316,7 +318,22 @@ const brands = [
 ]
 
 const Home = () => {
-    const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false)
+  const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
+  const userid = useAuthStore((state) => state.allUserData);
+
+  const getCartId = async (useruuid) => {
+    const response = await fetchCartItems(useruuid);
+    if (response != null) {
+      setCartIdCookie(response.cart.id)
+    }
+  };
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      getCartId(userid);
+    }
+  });
 
     return (
         <div className="bg-white">

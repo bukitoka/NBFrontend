@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import useAuthStore from '../store/authStore';
 
 import { nanobeepa, google } from "../assets"
+import { fetchCartItems } from "../api/CartApi";
 
 import {
     EyeIcon,
@@ -19,9 +20,12 @@ const Signin = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [rememberMe, setRememberMe] = useState(false);
-    const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
+  const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
+  var userid = useAuthStore((state) => state.allUserData);
+  console.log("userid",userid);
 
-    useEffect(() => {
+  useEffect(() => {
+    // getCartId();
         if (isLoggedIn) {
             navigate('/');
         }
@@ -40,9 +44,17 @@ const Signin = () => {
             toast.error(error);
         } else {
             navigate('/');
-            resetForm();
+          resetForm();
+          console.log("userid di sukses",userid);
+            getCartId();
         }
-    };
+  };
+
+  const getCartId = async () => {
+    const response = await fetchCartItems(userid);
+    console.log("response",response);
+  }
+
 
 
     const [showPassword, setShowPassword] = useState(false);
@@ -176,8 +188,8 @@ const Signin = () => {
                         <div className="mt-6 flex">
                             <a
                                 href="#"
-                                className="relative flex w-full items-center justify-start rounded-lg py-3 bg-white 
-                                hover:bg-zinc-800 text-zinc-800 hover:text-zinc-100 ring-1 hover:ring-0 ring-inset ring-zinc-300 focus-visible:outline 
+                                className="relative flex w-full items-center justify-start rounded-lg py-3 bg-white
+                                hover:bg-zinc-800 text-zinc-800 hover:text-zinc-100 ring-1 hover:ring-0 ring-inset ring-zinc-300 focus-visible:outline
                                 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-600 overflow-hidden"
                                 onClick={handleGoogleSignIn}
                             >
