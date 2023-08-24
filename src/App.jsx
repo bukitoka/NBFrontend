@@ -14,6 +14,7 @@ import Products from "./pages/Product"
 import Detail from "./pages/ProductDetail"
 import Google from "./pages/GoogleCallBack"
 import VerifyEmail from "./pages/VerifyEmail"
+import Cart from "./pages/Cart"
 
 const App = () => {
     return (
@@ -36,6 +37,7 @@ const App = () => {
                     <Route path="/products/:slug" element={<Detail />} />
                     <Route path="/google" element={<Google />} />
                     <Route path="/verify-email" element={<VerifyEmail />} />
+                    <Route path="/cart" element={<Cart />} />
 
                 </Routes>
             </MainWrapper>
