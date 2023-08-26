@@ -8,23 +8,25 @@ import Cookies from 'js-cookie';
 /**
  * Fetch all cart items
  */
-export const fetchCartItems = async (useruuid) => {
+export const fetchCartItems = async (onSuccess, onError) => {
   try {
-    const response = await api.get(`${API_MIDDLE_URL}cart/${useruuid}/`);
+    const response = await api.get(`${API_MIDDLE_URL}cart/`);
     if (response.status === 200) {
-      return response.data;
+      onSuccess(response.data);
+      return;
     }
-    return null;
+    onError(response.data);
+    return ;
   } catch (error) {
+    onError(error);
     throw error;
   }
 }
 
 
-export const insertCartItem = async (cart, product, stock, quantity) => {
+export const insertCartItem = async ( product, stock, quantity) => {
   try {
      const response  = await api.post(`${API_MIDDLE_URL}cart-item/`, {
-       cart,
        product,
        stock,
        quantity
@@ -36,28 +38,6 @@ export const insertCartItem = async (cart, product, stock, quantity) => {
     throw error;
   }
  }
-
-export const setCartIdCookie = (cartId) => {
-  Cookies.set('cart_id',cartId );
-}
-
-export const getCartIdCookie = () => {
-  return Cookies.get('cart_id') ?? null;
-}
-
-
-export const fetchCart = async (useruuid, onSuccess, onError) => {
-   try {
-    const response = await api.get(`${API_MIDDLE_URL}cart/${useruuid}/`);
-    if (response.status === 200) {
-     onSuccess(response.data);
-    }
-    return null;
-   } catch (error) {
-     onError(error);
-  }
-}
-
 
 
 // update cart item quantity

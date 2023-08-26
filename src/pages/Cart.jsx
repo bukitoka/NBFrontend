@@ -1,22 +1,8 @@
-/*
-  This example requires some changes to your config:
-
-  ```
-  // tailwind.config.js
-  module.exports = {
-    // ...
-    plugins: [
-      // ...
-      require('@tailwindcss/forms'),
-    ],
-  }
-  ```
-*/
 import { CheckIcon, ClockIcon, QuestionMarkCircleIcon, XMarkIcon } from '@heroicons/react/20/solid'
-import { fetchCartItems } from "../api/CartApi";
 import { useEffect } from 'react';
 import useAuthStore from '../store/authStore';
 import { useNavigate } from 'react-router-dom';
+import { fetchCartItems } from '../api/CartApi'
 
 const products = [
   {
@@ -55,21 +41,28 @@ const products = [
 ]
 
 export default function Example() {
-   const navigate = useNavigate();
-const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
-  var userid = useAuthStore((state) => state.allUserData);
+  const navigate = useNavigate();
+  const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
+
 
   useEffect(() => {
-      if (!isLoggedIn) {
-            navigate('/');
-        }
-      cartItems(userid);
+    if (!isLoggedIn) {
+      navigate('/');
+    }
+    getCartItems((data) => onSuccess(data), (error) => onError(error))
 
-    }, [])
+  }, [])
 
-  const cartItems = async (userid) => {
-    const response = await fetchCartItems( userid);
-    console.log(response);
+  const getCartItems = async (onsucces, onError) => {
+    await fetchCartItems(onsucces, onError);
+  }
+
+  function onSuccess(data) {
+    console.log(data);
+  }
+
+  function onError(error) {
+    console.log(error);
   }
 
   return (
