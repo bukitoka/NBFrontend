@@ -10,6 +10,8 @@ export default function Cart() {
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
   const [cartItems, setCartItems] = useState([]);
   const [listid, setListid] = useState([]);
+  const [subTotal, setSubTotal] = useState(0);
+  const [totalPayment, setTotalPayment] = useState(0);
 
   const baseurl = import.meta.env.VITE_API_BASE_URL;
   const altImage = import.meta.env.VITE_API_NO_IMAGE_URL;
@@ -19,18 +21,24 @@ export default function Cart() {
       navigate('/');
     }
     getCartItems((data) => onSuccess(data), (error) => onError(error))
-
   }, [])
+
+  // use effect when listid change
+  useEffect(() => {
+    console.log("jalan");
+    updateSummaryCart();
+  }, [listid])
 
   const getCartItems = async (onsucces, onError) => {
     await fetchCartItems(onsucces, onError);
   }
 
+  // handle when get cart items success
   function onSuccess(data) {
     setCartItems(data.cart_items);
-    console.log(data.cart_items);
   }
 
+  // handle when get cart items error
   function onError(error) {
     console.log(error);
   }
@@ -49,6 +57,8 @@ export default function Cart() {
         listid.splice(index, 1);
       }
       setListid(listid);
+      // call update summary cart
+      updateSummaryCart();
     }
 
   }
@@ -68,8 +78,30 @@ export default function Cart() {
   }
 
   function showCheckout() {
-    console.log(listid);
+    navigate('/checkout');
   }
+
+  // update summary cart
+  function updateSummaryCart() {
+    let subTotal = 0;
+
+    // calculate subtotal
+    cartItems.forEach((cartItem) => {
+      if (listid.includes(cartItem.id)) {
+        subTotal = subTotal + cartItem.total_price;
+      }
+    })
+
+    // update subtotal
+    setSubTotal(subTotal);
+
+    // TODO: calculate total payment
+    // add if need to calculate total payment
+
+    // update total payment
+    setTotalPayment(subTotal);
+  }
+
 
   return (
 
@@ -103,7 +135,6 @@ export default function Cart() {
 
             <ul role="list" className="divide-y divide-gray-200 border-b border-t border-gray-200">
               {cartItems.map((cart, cartidx) => (
-                console.log(cart.product_data.image),
                 <li key={cart.id} className="flex py-6 sm:py-10 ">
 
                   <div className="flex-shrink-0 ">
@@ -187,7 +218,7 @@ export default function Cart() {
             <dl className="mt-6 space-y-4">
               <div className="flex items-center justify-between">
                 <dt className="text-sm text-gray-600">Subtotal</dt>
-                <dd className="text-sm font-medium text-gray-900">$99.00</dd>
+                <dd className="text-sm font-medium text-gray-900">${subTotal}</dd>
               </div>
               <div className="flex items-center justify-between border-t border-gray-200 pt-4">
                 <dt className="flex items-center text-sm text-gray-600">
@@ -209,17 +240,18 @@ export default function Cart() {
                 </dt>
                 <dd className="text-sm font-medium text-gray-900">$8.32</dd>
               </div>
-              <div className="flex items-center justify-between border-t border-gray-200 pt-4">
+              <div className="flex items-center justify-between border-t border-gray-200 pt-4 ">
                 <dt className="text-base font-medium text-gray-900">Order total</dt>
-                <dd className="text-base font-medium text-gray-900">$112.32</dd>
+                <dd className="text-base font-medium text-gray-900">${totalPayment}</dd>
               </div>
             </dl>
 
             <div className="mt-6">
               <button
-                // type="submit"
+                type="button"
                 onClick={showCheckout}
-                className="w-full rounded-md border border-transparent bg-indigo-600 px-4 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
+                disabled={listid.length === 0}
+                className={`w-full rounded-md border border-transparent ${listid.length === 0 ? 'bg-gray-300' : 'bg-indigo-600 '} px-4 py-3 text-base font-medium text-white shadow-sm  focus:outline-none focus:ring-2 ${listid.length === 0 ? 'focus:ring-gray-300' : 'focus:ring-indigo-500 '}  focus:ring-offset-2 focus:ring-offset-gray-50`}
               >
                 Checkout
               </button>
