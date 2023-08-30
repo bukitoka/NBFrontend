@@ -1,20 +1,8 @@
-/*
-  This example requires some changes to your config:
 
-  ```
-  // tailwind.config.js
-  module.exports = {
-    // ...
-    plugins: [
-      // ...
-      require('@tailwindcss/forms'),
-      require('@tailwindcss/aspect-ratio'),
-    ],
-  }
-  ```
-*/
-import { Fragment, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import { Dialog, Popover, RadioGroup, Tab, Transition } from '@headlessui/react'
+import { useLocation } from 'react-router-dom'
+import { fetchCartItems } from '../api/CartApi'
 import {
   Bars3Icon,
   MagnifyingGlassIcon,
@@ -148,6 +136,32 @@ function classNames(...classes) {
 export default function Example() {
   const [open, setOpen] = useState(false)
   const [selectedDeliveryMethod, setSelectedDeliveryMethod] = useState(deliveryMethods[0])
+  const [selectedCartItems, setCartItems] = useState([])
+  const location = useLocation()
+  const listId = location.state?.listid || [];
+
+
+  useEffect(() => {
+    getCartItems((data) => onSuccess(data), (error) => onError(error))
+  }, [])
+
+
+  const getCartItems = async (onsucces, onError) => {
+    await fetchCartItems(onsucces, onError);
+  }
+
+  // handle when get cart items success
+  function onSuccess(data) {
+    const allCartItems = data.cart_items;
+    const cartItems = allCartItems.filter((cartItem) => listId.includes(cartItem.id));
+    setCartItems(cartItems);
+    console.log(cartItems);
+  }
+
+  // handle when get cart items error
+  function onError(error) {
+    console.log(error);
+  }
 
   return (
     <div className="bg-gray-50">
@@ -832,22 +846,22 @@ export default function Example() {
               <div className="mt-4 rounded-lg border border-gray-200 bg-white shadow-sm">
                 <h3 className="sr-only">Items in your cart</h3>
                 <ul role="list" className="divide-y divide-gray-200">
-                  {products.map((product) => (
-                    <li key={product.id} className="flex px-4 py-6 sm:px-6">
+                  {selectedCartItems.map((cartItem) => (
+                    <li key={cartItem.id} className="flex px-4 py-6 sm:px-6">
                       <div className="flex-shrink-0">
-                        <img src={product.imageSrc} alt={product.imageAlt} className="w-20 rounded-md" />
+                        <img src={cartItem.product_data.image} alt={cartItem.product_data.image} className="w-20 rounded-md" />
                       </div>
 
                       <div className="ml-6 flex flex-1 flex-col">
                         <div className="flex">
                           <div className="min-w-0 flex-1">
                             <h4 className="text-sm">
-                              <a href={product.href} className="font-medium text-gray-700 hover:text-gray-800">
-                                {product.title}
+                              <a href="#" className="font-medium text-gray-700 hover:text-gray-800">
+                                {cartItem.product_data.name}
                               </a>
                             </h4>
-                            <p className="mt-1 text-sm text-gray-500">{product.color}</p>
-                            <p className="mt-1 text-sm text-gray-500">{product.size}</p>
+                            <p className="mt-1 text-sm text-gray-500">product color</p>
+                            <p className="mt-1 text-sm text-gray-500">product size</p>
                           </div>
 
                           <div className="ml-4 flow-root flex-shrink-0">
@@ -862,7 +876,7 @@ export default function Example() {
                         </div>
 
                         <div className="flex flex-1 items-end justify-between pt-2">
-                          <p className="mt-1 text-sm font-medium text-gray-900">{product.price}</p>
+                          <p className="mt-1 text-sm font-medium text-gray-900">Price</p>
 
                           <div className="ml-4">
                             <label htmlFor="quantity" className="sr-only">

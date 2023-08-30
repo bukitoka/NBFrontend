@@ -25,7 +25,6 @@ export default function Cart() {
 
   // use effect when listid change
   useEffect(() => {
-    console.log("jalan");
     updateSummaryCart();
   }, [listid])
 
@@ -78,7 +77,7 @@ export default function Cart() {
   }
 
   function showCheckout() {
-    navigate('/checkout');
+    navigate('/checkout', { state: { listid: listid } });
   }
 
   // update summary cart

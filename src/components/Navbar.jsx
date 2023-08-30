@@ -53,7 +53,7 @@ const Navbar = ({ setOpen, classNames }) => {
   }
 
   function onSuccessLoadCart(data) {
-    setTotalItems(data.total_items);
+    setTotalItems(data.cart_items.length);
   }
 
   function onErrorLoadCart(error) {
