@@ -3,6 +3,8 @@ import { Fragment, useEffect, useState } from 'react'
 import { Dialog, Popover, RadioGroup, Tab, Transition } from '@headlessui/react'
 import { useLocation } from 'react-router-dom'
 import { fetchCartItems } from '../api/CartApi'
+import { apiGet } from '../api/ApiService'
+import Modal from '../components/modal'
 import {
   Bars3Icon,
   MagnifyingGlassIcon,
@@ -12,87 +14,6 @@ import {
 } from '@heroicons/react/24/outline'
 import { CheckCircleIcon, ChevronDownIcon, TrashIcon } from '@heroicons/react/20/solid'
 
-const currencies = ['CAD', 'USD', 'AUD', 'EUR', 'GBP']
-const navigation = {
-  categories: [
-    {
-      name: 'Women',
-      featured: [
-        {
-          name: 'New Arrivals',
-          href: '#',
-          imageSrc: 'https://tailwindui.com/img/ecommerce-images/mega-menu-category-01.jpg',
-          imageAlt: 'Models sitting back to back, wearing Basic Tee in black and bone.',
-        },
-        {
-          name: 'Basic Tees',
-          href: '#',
-          imageSrc: 'https://tailwindui.com/img/ecommerce-images/mega-menu-category-02.jpg',
-          imageAlt: 'Close up of Basic Tee fall bundle with off-white, ochre, olive, and black tees.',
-        },
-        {
-          name: 'Accessories',
-          href: '#',
-          imageSrc: 'https://tailwindui.com/img/ecommerce-images/mega-menu-category-03.jpg',
-          imageAlt: 'Model wearing minimalist watch with black wristband and white watch face.',
-        },
-        {
-          name: 'Carry',
-          href: '#',
-          imageSrc: 'https://tailwindui.com/img/ecommerce-images/mega-menu-category-04.jpg',
-          imageAlt: 'Model opening tan leather long wallet with credit card pockets and cash pouch.',
-        },
-      ],
-    },
-    {
-      name: 'Men',
-      featured: [
-        {
-          name: 'New Arrivals',
-          href: '#',
-          imageSrc: 'https://tailwindui.com/img/ecommerce-images/mega-menu-01-men-category-01.jpg',
-          imageAlt: 'Hats and sweaters on wood shelves next to various colors of t-shirts on hangers.',
-        },
-        {
-          name: 'Basic Tees',
-          href: '#',
-          imageSrc: 'https://tailwindui.com/img/ecommerce-images/mega-menu-01-men-category-02.jpg',
-          imageAlt: 'Model wearing light heather gray t-shirt.',
-        },
-        {
-          name: 'Accessories',
-          href: '#',
-          imageSrc: 'https://tailwindui.com/img/ecommerce-images/mega-menu-01-men-category-03.jpg',
-          imageAlt:
-            'Grey 6-panel baseball hat with black brim, black mountain graphic on front, and light heather gray body.',
-        },
-        {
-          name: 'Carry',
-          href: '#',
-          imageSrc: 'https://tailwindui.com/img/ecommerce-images/mega-menu-01-men-category-04.jpg',
-          imageAlt: 'Model putting folded cash into slim card holder olive leather wallet with hand stitching.',
-        },
-      ],
-    },
-  ],
-  pages: [
-    { name: 'Company', href: '#' },
-    { name: 'Stores', href: '#' },
-  ],
-}
-const products = [
-  {
-    id: 1,
-    title: 'Basic Tee',
-    href: '#',
-    price: '$32.00',
-    color: 'Black',
-    size: 'Large',
-    imageSrc: 'https://tailwindui.com/img/ecommerce-images/checkout-page-02-product-01.jpg',
-    imageAlt: "Front of men's Basic Tee in black.",
-  },
-  // More products...
-]
 const deliveryMethods = [
   { id: 1, title: 'Standard', turnaround: '4–10 business days', price: '$5.00' },
   { id: 2, title: 'Express', turnaround: '2–5 business days', price: '$16.00' },
@@ -139,12 +60,27 @@ export default function Example() {
   const [selectedCartItems, setCartItems] = useState([])
   const location = useLocation()
   const listId = location.state?.listid || [];
+  const [shippingList, setShippingList] = useState([]);
 
 
   useEffect(() => {
     getCartItems((data) => onSuccess(data), (error) => onError(error))
+    getShippingData((data) => onShippingSuccess(data), (error) => onShippingError(error))
+
   }, [])
 
+  const getShippingData = async (onSucces, onError) => {
+    await apiGet('shipping/', onSucces, onError);
+  }
+
+  function onShippingSuccess(data) {
+    console.log(data.results[0].receiver_phone);
+    setShippingList(data.results);
+  }
+
+  function onShippingError(error) {
+    console.log(error);
+  }
 
   const getCartItems = async (onsucces, onError) => {
     await fetchCartItems(onsucces, onError);
@@ -181,29 +117,26 @@ export default function Example() {
 
                   <dl className="space-y-6 border-t border-gray-200 px-4 py-6 sm:px-6">
                     <div className="flex items-center justify-between">
-                      <dt className="text-sm">Subtotal</dt>
-                      <dd className="text-sm font-medium text-gray-900">$64.00</dd>
+                      <dt className="text-sm">Phone Number</dt>
+                      {/* <dd className="text-sm font-medium text-gray-900">{shippingList[0].receiver_phone ?? 0}</dd> */}
                     </div>
                     <div className="flex items-center justify-between">
-                      <dt className="text-sm">Shipping</dt>
-                      <dd className="text-sm font-medium text-gray-900">$5.00</dd>
+                      <dt className="text-sm">Address</dt>
+                      {/* <dd className="text-sm font-medium text-gray-900">{shippingList[0].receiver_address ?? 0}</dd> */}
                     </div>
                     <div className="flex items-center justify-between">
-                      <dt className="text-sm">Taxes</dt>
-                      <dd className="text-sm font-medium text-gray-900">$5.52</dd>
-                    </div>
-                    <div className="flex items-center justify-between border-t border-gray-200 pt-6">
-                      <dt className="text-base font-medium">Total</dt>
-                      <dd className="text-base font-medium text-gray-900">$75.52</dd>
+                      <dt className="text-sm">Lion PArcel</dt>
+                      {/* <dd className="text-sm font-medium text-gray-900">{shippingList[0].destination.route}</dd> */}
                     </div>
                   </dl>
 
                   <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
                     <button
                       type="button"
+                      onClick={() => setOpen(true)}
                       className="w-full rounded-md border border-transparent bg-indigo-600 px-4 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
                     >
-                      Confirm order
+                      Select another address
                     </button>
                   </div>
                 </div>
@@ -456,6 +389,7 @@ export default function Example() {
           </form>
         </div>
       </main>
+      <Modal open={open} setOpen={setOpen} />
     </div>
   )
 }
