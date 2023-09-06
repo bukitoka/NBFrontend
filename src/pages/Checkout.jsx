@@ -337,12 +337,12 @@ export default function Example() {
   }
 
   function onShippingSuccess(data) {
-    console.log(data.results);
+    // console.log(data.results);
     setShippingList(data.results);
   }
 
   function onShippingError(error) {
-    console.log(error);
+    // console.log(error);
   }
 
   const getCartItems = async (onsucces, onError) => {
@@ -412,7 +412,7 @@ export default function Example() {
 
                         </div>
                         <div className="flex items-center justify-between">
-                          <dt className="text-sm">Lion PArcel</dt>
+                          <dt className="text-sm">Lion Parcel</dt>
                           {shippingList.length > 0 && (
                             <dd className="text-sm font-medium text-gray-900">{shippingList[0].destination.route}</dd>
                           )}
