@@ -16,6 +16,7 @@ import Google from "./pages/GoogleCallBack"
 import VerifyEmail from "./pages/VerifyEmail"
 import Cart from "./pages/Cart"
 import CheckOut from "./pages/Checkout"
+import 'react-loading-skeleton/dist/skeleton.css'
 
 const App = () => {
   return (

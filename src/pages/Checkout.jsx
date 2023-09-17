@@ -3,7 +3,7 @@ import { Fragment, useEffect, useState } from 'react'
 import { Dialog, Popover, RadioGroup, Tab, Transition } from '@headlessui/react'
 import { useLocation } from 'react-router-dom'
 import { fetchCartItems } from '../api/CartApi'
-import { apiGet } from '../api/ApiService'
+import { apiGet, apiPost } from '../api/ApiService'
 import Modal from '../components/modal'
 import NewAddressModal from './confirmOrder/component/addNewAddress'
 import {
@@ -323,21 +323,40 @@ export default function Example() {
   const location = useLocation()
   const listId = location.state?.listid || [];
   const [shippingList, setShippingList] = useState([]);
+  const [selectectShipping, setSelectedShping] = useState(null);
   const baseurl = import.meta.env.VITE_API_BASE_URL;
 
 
   useEffect(() => {
-    getCartItems((data) => onSuccess(data), (error) => onError(error))
+    // getCartItems((data) => onSuccess(data), (error) => onError(error))
     getShippingData((data) => onShippingSuccess(data), (error) => onShippingError(error))
-
+    // chekTariff()
+    getSelectedCartItems()
   }, [])
 
   const getShippingData = async (onSucces, onError) => {
     await apiGet('shipping/', onSucces, onError);
   }
 
+  const getSelectedCartItems = async () => {
+    await apiGet(`selected-item/`, (data) => onSuccessGetData(data), (error) => onErrorGetData(error))
+  }
+
+  function onSuccessGetData(data) {
+    setCartItems(data);
+    console.log('selected Data');
+    console.log(data);
+    // setCartItems(data);
+  }
+
+
+  function onErrorGetData(error) {
+    console.log(error);
+  }
+
   function onShippingSuccess(data) {
-    // console.log(data.results);
+
+    console.log(data.results);
     setShippingList(data.results);
   }
 
@@ -363,12 +382,38 @@ export default function Example() {
   }
 
   const handleOpenModalNewAddress = () => {
-    console.log("open modal");
     setOpen(false);
     setModalNewAddress(true);
   }
 
 
+  const chekTariff = () => {
+    apiGet(`tariff/?shipping=4dcca9cb-0da1-436d-8dfa-105e2a3c57d5`, (res) => onSuccessTariff(res), (res) => onErrorTariff(res))
+  }
+
+  function onSuccessTariff(data) {
+    console.log(data);
+  }
+
+  function onErrorTariff(error) {
+    console.log(error);
+  }
+
+  const createOrder = async () => {
+    console.log(shippingList[0].id);
+    await apiPost(`order/create/`, {
+      shipping: shippingList[0].id,
+      shipping_type: "REGPACK"
+    }, (res) => onSuccessCreateOrder(res), (res) => onErrorCreateOrder(res))
+  }
+
+  function onSuccessCreateOrder(data) {
+    console.log(data);
+  }
+
+  function onErrorCreateOrder(error) {
+    console.log(error);
+  }
 
   // open and close mobile menu
   const [openMobile, setOpenMobile] = useState(false)
@@ -382,7 +427,7 @@ export default function Example() {
       <Navbar open={openMobile} setOpen={setOpenMobile} classNames={classNames} navigation={navigation} socials={socials} />
       <main>
 
-        <div className="bg-gray-50   pt-[140px] lg:pt-[96px]">
+        <div className=" bg-zinc-100 pt-[140px] lg:pt-[96px]">
 
           <main className="mx-auto max-w-7xl px-4 pb-24 pt-16 sm:px-6 lg:px-8">
             <div className="mx-auto max-w-2xl lg:max-w-none">
@@ -397,22 +442,28 @@ export default function Example() {
                     <div className="mt-4 rounded-lg border border-gray-200 bg-white shadow-sm">
                       <h3 className="sr-only">Items in your cart</h3>
 
-                      <dl className="space-y-6 border-t border-gray-200 px-4 py-6 sm:px-6">
-                        <div className="flex items-center justify-between">
+                      <dl className="space-y-3 border-t border-gray-200 px-4 py-6 sm:px-6">
+                        <div className=" flex-col">
+                          <dt className="text-sm">Receiver</dt>
+                          {shippingList.length > 0 && (
+                            <dd className="text-sm font-medium text-gray-900">{shippingList[0].receiver_name}</dd>
+                          )}
+                        </div>
+                        <div className=" flex-col">
                           <dt className="text-sm">Phone Number</dt>
                           {shippingList.length > 0 && (
                             <dd className="text-sm font-medium text-gray-900">{shippingList[0].receiver_phone}</dd>
                           )}
                         </div>
-                        <div className="flex items-center justify-between">
+                        <div className="flex-col">
                           <dt className="text-sm">Address</dt>
                           {shippingList.length > 0 && (
                             <dd className="text-sm font-medium text-gray-900">{shippingList[0].receiver_address}</dd>
                           )}
 
                         </div>
-                        <div className="flex items-center justify-between">
-                          <dt className="text-sm">Lion Parcel</dt>
+                        <div className="flex-col">
+                          <dt className="text-sm">Kec/Kab</dt>
                           {shippingList.length > 0 && (
                             <dd className="text-sm font-medium text-gray-900">{shippingList[0].destination.route}</dd>
                           )}
@@ -423,7 +474,7 @@ export default function Example() {
                         <button
                           type="button"
                           onClick={() => setOpen(true)}
-                          className="w-full rounded-md border border-transparent bg-indigo-600 px-4 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
+                          className="w-full rounded-md border border-transparent bg-zinc-800 px-4 py-3 text-base font-medium text-white shadow-sm hover:bg-yellow-500 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 focus:ring-offset-gray-50"
                         >
                           Select another address
                         </button>
@@ -443,7 +494,7 @@ export default function Example() {
                             className={({ checked, active }) =>
                               classNames(
                                 checked ? 'border-transparent' : 'border-gray-300',
-                                active ? 'ring-2 ring-indigo-500' : '',
+                                active ? 'ring-2 ring-yellow-500' : '',
                                 'relative flex cursor-pointer rounded-lg border bg-white p-4 shadow-sm focus:outline-none'
                               )
                             }
@@ -467,12 +518,12 @@ export default function Example() {
                                   </span>
                                 </span>
                                 {checked ? (
-                                  <CheckCircleIcon className="h-5 w-5 text-indigo-600" aria-hidden="true" />
+                                  <CheckCircleIcon className="h-5 w-5 text-yellow-500" aria-hidden="true" />
                                 ) : null}
                                 <span
                                   className={classNames(
                                     active ? 'border' : 'border-2',
-                                    checked ? 'border-indigo-500' : 'border-transparent',
+                                    checked ? 'border-yellow-500' : 'border-transparent',
                                     'pointer-events-none absolute -inset-px rounded-lg'
                                   )}
                                   aria-hidden="true"
@@ -591,6 +642,7 @@ export default function Example() {
                     <h3 className="sr-only">Items in your cart</h3>
                     <ul role="list" className="divide-y divide-gray-200">
                       {selectedCartItems.map((cartItem) => (
+                        console.log(cartItem),
                         <li key={cartItem.id} className="flex px-4 py-6 sm:px-6">
                           <div className="flex-shrink-0">
                             <img src={`${baseurl}${cartItem.product_data.image}`} alt={`${baseurl}${cartItem.product_data.image}`} className="w-20 rounded-md" />
@@ -604,43 +656,13 @@ export default function Example() {
                                     {cartItem.product_data.name}
                                   </a>
                                 </h4>
-                                <p className="mt-1 text-sm text-gray-500">product color</p>
-                                <p className="mt-1 text-sm text-gray-500">product size</p>
-                              </div>
-
-                              <div className="ml-4 flow-root flex-shrink-0">
-                                <button
-                                  type="button"
-                                  className="-m-2.5 flex items-center justify-center bg-white p-2.5 text-gray-400 hover:text-gray-500"
-                                >
-                                  <span className="sr-only">Remove</span>
-                                  <TrashIcon className="h-5 w-5" aria-hidden="true" />
-                                </button>
+                                <p className="mt-1 text-sm text-gray-500">Size: {cartItem.product_data.size} gr</p>
+                                <p className="mt-1 text-sm text-gray-500">{cartItem.quantity} pcs</p>
                               </div>
                             </div>
 
                             <div className="flex flex-1 items-end justify-between pt-2">
-                              <p className="mt-1 text-sm font-medium text-gray-900">Price</p>
-
-                              {/* <div className="ml-4">
-                                <label htmlFor="quantity" className="sr-only">
-                                  Quantity
-                                </label>
-                                <select
-                                  id="quantity"
-                                  name="quantity"
-                                  className="rounded-md border border-gray-300 text-left text-base font-medium text-gray-700 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
-                                >
-                                  <option value={1}>1</option>
-                                  <option value={2}>2</option>
-                                  <option value={3}>3</option>
-                                  <option value={4}>4</option>
-                                  <option value={5}>5</option>
-                                  <option value={6}>6</option>
-                                  <option value={7}>7</option>
-                                  <option value={8}>8</option>
-                                </select>
-                              </div> */}
+                              <p className="mt-1 text-sm font-medium text-gray-900">Rp.{cartItem.total_price}</p>
                             </div>
                           </div>
                         </li>
@@ -655,10 +677,10 @@ export default function Example() {
                         <dt className="text-sm">Shipping</dt>
                         <dd className="text-sm font-medium text-gray-900">$5.00</dd>
                       </div>
-                      <div className="flex items-center justify-between">
+                      {/* <div className="flex items-center justify-between">
                         <dt className="text-sm">Taxes</dt>
                         <dd className="text-sm font-medium text-gray-900">$5.52</dd>
-                      </div>
+                      </div> */}
                       <div className="flex items-center justify-between border-t border-gray-200 pt-6">
                         <dt className="text-base font-medium">Total</dt>
                         <dd className="text-base font-medium text-gray-900">$75.52</dd>
@@ -667,8 +689,9 @@ export default function Example() {
 
                     <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
                       <button
-                        type="submit"
-                        className="w-full rounded-md border border-transparent bg-indigo-600 px-4 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
+                        onClick={() => createOrder()}
+                        type="button"
+                        className="w-full rounded-md border border-transparent bg-zinc-800 px-4 py-3 text-base font-medium text-white shadow-sm hover:bg-yellow-500 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 focus:ring-offset-gray-50"
                       >
                         Confirm order
                       </button>

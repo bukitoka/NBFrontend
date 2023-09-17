@@ -1,8 +1,10 @@
-import { CheckIcon, ClockIcon, QuestionMarkCircleIcon, XMarkIcon } from '@heroicons/react/20/solid'
+import { CheckIcon, ClockIcon, QuestionMarkCircleIcon, TrashIcon } from '@heroicons/react/20/solid'
 import { useState, useEffect } from 'react';
 import useAuthStore from '../store/authStore';
 import { useNavigate } from 'react-router-dom';
 import { fetchCartItems } from '../api/CartApi'
+import { apiPatch, apiPost, apiDelete } from '../api/ApiService';
+
 // simple icons
 import {
   SiWhatsapp,
@@ -275,6 +277,11 @@ export default function Cart() {
   const [listid, setListid] = useState([]);
   const [subTotal, setSubTotal] = useState(0);
   const [totalPayment, setTotalPayment] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [allCartId, setAllCartId] = useState([]);
+  const [listSelectedId, setListSelectedId] = useState([]);
+  let testAllCartId = [];
+  let testListSelectedId = [];
 
   const baseurl = import.meta.env.VITE_API_BASE_URL;
   const altImage = import.meta.env.VITE_API_NO_IMAGE_URL;
@@ -283,59 +290,74 @@ export default function Cart() {
     if (!isLoggedIn) {
       navigate('/');
     }
-    getCartItems((data) => onSuccess(data), (error) => onError(error))
+    getCartItems()
   }, [])
 
-  // use effect when listid change
   useEffect(() => {
-    updateSummaryCart();
-  }, [listid])
+    updateSummaryCart()
+  }, [listSelectedId])
 
-  const getCartItems = async (onsucces, onError) => {
-    await fetchCartItems(onsucces, onError);
+  const getCartItems = async () => {
+    await fetchCartItems((data) => onSuccess(data), (error) => onError(error));
   }
 
   // handle when get cart items success
   function onSuccess(data) {
+    console.log(data);
     setCartItems(data.cart_items);
+    setLoading(false);
+
+    // set all cart id
+    const ids = data.cart_items.map(item => item.id);
+    setAllCartId(ids);
+    testAllCartId = ids;
+
+
+    // set list selected id
+    const selectedIds = data.cart_items.filter(item => item.is_selected).map(item => item.id);
+    setListSelectedId(selectedIds);
+    testListSelectedId = selectedIds;
+
+    const checkAll = compareArrays(testListSelectedId, testAllCartId)
+    const selectAll = document.getElementById('select-all');
+    selectAll.checked = checkAll;
+
+    // console.log(listSelectedId)
+    updateSummaryCart()
   }
 
   // handle when get cart items error
   function onError(error) {
     console.log(error);
+    setLoading(false);
+  }
+
+
+  function compareArrays(array1, array2) {
+    if (array1.length !== array2.length) {
+      return false;
+    }
+
+    return array1.every((element1) => array2.includes(element1));
   }
 
   function handleChangeCheckbox(event, cartid) {
-    if (!event.target.checked) {
-      const selectAll = document.getElementById('select-all');
-      selectAll.checked = false;
-    }
-
     if (event.target.checked) {
-      setListid([...listid, cartid]);
+      setAsSelected(cartid, true);
     } else {
-      const index = listid.indexOf(cartid);
-      if (index > -1) {
-        listid.splice(index, 1);
-      }
-      setListid(listid);
-      // call update summary cart
-      updateSummaryCart();
+      setAsSelected(cartid, false);
     }
-
   }
 
   function handleSelectAll(event) {
-    const checkboxes = document.querySelectorAll('input[name="cart-item"]');
-    checkboxes.forEach((checkbox) => {
-      checkbox.checked = event.target.checked;
-    });
-
     if (event.target.checked) {
-      const ids = cartItems.map(item => item.id);
-      setListid(ids);
+      allCartId.forEach((id) => {
+        setAsSelected(id, true);
+      })
     } else {
-      setListid([]);
+      allCartId.forEach((id) => {
+        setAsSelected(id, false);
+      })
     }
   }
 
@@ -349,10 +371,12 @@ export default function Cart() {
 
     // calculate subtotal
     cartItems.forEach((cartItem) => {
-      if (listid.includes(cartItem.id)) {
+      if (listSelectedId.includes(cartItem.id)) {
         subTotal = subTotal + cartItem.total_price;
       }
     })
+
+    console.log(subTotal);
 
     // update subtotal
     setSubTotal(subTotal);
@@ -367,6 +391,51 @@ export default function Cart() {
   // open and close mobile menu
   const [open, setOpen] = useState(false)
 
+
+  // incrase quantity
+  const increaseQuantity = async (id) => {
+    await apiPatch(`cart-item/${id}/`, {
+      increase_quantity: true
+    }, (data) => {
+      getCartItems()
+      // console.log(data);
+    }, (err) => {
+      // console.log(err);
+    })
+  }
+
+  // decrease quantity
+  const decreaseQuantity = async (id) => {
+    await apiPatch(`cart-item/${id}/?decrease_quantity=true`, [], (data) => {
+      getCartItems()
+    }, (err) => {
+      // console.log(err);
+    })
+  }
+
+  const setAsSelected = async (id, isSelected) => {
+    await apiPatch(`cart-item/${id}/`, {
+      set_as_selected: isSelected
+    }
+      , (data) => {
+        console.log("test Dta ")
+        console.log(data)
+        getCartItems()
+      }, (err) => {
+        // console.log(err);
+      })
+  }
+
+  const deleteCart = async (id) => {
+    await apiDelete(`cart-item/${id}/`, {
+    }, (data) => {
+      getCartItems()
+      // console.log(data);
+    }, (err) => {
+      // console.log(err);
+    })
+  }
+
   return (
     <div>
       {/* Mobile Navigation */}
@@ -378,12 +447,11 @@ export default function Cart() {
 
 
         {/* shopping cart */}
-        <div className="bg-white  pt-[130px] lg:pt-[86px] ">
+        <div className=" bg-zinc-100 pt-[130px] lg:pt-[86px] ">
           <div className="mx-auto max-w-2xl px-4 pb-24 pt-16 sm:px-6 lg:max-w-7xl lg:px-8">
-            <h1 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Shopping Cart</h1>
             <form className="mt-12 lg:grid lg:grid-cols-12 lg:items-start lg:gap-x-12 xl:gap-x-16 ">
 
-              <section aria-labelledby="cart-heading" className="lg:col-span-7 ">
+              <section aria-labelledby="cart-heading" className="lg:col-span-7 bg-white p-4 rounded-lg">
                 <h2 id="cart-heading" className="sr-only">
                   Items in your shopping cart
                 </h2>
@@ -395,7 +463,7 @@ export default function Cart() {
                       name="comments"
                       type="checkbox"
                       onChange={handleSelectAll}
-                      className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                      className="h-4 w-4 rounded border-gray-300 text-zinc-800 focus:ring-white"
                     />
                   </div>
                   <div className="ml-3 text-sm leading-6">
@@ -406,7 +474,7 @@ export default function Cart() {
                 </div>
 
 
-                <ul role="list" className="divide-y divide-gray-200 border-b border-t border-gray-200">
+                <ul role="list" className="divide-y divide-gray-200  border-t border-gray-200">
                   {cartItems.map((cart, cartidx) => (
                     <li key={cart.id} className="flex py-6 sm:py-10 ">
 
@@ -418,7 +486,8 @@ export default function Cart() {
                             name="cart-item"
                             type="checkbox"
                             onChange={(e) => handleChangeCheckbox(e, cart.id)}
-                            className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600 mr-2"
+                            checked={cart.is_selected}
+                            className="h-4 w-4 rounded border-gray-300 text-zinc-800 mr-2 focus:ring-white"
                           />
                           <img
                             src={`${baseurl}${cart.product_data.image}`}
@@ -429,7 +498,7 @@ export default function Cart() {
                       </div>
 
                       <div className="ml-4 flex flex-1 flex-col justify-between sm:ml-6 ">
-                        <div className="relative pr-9 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:pr-0">
+                        <div className="relative  sm:grid sm:grid-cols-2 sm:gap-x-6 sm:pr-0">
                           <div>
                             <div className="flex justify-between">
                               <h3 className="text-sm">
@@ -439,40 +508,28 @@ export default function Cart() {
                               </h3>
                             </div>
                             <div className="mt-1 flex text-sm">
-                              <p className="text-gray-500"></p>
-                              {true ? (
-                                <p className="ml-4 border-l border-gray-200 pl-4 text-gray-500">product size</p>
-                              ) : null}
+                              <p className="text-gray-500">Size: {cart.product_data.size} gr  </p>
                             </div>
-                            <p className="mt-1 text-sm font-medium text-gray-900">{cart.product_data.price}</p>
+                            <p className="mt-1 text-sm font-medium text-gray-900">Rp. {cart.product_data.price}</p>
                           </div>
 
-                          <div className="mt-4 sm:mt-0 sm:pr-9">
+                          <div className="mt-4 flex w-full ">
 
-                            <div className="flex items-center border-gray-100">
-                              <span className="cursor-pointer rounded-l bg-gray-100 py-1 px-3.5 duration-100 hover:bg-blue-500 hover:text-blue-50"> - </span>
-                              <input className="h-8 w-12 border-gray-100 bg-transparent text-center text-xs appearance-none focus:outline-none" type="number" value={cart.quantity} min="1" />
-                              <span className="cursor-pointer rounded-r bg-gray-100 py-1 px-3 duration-100 hover:bg-blue-500 hover:text-blue-50"> + </span>
+                            <div className="flex items-center justify-center border-gray-100 w-full ">
+                              <span className="cursor-pointer w-12 rounded-l-lg bg-zinc-800 py-1 px-3.5 duration-100 hover:bg-yellow-500 hover:text-white text-white align-middle" onClick={() => decreaseQuantity(cart.id)}>-</span>
+                              <input className="h-8 w-12 border-gray-100 bg-transparent text-center text-xs appearance-none focus:outline-none" type="text" value={cart.quantity} min="1" />
+                              <span className="cursor-pointer w-12 rounded-r-lg bg-zinc-800 py-1 px-3 duration-100 hover:bg-yellow-500 hover:text-white text-white align-middle" onClick={() => increaseQuantity(cart.id)}>+</span>
                             </div>
 
-                            <div className="absolute right-0 top-0">
-                              <button type="button" className="-m-2 inline-flex p-2 text-gray-400 hover:text-gray-500">
+                            <div className="absolute right-0 top-0 ">
+                              <button type="button" className="-m-2 inline-flex p-2 text-zinc-800 hover:text-yellow-500" onClick={() => deleteCart(cart.id)}>
                                 <span className="sr-only">Remove</span>
-                                <XMarkIcon className="h-5 w-5" aria-hidden="true" />
+                                <TrashIcon className="h-5 w-5" aria-hidden="true" />
                               </button>
                             </div>
                           </div>
                         </div>
 
-                        <p className="mt-4 flex space-x-2 text-sm text-gray-700">
-                          {false ? (
-                            <CheckIcon className="h-5 w-5 flex-shrink-0 text-green-500" aria-hidden="true" />
-                          ) : (
-                            <ClockIcon className="h-5 w-5 flex-shrink-0 text-gray-300" aria-hidden="true" />
-                          )}
-
-                          <span>{false ? 'In stock' : `Ships in 3 week`}</span>
-                        </p>
                       </div>
                     </li>
                   ))}
@@ -482,7 +539,7 @@ export default function Cart() {
               {/* Order summary */}
               <section
                 aria-labelledby="summary-heading"
-                className="mt-16 rounded-lg bg-gray-50 px-4 py-6 sm:p-6 lg:col-span-5 lg:mt-0 lg:p-8"
+                className="mt-16 rounded-lg bg-white px-4 py-6 sm:p-6 lg:col-span-5 lg:mt-0 lg:p-8"
               >
                 <h2 id="summary-heading" className="text-lg font-medium text-gray-900">
                   Order summary
@@ -493,7 +550,7 @@ export default function Cart() {
                     <dt className="text-sm text-gray-600">Subtotal</dt>
                     <dd className="text-sm font-medium text-gray-900">RP. {subTotal}</dd>
                   </div>
-                  <div className="flex items-center justify-between border-t border-gray-200 pt-4">
+                  {/* <div className="flex items-center justify-between border-t border-gray-200 pt-4">
                     <dt className="flex items-center text-sm text-gray-600">
                       <span>Shipping estimate</span>
                       <a href="#" className="ml-2 flex-shrink-0 text-gray-400 hover:text-gray-500">
@@ -512,7 +569,7 @@ export default function Cart() {
                       </a>
                     </dt>
                     <dd className="text-sm font-medium text-gray-900">RP. 8.32</dd>
-                  </div>
+                  </div> */}
                   <div className="flex items-center justify-between border-t border-gray-200 pt-4 ">
                     <dt className="text-base font-medium text-gray-900">Order total</dt>
                     <dd className="text-base font-medium text-gray-900">RP. {totalPayment}</dd>
@@ -523,8 +580,8 @@ export default function Cart() {
                   <button
                     type="button"
                     onClick={showCheckout}
-                    disabled={listid.length === 0}
-                    className={`w-full rounded-md border border-transparent ${listid.length === 0 ? 'bg-gray-300' : 'bg-indigo-600 '} px-4 py-3 text-base font-medium text-white shadow-sm  focus:outline-none focus:ring-2 ${listid.length === 0 ? 'focus:ring-gray-300' : 'focus:ring-indigo-500 '}  focus:ring-offset-2 focus:ring-offset-gray-50`}
+                    disabled={listSelectedId.length === 0}
+                    className={`w-full rounded-md border border-transparent ${listSelectedId.length === 0 ? 'bg-gray-300' : 'bg-zinc-800 '} px-4 py-3 text-base font-medium text-white shadow-sm  focus:outline-none focus:ring-white hover:${listSelectedId.length === 0 ? 'bg-gray-300' : 'bg-yellow-500'}`}
                   >
                     Checkout
                   </button>
