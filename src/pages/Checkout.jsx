@@ -6,6 +6,7 @@ import { fetchCartItems } from '../api/CartApi'
 import { apiGet, apiPost } from '../api/ApiService'
 import Modal from '../components/modal'
 import NewAddressModal from './confirmOrder/component/addNewAddress'
+import ConfirmOrder from '../components/ConfirmOrder'
 import {
   Bars3Icon,
   MagnifyingGlassIcon,
@@ -324,6 +325,7 @@ export default function Example() {
   const listId = location.state?.listid || [];
   const [shippingList, setShippingList] = useState([]);
   const [selectectShipping, setSelectedShping] = useState(null);
+  const [openConfirmOrder, setOpenConfirmOrder] = useState(false);
   const baseurl = import.meta.env.VITE_API_BASE_URL;
 
 
@@ -401,10 +403,12 @@ export default function Example() {
 
   const createOrder = async () => {
     console.log(shippingList[0].id);
-    await apiPost(`order/create/`, {
-      shipping: shippingList[0].id,
-      shipping_type: "REGPACK"
-    }, (res) => onSuccessCreateOrder(res), (res) => onErrorCreateOrder(res))
+    setOpenConfirmOrder(true);
+
+    // await apiPost(`order/create/`, {
+    //   shipping: shippingList[0].id,
+    //   shipping_type: "REGPACK"
+    // }, (res) => onSuccessCreateOrder(res), (res) => onErrorCreateOrder(res))
   }
 
   function onSuccessCreateOrder(data) {
@@ -414,6 +418,7 @@ export default function Example() {
   function onErrorCreateOrder(error) {
     console.log(error);
   }
+
 
   // open and close mobile menu
   const [openMobile, setOpenMobile] = useState(false)
@@ -705,6 +710,7 @@ export default function Example() {
           {/* Modal */}
           <Modal open={open} setOpen={setOpen} openModalNewAddress={handleOpenModalNewAddress} />
           <NewAddressModal open={openModalNewAdress} setOpen={setModalNewAddress} />
+          <ConfirmOrder open={openConfirmOrder} setOpen={setOpenConfirmOrder} />
         </div>
       </main>
       {/* Footer */}
