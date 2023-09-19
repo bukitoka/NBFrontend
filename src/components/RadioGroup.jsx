@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { RadioGroup } from '@headlessui/react'
-import { apiGet } from '../api/ApiService'
+import { apiGet, apiPatch } from '../api/ApiService'
 
 
 function classNames(...classes) {
@@ -27,8 +27,16 @@ export default function Example({ selected, setSelected }) {
   }, [])
 
   useEffect(() => {
-    console.log(selected);
+    setDefaultAddress(selected);
   }, [selected])
+
+  const setDefaultAddress = async (id) => {
+    apiPatch('shipping/' + id + '/', { set_as_default: true }, (data) => {
+      console.log(data);
+    }, (err) => {
+      console.log(err);
+    });
+  }
 
   return (
     <RadioGroup value={selected} onChange={setSelected}>

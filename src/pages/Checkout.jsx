@@ -326,13 +326,14 @@ export default function Example() {
   const [shippingList, setShippingList] = useState([]);
   const [selectectShipping, setSelectedShping] = useState(null);
   const [openConfirmOrder, setOpenConfirmOrder] = useState(false);
+  const [tariffList, setTariffList] = useState([])
   const baseurl = import.meta.env.VITE_API_BASE_URL;
 
 
   useEffect(() => {
     // getCartItems((data) => onSuccess(data), (error) => onError(error))
     getShippingData((data) => onShippingSuccess(data), (error) => onShippingError(error))
-    // chekTariff()
+    chekTariff()
     getSelectedCartItems()
   }, [])
 
@@ -357,9 +358,9 @@ export default function Example() {
   }
 
   function onShippingSuccess(data) {
-
-    console.log(data.results);
-    setShippingList(data.results);
+    // return when is default is true
+    const shippingList = data.results.filter((shipping) => shipping.is_default === true);
+    setShippingList(shippingList);
   }
 
   function onShippingError(error) {
@@ -390,11 +391,11 @@ export default function Example() {
 
 
   const chekTariff = () => {
-    apiGet(`tariff/?shipping=4dcca9cb-0da1-436d-8dfa-105e2a3c57d5`, (res) => onSuccessTariff(res), (res) => onErrorTariff(res))
+    apiGet(`tariff/`, (res) => onSuccessTariff(res), (res) => onErrorTariff(res))
   }
 
   function onSuccessTariff(data) {
-    console.log(data);
+    setTariffList(data);
   }
 
   function onErrorTariff(error) {
@@ -450,6 +451,7 @@ export default function Example() {
                       <dl className="space-y-3 border-t border-gray-200 px-4 py-6 sm:px-6">
                         <div className=" flex-col">
                           <dt className="text-sm">Receiver</dt>
+                          {/* show when is_dedault is true */}
                           {shippingList.length > 0 && (
                             <dd className="text-sm font-medium text-gray-900">{shippingList[0].receiver_name}</dd>
                           )}
@@ -492,10 +494,10 @@ export default function Example() {
                       <RadioGroup.Label className="text-lg font-medium text-gray-900">Delivery method</RadioGroup.Label>
 
                       <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
-                        {deliveryMethods.map((deliveryMethod) => (
+                        {tariffList.map((tariff, index) => (
                           <RadioGroup.Option
-                            key={deliveryMethod.id}
-                            value={deliveryMethod}
+                            key={index}
+                            value={tariff.shipping_type}
                             className={({ checked, active }) =>
                               classNames(
                                 checked ? 'border-transparent' : 'border-gray-300',
@@ -509,16 +511,16 @@ export default function Example() {
                                 <span className="flex flex-1">
                                   <span className="flex flex-col">
                                     <RadioGroup.Label as="span" className="block text-sm font-medium text-gray-900">
-                                      {deliveryMethod.title}
+                                      {tariff.shipping_type}
                                     </RadioGroup.Label>
                                     <RadioGroup.Description
                                       as="span"
                                       className="mt-1 flex items-center text-sm text-gray-500"
                                     >
-                                      {deliveryMethod.turnaround}
+                                      {tariff.shipping_type}
                                     </RadioGroup.Description>
                                     <RadioGroup.Description as="span" className="mt-6 text-sm font-medium text-gray-900">
-                                      {deliveryMethod.price}
+                                      {tariff.total_traif}
                                     </RadioGroup.Description>
                                   </span>
                                 </span>
