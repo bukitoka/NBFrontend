@@ -7,8 +7,9 @@ import PrivateRoute from "./layouts/PrivateWrapper"
 // pages
 import Home from "./pages/Home"
 import Signin from "./pages/Signin"
-import Signup from "./pages/Signup"
-import UserProfile from "./pages/UserProfile"
+import Signup from "./pages/Signup" 
+// import UserProfile from "./pages/UserProfile"
+import Profile from "./pages/profile/Profile"
 import Logout from "./pages/Logout"
 import Products from "./pages/Product"
 import Detail from "./pages/ProductDetail"
@@ -27,7 +28,7 @@ const App = () => {
             path="/account"
             element={
               <PrivateRoute>
-                <UserProfile />
+                <Profile />
               </PrivateRoute>
             }
           />
