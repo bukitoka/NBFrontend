@@ -406,7 +406,9 @@ export default function Cart() {
 
   // decrease quantity
   const decreaseQuantity = async (id) => {
-    await apiPatch(`cart-item/${id}/?decrease_quantity=true`, [], (data) => {
+    await apiPatch(`cart-item/${id}/`, {
+      decrease_quantity: true
+    }, (data) => {
       getCartItems()
     }, (err) => {
       // console.log(err);
