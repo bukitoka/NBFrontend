@@ -1,28 +1,52 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { RadioGroup } from '@headlessui/react'
+import { apiGet, apiPatch } from '../api/ApiService'
 
-const plans = [
-  { name: 'Jalan merpati no 10 ', ram: '087124876234', cpus: '4 CPUs', disk: '160 GB SSD disk', price: '$40' },
-  { name: 'Jalan nusantara no 20', ram: '087124876234', cpus: '6 CPUs', disk: '256 GB SSD disk', price: '$80' },
-  { name: 'Jalan merdeka 10 ', ram: '087124876234', cpus: '8 CPUs', disk: '512 GB SSD disk', price: '$160' },
-  { name: 'jalan pramuka', ram: '087124876234', cpus: '12 CPUs', disk: '1024 GB SSD disk', price: '$240' },
-]
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
 export default function Example({ selected, setSelected }) {
+  const [shippingList, setShippingList] = useState([]);
+
+  const getShippingData = async (onSucces, onError) => {
+    await apiGet('shipping/', onSucces, onError);
+  }
+
+  const onSuccess = data => {
+    setShippingList(data.results);
+  }
+
+  const onError = error => {
+    console.log(error);
+  }
+
+  useEffect(() => {
+    getShippingData(onSuccess, onError)
+  }, [])
+
+  useEffect(() => {
+    setDefaultAddress(selected);
+  }, [selected])
+
+  const setDefaultAddress = async (id) => {
+    apiPatch('shipping/' + id + '/', { set_as_default: true }, (data) => {
+      console.log(data);
+    }, (err) => {
+      console.log(err);
+    });
+  }
 
   return (
     <RadioGroup value={selected} onChange={setSelected}>
       <RadioGroup.Label className="sr-only">Server size</RadioGroup.Label>
       <div className="space-y-4">
 
-        {plans.map((plan) => (
+        {shippingList.map((shipping) => (
           <RadioGroup.Option
-            key={plan.name}
-            value={plan}
+            key={shipping.id}
+            value={shipping.id}
             className={({ active }) =>
               classNames(
                 active ? 'border-indigo-600 ring-2 ring-indigo-600' : 'border-gray-300',
@@ -35,11 +59,11 @@ export default function Example({ selected, setSelected }) {
                 <span className="flex items-center">
                   <span className="flex flex-col text-sm">
                     <RadioGroup.Label as="span" className="font-medium text-gray-900">
-                      {plan.name}
+                      {shipping.destination.route}
                     </RadioGroup.Label>
                     <RadioGroup.Description as="span" className="text-gray-500">
                       <span className="block sm:inline">
-                        {plan.ram}
+                        {shipping.receiver_address}
                       </span>
                       {/* {' '}
                       <span className="hidden sm:mx-1 sm:inline" aria-hidden="true">

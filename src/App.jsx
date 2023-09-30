@@ -8,7 +8,8 @@ import PrivateRoute from "./layouts/PrivateWrapper"
 import Home from "./pages/Home"
 import Signin from "./pages/Signin"
 import Signup from "./pages/Signup"
-import UserProfile from "./pages/UserProfile"
+// import UserProfile from "./pages/UserProfile"
+import Profile from "./pages/profile/Profile"
 import Logout from "./pages/Logout"
 import Products from "./pages/Product"
 import Detail from "./pages/ProductDetail"
@@ -16,6 +17,7 @@ import Google from "./pages/GoogleCallBack"
 import VerifyEmail from "./pages/VerifyEmail"
 import Cart from "./pages/Cart"
 import CheckOut from "./pages/Checkout"
+import 'react-loading-skeleton/dist/skeleton.css'
 
 const App = () => {
   return (
@@ -26,7 +28,7 @@ const App = () => {
             path="/account"
             element={
               <PrivateRoute>
-                <UserProfile />
+                <Profile />
               </PrivateRoute>
             }
           />
