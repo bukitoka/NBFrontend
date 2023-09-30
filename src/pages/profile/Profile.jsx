@@ -19,10 +19,35 @@ const getItems = () =>
     .fill(0)
     .map((_, ind) => ({ id: getId(ind) }));
 
+// new array with contain id, title,
+const menuItems = [
+  {
+    id: 1,
+    title: 'Profile'
+
+  },
+  {
+    id: 2,
+    title: 'Order History'
+  },
+  {
+    id: 3,
+    title: 'Wishlist'
+  },
+  {
+    id: 4,
+    title: 'Coupons'
+  }
+  , {
+    id: 5,
+    title: 'Settings'
+  }
+]
+
 
 const Profile = () => {
 
-  const [items] = useState(getItems);
+  const [items] = useState(menuItems);
 
   // NOTE: for drag by mouse
   const { dragStart, dragStop, dragMove, dragging } = useDrag();
@@ -157,11 +182,11 @@ const Profile = () => {
                       onMouseDown={() => dragStart}
                       onMouseUp={() => dragStop}
                       onMouseMove={handleDrag}
-                      scrollContainerClassName="example rounded-md"
+                      scrollContainerClassName="example rounded-md gap-2"
                     >
-                      {items.map(({ id }) => (
+                      {items.map(({ id, title }) => (
                         <Card
-                          title={id}
+                          title={title}
                           itemId={id} // NOTE: itemId is required for tracking items
                           key={id}
                           onClick={handleItemClick(id)}

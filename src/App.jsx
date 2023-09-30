@@ -7,7 +7,7 @@ import PrivateRoute from "./layouts/PrivateWrapper"
 // pages
 import Home from "./pages/Home"
 import Signin from "./pages/Signin"
-import Signup from "./pages/Signup" 
+import Signup from "./pages/Signup"
 // import UserProfile from "./pages/UserProfile"
 import Profile from "./pages/profile/Profile"
 import Logout from "./pages/Logout"

@@ -2,6 +2,10 @@ import React, { useContext } from "react";
 import { VisibilityContext } from "react-horizontal-scrolling-menu";
 import {
   UserCircleIcon,
+  ShoppingBagIcon,
+  Cog6ToothIcon,
+  HeartIcon,
+  ReceiptPercentIcon,
 } from '@heroicons/react/24/solid'
 
 export function Card({
@@ -16,10 +20,28 @@ export function Card({
 
   return (
 
-    <div className="mx-1 bg-zinc-200 rounded-md h-20 w-40">
+    <div
+      onClick={onClick}
+      className="mx-1 bg-zinc-200 rounded-md h-16 w-36 flex justify-items-center">
       <div className="flex flex-row">
-        <UserCircleIcon className="text-lg" />
-        <a href="#" className="flex items-center justify-center  ms-1 text-center bg-green-200">UserDetail</a>
+        {
+          (itemId == 1) ? <UserCircleIcon className=" text-zinc-800 hover:text-yellow-500 max-h-16" /> : <></>
+        }
+        {
+          (itemId == 2) ? <ShoppingBagIcon className=" text-zinc-800 hover:text-yellow-500 max-h-16" /> : <></>
+        }
+        {
+          (itemId == 3) ? <Cog6ToothIcon className=" text-zinc-800 hover:text-yellow-500 max-h-16" /> : <></>
+        }
+        {
+          (itemId == 4) ? <HeartIcon className=" text-zinc-800 hover:text-yellow-500 max-h-16" /> : <></>
+        }
+        {
+          (itemId == 5) ? <ReceiptPercentIcon className=" text-zinc-800 hover:text-yellow-500 max-h-16" /> : <></>
+        }
+
+        <a href="#" className="flex items-center justify-center ms-1 text-cente hover:text-yellow-500">{title} {selected ? "selected" : "not Selected"}</a>
+
       </div>
     </div>
 
