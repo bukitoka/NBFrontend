@@ -31,13 +31,13 @@ export function Card({
           (itemId == 2) ? <ShoppingBagIcon className={`${selected ? 'text-yellow-500' : 'text-zinc-800'}  max-h-16`} /> : <></>
         }
         {
-          (itemId == 3) ? <Cog6ToothIcon className={`${selected ? 'text-yellow-500' : 'text-zinc-800'} max-h-16`} /> : <></>
+          (itemId == 3) ? <HeartIcon className={`${selected ? 'text-yellow-500' : 'text-zinc-800 '} max-h-16`} /> : <></>
         }
         {
-          (itemId == 4) ? <HeartIcon className={`${selected ? 'text-yellow-500' : 'text-zinc-800 '} max-h-16`} /> : <></>
+          (itemId == 4) ? <ReceiptPercentIcon className={`${selected ? 'text-yellow-500' : 'text-zinc-800'} max-h-16`} /> : <></>
         }
         {
-          (itemId == 5) ? <ReceiptPercentIcon className={`${selected ? 'text-yellow-500' : 'text-zinc-800'} max-h-16`} /> : <></>
+          (itemId == 5) ? <Cog6ToothIcon className={`${selected ? 'text-yellow-500' : 'text-zinc-800'} max-h-16`} /> : <></>
         }
 
         <p className={`flex items-center justify-center ms-1 text-cente ${selected ? 'text-yellow-500' : 'text-zinc-800'}`}>{title} </p>

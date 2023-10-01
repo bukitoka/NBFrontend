@@ -7,17 +7,15 @@ import { ScrollMenu, VisibilityContext } from "react-horizontal-scrolling-menu";
 import "react-horizontal-scrolling-menu/dist/styles.css";
 import useDrag from "./_component/useDrag";
 import './styles/profile.css'
+import ProfileDetail from './_component/detail/ProfileDetail'
+import OrderHistory from './_component/orderHistory/OrderHistory'
+import Footer from '../../components/Footer'
 
 
 import { Card } from "./_component/menuItem/card";
 
 const elemPrefix = "test";
 const getId = (index) => `${elemPrefix}${index}`;
-
-const getItems = () =>
-  Array(5)
-    .fill(0)
-    .map((_, ind) => ({ id: getId(ind) }));
 
 // new array with contain id, title,
 const menuItems = [
@@ -58,7 +56,7 @@ const Profile = () => {
       }
     });
 
-  const [selected, setSelected] = useState("");
+  const [selected, setSelected] = useState(1);
   const handleItemClick = (itemId) => () => {
     if (dragging) {
       return false;
@@ -109,7 +107,7 @@ const Profile = () => {
 
 
   // State to track the selected menu item
-  const [selectedMenuItem, setSelectedMenuItem] = useState('item1'); // Set an initial menu item
+  const [selectedMenuItem, setSelectedMenuItem] = useState(1); // Set an initial menu item
 
   // Function to handle menu item clicks
   const handleMenuItemClick = (item) => {
@@ -117,9 +115,11 @@ const Profile = () => {
   };
   // Content for section 03 based on the selected menu item
   const section03Content = {
-    item1: "Content for item 1",
-    item2: "Content for item 2",
-    item3: "Content for item 3",
+    1: "Content for item 1",
+    2: "Content for item 2",
+    3: "Content for item 3",
+    4: "Content for item 4",
+    5: "Content for item 5"
   };
 
   // mobile menu items
@@ -133,25 +133,7 @@ const Profile = () => {
 
   return (
     <>
-      {/* <div>UserProfile</div>
-            {
-                userDetails && (
-                    <>
-                        <ul>
-                            <li>Email: {userDetails.email}</li>
-                            <li>First Name: {userDetails.first_name}</li>
-                            <li>Last Name: {userDetails.last_name}</li>
-                            <li>Avatar: {userDetails.avatar ? userDetails.avatar : 'No Avatar'} </li>
-                        </ul>
-                    </>
-                )
-            }
-
-            <br />
-
-            <button onClick={handleLogout}>logout</button> */}
-
-      <div className="h-screen w-full bg-zinc-100 p-6">
+      <div className="h-full w-full bg-zinc-100 p-6">
         <div className="grid gap-6 lg:flex">
           <div className="grid w-full grid-cols-1 lg:w-2/5 h-1/5">
             <div className="grid-cols-1 rounded-xl border bg-white p-8 text-center">
@@ -220,14 +202,22 @@ const Profile = () => {
               </div>
             </div>
           </div>
-          <div className="w-full h-screen rounded-xl border bg-white p-6 lg:w-3/5">
+          <div className="w-full h-full rounded-xl border bg-white p-6 lg:w-3/5">
             {/* Content for section 03 based on the selected menu item */}
-            {section03Content[selectedMenuItem]}
+
+            {
+              selected === 1 ? <ProfileDetail /> : <></>
+            }
+
+            {
+              selected === 2 ? <OrderHistory /> : <></>
+            }
+
           </div>
         </div>
       </div>
 
-
+      <Footer />
     </>
   );
 }
