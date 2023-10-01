@@ -275,43 +275,6 @@ const socials = [
   },
 ];
 
-
-const deliveryMethods = [
-  { id: 1, title: 'Standard', turnaround: '4–10 business days', price: '$5.00' },
-  { id: 2, title: 'Express', turnaround: '2–5 business days', price: '$16.00' },
-]
-const paymentMethods = [
-  { id: 'credit-card', title: 'Credit card' },
-  { id: 'paypal', title: 'PayPal' },
-  { id: 'etransfer', title: 'eTransfer' },
-]
-const footerNavigation = {
-  products: [
-    { name: 'Bags', href: '#' },
-    { name: 'Tees', href: '#' },
-    { name: 'Objects', href: '#' },
-    { name: 'Home Goods', href: '#' },
-    { name: 'Accessories', href: '#' },
-  ],
-  company: [
-    { name: 'Who we are', href: '#' },
-    { name: 'Sustainability', href: '#' },
-    { name: 'Press', href: '#' },
-    { name: 'Careers', href: '#' },
-    { name: 'Terms & Conditions', href: '#' },
-    { name: 'Privacy', href: '#' },
-  ],
-  customerService: [
-    { name: 'Contact', href: '#' },
-    { name: 'Shipping', href: '#' },
-    { name: 'Returns', href: '#' },
-    { name: 'Warranty', href: '#' },
-    { name: 'Secure Payments', href: '#' },
-    { name: 'FAQ', href: '#' },
-    { name: 'Find a store', href: '#' },
-  ],
-}
-
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
@@ -319,7 +282,7 @@ function classNames(...classes) {
 export default function Example() {
   const [open, setOpen] = useState(false)
   const [openModalNewAdress, setModalNewAddress] = useState(false)
-  const [selectedDeliveryMethod, setSelectedDeliveryMethod] = useState(deliveryMethods[0])
+  const [selectedDeliveryMethod, setSelectedDeliveryMethod] = useState('')
   const [selectedCartItems, setCartItems] = useState([])
   const location = useLocation()
   const listId = location.state?.listid || [];
@@ -335,6 +298,14 @@ export default function Example() {
     getShippingData((data) => onShippingSuccess(data), (error) => onShippingError(error))
     chekTariff()
     getSelectedCartItems()
+
+    // append midtrans script
+    const script = document.createElement('script');
+    script.src = 'https://app.sandbox.midtrans.com/snap/snap.js';
+    script.async = true;
+    script.setAttribute('data-client-key', import.meta.env.VITE_MIDTRANS_CLIENT_KEY);
+    document.body.appendChild(script);
+
   }, [])
 
   const getShippingData = async (onSucces, onError) => {
@@ -403,21 +374,60 @@ export default function Example() {
   }
 
   const createOrder = async () => {
-    console.log(shippingList[0].id);
-    setOpenConfirmOrder(true);
+    // console.log(shippingList[0].id);
+    // setOpenConfirmOrder(true);
+    // console.log(selectedDeliveryMethod);
+    const shipping_type = selectedDeliveryMethod;
 
-    // await apiPost(`order/create/`, {
-    //   shipping: shippingList[0].id,
-    //   shipping_type: "REGPACK"
-    // }, (res) => onSuccessCreateOrder(res), (res) => onErrorCreateOrder(res))
+    await apiPost(`order/`, {
+      shipping_type: shipping_type,
+    }, (res) => onSuccessCreateOrder(res), (res) => onErrorCreateOrder(res))
+
+    // requestToken('f384b386-eb44-4cac-a981-38c750c0451d')
+  }
+
+  const requestToken = async (order_id) => {
+    await apiPost(`payment/`, {
+      order_id: order_id
+    }, (data) => onSuccessRequestToken(data), (err) => onErrorRequestToken(err))
+  }
+
+  function onSuccessRequestToken(data) {
+    console.log(data.data.token);
+    const token = data.data.token;
+
+    window.snap.pay(token, {
+      onSuccess: function (result) {
+        console.log('success');
+        console.log(result);
+      },
+      onPending: function (result) {
+        console.log('pending');
+        console.log(result);
+      },
+      onError: function (result) {
+        console.log('error');
+        console.log(result);
+      },
+      onClose: function () {
+        console.log('customer closed the popup without finishing the payment');
+      }
+    });
+  }
+
+  function onErrorRequestToken(error) {
+    console.log(error);
   }
 
   function onSuccessCreateOrder(data) {
-    console.log(data);
+    console.log('success create order');
+    console.log('order', data);
+
+    requestToken(data.id);
   }
 
   function onErrorCreateOrder(error) {
-    console.log(error);
+    console.log('error', error);
   }
 
 
@@ -442,11 +452,10 @@ export default function Example() {
               <form className="lg:grid lg:grid-cols-2 lg:gap-x-12 xl:gap-x-16">
                 <div>
 
-                  <div className="mt-10 lg:mt-0">
-                    <h2 className="text-lg font-medium text-gray-900">Shipping</h2>
+                  <div className="mt-10">
+                    <div className="mt-4 rounded-lg border border-gray-200 bg-white">
 
-                    <div className="mt-4 rounded-lg border border-gray-200 bg-white shadow-sm">
-                      <h3 className="sr-only">Items in your cart</h3>
+                      <h2 className="text-lg px-4 sm:px-6 py-4 font-medium text-gray-900">Shipping Address</h2>
 
                       <dl className="space-y-3 border-t border-gray-200 px-4 py-6 sm:px-6">
                         <div className=" flex-col">
@@ -542,103 +551,6 @@ export default function Example() {
                       </div>
                     </RadioGroup>
                   </div>
-
-                  {/* Payment */}
-                  <div className="mt-10 border-t border-gray-200 pt-10">
-                    <h2 className="text-lg font-medium text-gray-900">Payment</h2>
-
-                    <fieldset className="mt-4">
-                      <legend className="sr-only">Payment type</legend>
-                      <div className="space-y-4 sm:flex sm:items-center sm:space-x-10 sm:space-y-0">
-                        {paymentMethods.map((paymentMethod, paymentMethodIdx) => (
-                          <div key={paymentMethod.id} className="flex items-center">
-                            {paymentMethodIdx === 0 ? (
-                              <input
-                                id={paymentMethod.id}
-                                name="payment-type"
-                                type="radio"
-                                defaultChecked
-                                className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                              />
-                            ) : (
-                              <input
-                                id={paymentMethod.id}
-                                name="payment-type"
-                                type="radio"
-                                className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                              />
-                            )}
-
-                            <label htmlFor={paymentMethod.id} className="ml-3 block text-sm font-medium text-gray-700">
-                              {paymentMethod.title}
-                            </label>
-                          </div>
-                        ))}
-                      </div>
-                    </fieldset>
-
-                    <div className="mt-6 grid grid-cols-4 gap-x-4 gap-y-6">
-                      <div className="col-span-4">
-                        <label htmlFor="card-number" className="block text-sm font-medium text-gray-700">
-                          Card number
-                        </label>
-                        <div className="mt-1">
-                          <input
-                            type="text"
-                            id="card-number"
-                            name="card-number"
-                            autoComplete="cc-number"
-                            className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                          />
-                        </div>
-                      </div>
-
-                      <div className="col-span-4">
-                        <label htmlFor="name-on-card" className="block text-sm font-medium text-gray-700">
-                          Name on card
-                        </label>
-                        <div className="mt-1">
-                          <input
-                            type="text"
-                            id="name-on-card"
-                            name="name-on-card"
-                            autoComplete="cc-name"
-                            className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                          />
-                        </div>
-                      </div>
-
-                      <div className="col-span-3">
-                        <label htmlFor="expiration-date" className="block text-sm font-medium text-gray-700">
-                          Expiration date (MM/YY)
-                        </label>
-                        <div className="mt-1">
-                          <input
-                            type="text"
-                            name="expiration-date"
-                            id="expiration-date"
-                            autoComplete="cc-exp"
-                            className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                          />
-                        </div>
-                      </div>
-
-                      <div>
-                        <label htmlFor="cvc" className="block text-sm font-medium text-gray-700">
-                          CVC
-                        </label>
-                        <div className="mt-1">
-                          <input
-                            type="text"
-                            name="cvc"
-                            id="cvc"
-                            autoComplete="csc"
-                            className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
                 </div>
 
                 {/* Order summary */}
@@ -698,9 +610,16 @@ export default function Example() {
                       <button
                         onClick={() => createOrder()}
                         type="button"
-                        className="w-full rounded-md border border-transparent bg-zinc-800 px-4 py-3 text-base font-medium text-white shadow-sm hover:bg-yellow-500 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 focus:ring-offset-gray-50"
+                        disabled={selectedDeliveryMethod === '' ? true : false}
+                        // className={`w-full rounded-md border border-transparent bg-zinc-800 px-4 py-3 text-base font-medium text-white shadow-sm hover:bg-yellow-500 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 focus:ring-offset-gray-50`}
+                        className={
+                          classNames(
+                            selectedDeliveryMethod === '' ? 'bg-gray-300 cursor-not-allowed' : 'bg-zinc-800 hover:bg-yellow-500',
+                            'w-full rounded-md border border-transparent px-4 py-3 text-base font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 focus:ring-offset-gray-50'
+                          )
+                        }
                       >
-                        Confirm order
+                        Continue to payment
                       </button>
                     </div>
                   </div>
