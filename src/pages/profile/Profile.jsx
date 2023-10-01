@@ -143,7 +143,7 @@ const Profile = () => {
                 </div>
               </div>
               <div className="mt-8">
-                <span className="text-lg font-bold">Kusuma J</span>
+                <span className="text-lg font-bold">User Name</span>
               </div>
             </div>
             <div className="mt-6 rounded-xl border bg-white py-2 px-6">
