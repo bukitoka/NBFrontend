@@ -13,7 +13,7 @@ export const apiGet = async (path, onSuccess, onError) => {
       return;
     }
     onError(response.data);
-    return ;
+    return;
   } catch (error) {
     onError(error);
     throw error;
@@ -27,7 +27,7 @@ export const apiGet = async (path, onSuccess, onError) => {
 export const apiPost = async (path, data, onSuccess, onError) => {
   try {
     const response = await api.post(`${API_MIDDLE_URL}${path}`, data);
-    if (response.status === 200) {
+    if (response.status === 200 || response.status === 201) {
       onSuccess(response.data);
       return;
     }
@@ -71,7 +71,7 @@ export const apiPut = async (path, data, onSuccess, onError) => {
  * @param {*} onError
  * @returns
  */
-export const apiDelete = async (path,data, onSuccess, onError) => {
+export const apiDelete = async (path, data, onSuccess, onError) => {
   try {
     const response = await api.delete(`${API_MIDDLE_URL}${path}`, data);
     if (response.status === 200) {
