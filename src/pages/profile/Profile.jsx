@@ -14,6 +14,7 @@ import useDrag from "./_component/useDrag";
 import './styles/profile.css'
 import ProfileDetail from './_component/detail/ProfileDetail'
 import OrderHistory from './_component/orderHistory/OrderHistory'
+import WishList from './_component/wishlist/WishList'
 import Footer from '../../components/Footer'
 
 import { Card } from "./_component/menuItem/card";
@@ -218,6 +219,12 @@ const Profile = () => {
             {
               selected === 2 ? <OrderHistory /> : <></>
             }
+
+            {
+              selected === 3 ? <WishList /> : <></>
+            }
+
+
 
           </div>
         </div>
