@@ -317,7 +317,7 @@ export default function Example() {
   }
 
   function onSuccessGetData(data) {
-    setCartItems(data);
+    setCartItems(data.cart_items);
     console.log('selected Data');
     console.log(data);
     // setCartItems(data);
@@ -381,6 +381,7 @@ export default function Example() {
 
     await apiPost(`order/`, {
       shipping_type: shipping_type,
+      
     }, (res) => onSuccessCreateOrder(res), (res) => onErrorCreateOrder(res))
 
     // requestToken('f384b386-eb44-4cac-a981-38c750c0451d')

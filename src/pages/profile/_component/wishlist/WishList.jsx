@@ -23,6 +23,7 @@ export default function WishList() {
   }
 
   const onGetWishListSuccess = (response) => {
+    console.log(response)
     setWishList(response.results)
   }
 
@@ -46,7 +47,7 @@ export default function WishList() {
                 <div className="relative">
                   <div className="relative h-72 w-full overflow-hidden rounded-lg">
                     <img
-                      src={`${item.product_details.cover}`}
+                      src={`${baseurl}${item.product_details.cover}`}
                       alt={item.product_details.name}
                       className="h-full w-full object-cover object-center"
                     />
@@ -70,7 +71,7 @@ export default function WishList() {
         </div>
 
         {/* <!-- component --> */}
-        <div className="flex items-center justify-center mt-8">
+        {/* <div className="flex items-center justify-center mt-8">
           <ul className="flex items-center -mx-[6px]">
             <li className="px-[6px]">
               <a href="#" className="w-9 h-9 flex items-center justify-center rounded-md  border border-[#EDEFF1]text-[#838995] text-base hover:text-8xl"
@@ -93,7 +94,7 @@ export default function WishList() {
               </a>
             </li>
           </ul>
-        </div>
+        </div> */}
       </div>
     </div>
   )

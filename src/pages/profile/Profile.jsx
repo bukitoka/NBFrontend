@@ -16,6 +16,7 @@ import ProfileDetail from './_component/detail/ProfileDetail'
 import OrderHistory from './_component/orderHistory/OrderHistory'
 import WishList from './_component/wishlist/WishList'
 import Footer from '../../components/Footer'
+import Coupon from './_component/coupon/Coupon';
 
 import { Card } from "./_component/menuItem/card";
 
@@ -222,6 +223,10 @@ const Profile = () => {
 
             {
               selected === 3 ? <WishList /> : <></>
+            }
+
+            {
+              selected === 4 ? <Coupon /> : <></>
             }
 
 

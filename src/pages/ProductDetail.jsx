@@ -8,6 +8,7 @@ import Cookies from 'js-cookie';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { insertCartItem } from "../api/CartApi";
+import { apiPost } from '../api/ApiService';
 
 
 // simple icons
@@ -319,8 +320,6 @@ export default function ProductDetail() {
 
   const allUserData = useAuthStore((state) => state.allUserData);
 
-
-
   useEffect(() => {
     getProductdetail(slug);
   }, [])
@@ -351,6 +350,21 @@ export default function ProductDetail() {
     }
     // console.log(newProduct)
   }
+
+  const addWishList = async (productId) => {
+    await apiPost('wishlist/', {
+      product: productId,
+    }, (respone) => onSucessAddWishList(respone), (error) => onErrorAddWishList(error));
+  }
+
+  const onSucessAddWishList = (response) => {
+    console.log(response)
+  }
+
+  const onErrorAddWishList = (error) => {
+    console.log(error)
+  }
+
 
   // open and close mobile menu
   const [open, setOpen] = useState(false)
@@ -499,6 +513,7 @@ export default function ProductDetail() {
 
                     <button
                       type="button"
+                      onClick={() => addWishList(newProduct.id)}
                       className="ml-4 flex items-center justify-center rounded-md px-3 py-3 text-gray-400 hover:bg-gray-100 hover:text-gray-500"
                     >
                       <HeartIcon className="h-6 w-6 flex-shrink-0" aria-hidden="true" />
