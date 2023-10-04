@@ -53,39 +53,33 @@ const ProfileDetail = () => {
 
   return (
     <>
-      <div>
-        <div className="mt-6 border-t border-gray-100">
-          <dl className="divide-y divide-gray-100">
-            <div className="bg-gray-50 px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-3">
-              <dt className="text-sm font-medium leading-6 text-gray-900">Name</dt>
-              <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{userDetails.first_name} {userDetails.last_name}</dd>
-            </div>
-            <div className="bg-white px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-3">
-              <dt className="text-sm font-medium leading-6 text-gray-900">Email</dt>
-              <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{userDetails.email}</dd>
-            </div>
-            <div className="bg-gray-50 px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-3">
-              <dt className="text-sm font-medium leading-6 text-gray-900">Phone Number</dt>
-              <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{userDetails.user_details?.phone_number ?? '-'}</dd>
-            </div>
-            <div className="bg-white px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-3">
-              <dt className="text-sm font-medium leading-6 text-gray-900">Birth Date</dt>
-              <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{userDetails.user_details?.date_of_birth ?? '-'}</dd>
-            </div>
-            <div className="bg-gray-50 px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-3">
-              <dt className="text-sm font-medium leading-6 text-gray-900">Gender</dt>
-              <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{userDetails.user_details?.gender ?? '-'}</dd>
-            </div>
-            <div className="bg-white px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-3">
-              <dt className="text-sm font-medium leading-6 text-gray-900">Kab/Kec</dt>
-              <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{shippingList?.destination?.route}</dd>
-            </div>
-            <div className="bg-gray-50 px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-3">
-              <dt className="text-sm font-medium leading-6 text-gray-900">Detail</dt>
-              <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{shippingList?.receiver_address}</dd>
-            </div>
-          </dl>
-        </div>
+      <div className="bg-gray-50 px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-3 rounded-lg">
+        <dt className="text-sm font-medium leading-6 text-gray-900">Name</dt>
+        <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{userDetails.first_name} {userDetails.last_name}</dd>
+      </div>
+      <div className="bg-white px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-3">
+        <dt className="text-sm font-medium leading-6 text-gray-900">Email</dt>
+        <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{userDetails.email}</dd>
+      </div>
+      <div className="bg-gray-50 px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-3 rounded-lg">
+        <dt className="text-sm font-medium leading-6 text-gray-900">Phone Number</dt>
+        <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{userDetails.user_details?.phone_number ?? '-'}</dd>
+      </div>
+      <div className="bg-white px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-3">
+        <dt className="text-sm font-medium leading-6 text-gray-900">Birth Date</dt>
+        <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{userDetails.user_details?.date_of_birth ?? '-'}</dd>
+      </div>
+      <div className="bg-gray-50 px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-3 rounded-lg">
+        <dt className="text-sm font-medium leading-6 text-gray-900">Gender</dt>
+        <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{userDetails.user_details?.gender ?? '-'}</dd>
+      </div>
+      <div className="bg-white px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-3">
+        <dt className="text-sm font-medium leading-6 text-gray-900">Kab/Kec</dt>
+        <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{shippingList?.destination?.route}</dd>
+      </div>
+      <div className="bg-gray-50 px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-3 rounded-lg">
+        <dt className="text-sm font-medium leading-6 text-gray-900">Detail</dt>
+        <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{shippingList?.receiver_address}</dd>
       </div>
     </>
   );

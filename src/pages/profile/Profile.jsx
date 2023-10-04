@@ -2,27 +2,30 @@ import { logout } from '../../tools/auth'
 import useAuthStore from "../../store/authStore";
 import api from '../../tools/api';
 import { useState, useEffect } from 'react';
-import { UserCircleIcon } from '@heroicons/react/24/solid'
+import {
+  UserCircleIcon, ShoppingBagIcon,
+  Cog6ToothIcon,
+  HeartIcon,
+  ReceiptPercentIcon,
+} from '@heroicons/react/24/solid'
 import { ScrollMenu, VisibilityContext } from "react-horizontal-scrolling-menu";
 import "react-horizontal-scrolling-menu/dist/styles.css";
 import useDrag from "./_component/useDrag";
 import './styles/profile.css'
 import ProfileDetail from './_component/detail/ProfileDetail'
 import OrderHistory from './_component/orderHistory/OrderHistory'
+import WishList from './_component/wishlist/WishList'
 import Footer from '../../components/Footer'
-
+import Coupon from './_component/coupon/Coupon';
 
 import { Card } from "./_component/menuItem/card";
 
-const elemPrefix = "test";
-const getId = (index) => `${elemPrefix}${index}`;
 
 // new array with contain id, title,
 const menuItems = [
   {
     id: 1,
     title: 'Profile'
-
   },
   {
     id: 2,
@@ -79,8 +82,6 @@ const Profile = () => {
     }
   };
 
-
-
   const allUserData = useAuthStore((state) => state.allUserData);
   const [userDetails, setUserDetails] = useState({});
 
@@ -105,32 +106,6 @@ const Profile = () => {
     fetchUserDetails();
   }, []);
 
-
-  // State to track the selected menu item
-  const [selectedMenuItem, setSelectedMenuItem] = useState(1); // Set an initial menu item
-
-  // Function to handle menu item clicks
-  const handleMenuItemClick = (item) => {
-    setSelectedMenuItem(item);
-  };
-  // Content for section 03 based on the selected menu item
-  const section03Content = {
-    1: "Content for item 1",
-    2: "Content for item 2",
-    3: "Content for item 3",
-    4: "Content for item 4",
-    5: "Content for item 5"
-  };
-
-  // mobile menu items
-  const mobileMenuItems = [
-    {
-      id: 'item1',
-      title: 'Menu Item 1'
-      // icon : <UserCircleIcon className="h-6 w-6 text-gray-500" aria-hidden="true" />
-    }
-  ]
-
   return (
     <>
       <div className="h-full w-full bg-zinc-100 p-6">
@@ -143,17 +118,50 @@ const Profile = () => {
                 </div>
               </div>
               <div className="mt-8">
-                <span className="text-lg font-bold">User Name</span>
+                <span className="text-lg font-bold">{userDetails.first_name} {userDetails.last_name}</span>
               </div>
             </div>
-            <div className="mt-6 rounded-xl border bg-white py-2 px-6">
+            <div className="mt-6 rounded-xl border bg-white py-6 px-6">
               <div className="hidden lg:block">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
+                {
+                  items.map((item) => (
+                    <>
+                      <div
+                        key={item.id}
+                        onClick={handleItemClick(item.id)}
+                        className={`p-2 rounded-lg ${selected === item.id ? 'bg-zinc-100 ' : ''} hover:bg-zinc-100 mb-2`}>
+                        {item.id === 1 ? <div className={`flex flex-row ${selected === item.id ? 'text-yellow-500' : 'text-zinc-800'}  hover:text-yellow-500`}>
+                          < UserCircleIcon className={` max-h-8`} />
+                          <p className='flex items-center justify-center ms-1 text-center'>Profile</p>
+                        </div> : <></>}
 
-                Desktop View
-              </div>
+                        {item.id === 2 ? <div className={`flex flex-row ${selected === item.id ? ' text-yellow-500' : 'text-zinc-800'} hover:text-yellow-500`}>
+                          <ShoppingBagIcon className={` max-h-8`} />
+                          <p className='flex items-center justify-center ms-1 text-center'>Order History</p>
+                        </div> : <></>}
+
+                        {item.id === 3 ?
+                          <div className={`flex flex-row ${selected === item.id ? ' text-yellow-500' : 'text-zinc-800'} hover:text-yellow-500`}>
+                            <HeartIcon className={` max-h-8`} />
+                            <p className='flex items-center justify-center ms-1 text-center'>wishList </p>
+                          </div> : <></>}
+                        {item.id === 4 ?
+                          <div className={`flex flex-row ${selected === item.id ? ' text-yellow-500' : 'text-zinc-800'} hover:text-yellow-500`}>
+                            <ReceiptPercentIcon className={` max-h-8`} />
+                            <p className='flex items-center justify-center ms-1 text-center'>Voucher </p>
+                          </div>
+                          : <></>}
+                        {item.id === 5 ?
+                          <div className={`flex flex-row ${selected === item.id ? ' text-yellow-500' : 'text-zinc-800'} hover:text-yellow-500`}>
+                            <Cog6ToothIcon className={` max-h-8`} />
+                            <p className='flex items-center justify-center ms-1 text-center'>Settings</p>
+                          </div> : <></>}
+                      </div>
+                    </>
+                  ))
+                }
+
+              </div >
               <div className="block lg:hidden">
 
 
@@ -212,6 +220,16 @@ const Profile = () => {
             {
               selected === 2 ? <OrderHistory /> : <></>
             }
+
+            {
+              selected === 3 ? <WishList /> : <></>
+            }
+
+            {
+              selected === 4 ? <Coupon /> : <></>
+            }
+
+
 
           </div>
         </div>
