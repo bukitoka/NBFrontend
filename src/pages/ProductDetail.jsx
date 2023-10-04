@@ -8,6 +8,7 @@ import Cookies from 'js-cookie';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { insertCartItem } from "../api/CartApi";
+import ProductReviews from '../components/ProductReviews';
 
 
 // simple icons
@@ -41,6 +42,10 @@ const product = {
     { name: 'Washed Black', bgColor: 'bg-gray-700', selectedColor: 'ring-gray-700' },
     { name: 'White', bgColor: 'bg-white', selectedColor: 'ring-gray-400' },
     { name: 'Washed Gray', bgColor: 'bg-gray-500', selectedColor: 'ring-gray-500' },
+  ],
+  sizes: [
+    { name: '400 ml', inStock: true },
+    { name: '800 ml', inStock: true },
   ],
   description: `
     <p>The Zip Tote Basket is the perfect midpoint between shopping tote and comfy backpack. With convertible straps, you can hand carry, should sling, or backpack this convenient and spacious bag. The zip top and durable canvas construction keeps your goods protected for all-day use.</p>
@@ -307,6 +312,7 @@ function classNames(...classes) {
 export default function ProductDetail() {
   const { slug } = useParams();
   const [selectedColor, setSelectedColor] = useState(product.colors[0])
+  const [selectedSize, setSelectedSize] = useState(product.sizes[2])
   const [newProduct, setProduct] = useState({});
   const [stocks, setStock] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -488,6 +494,41 @@ export default function ProductDetail() {
                     </RadioGroup>
                   </div>
 
+                  {/* Sizes */}
+                  <div className="mt-8">
+                    <div className="flex items-center justify-between">
+                      <h2 className="text-sm font-medium text-gray-900">Size</h2>
+                      <a href="#" className="text-sm font-medium text-indigo-600 hover:text-indigo-500">
+                        See sizing chart
+                      </a>
+                    </div>
+
+                    <RadioGroup value={selectedSize} onChange={setSelectedSize} className="mt-2">
+                      <RadioGroup.Label className="sr-only">Choose a size</RadioGroup.Label>
+                      <div className="grid grid-cols-3 gap-3 sm:grid-cols-6">
+                        {product.sizes.map((size) => (
+                          <RadioGroup.Option
+                            key={size.name}
+                            value={size}
+                            className={({ active, checked }) =>
+                              classNames(
+                                size.inStock ? 'cursor-pointer focus:outline-none' : 'cursor-not-allowed opacity-25',
+                                active ? 'ring-2 ring-indigo-500 ring-offset-2' : '',
+                                checked
+                                  ? 'border-transparent bg-indigo-600 text-white hover:bg-indigo-700'
+                                  : 'border-gray-200 bg-white text-gray-900 hover:bg-gray-50',
+                                'flex items-center justify-center rounded-md border py-3 px-3 text-sm font-medium uppercase sm:flex-1'
+                              )
+                            }
+                            disabled={!size.inStock}
+                          >
+                            <RadioGroup.Label as="span">{size.name}</RadioGroup.Label>
+                          </RadioGroup.Option>
+                        ))}
+                      </div>
+                    </RadioGroup>
+                  </div>
+
                   <div className="mt-10 flex">
                     <button
                       type="button"
@@ -558,6 +599,9 @@ export default function ProductDetail() {
 
         </div>
       </main>
+
+      {/* Product reviews */}
+      <ProductReviews />
       {/* Footer */}
       <Footer />
     </div>
