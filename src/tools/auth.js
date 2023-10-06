@@ -187,3 +187,42 @@ export const verifyEmail = async (key) => {
         };
     }
 }
+
+// password reset
+export const resetPassword = async (email) => {
+    try {
+        const res = await api.post('auth/password/reset/', {
+            email,
+        });
+
+        return { data: res.data, error: null };
+    } catch (err) {
+        console.log(err);
+
+        return {
+            data: null,
+            error: err.response.data?.detail || 'Something went wrong',
+        };
+    }
+};
+
+// password reset confirm
+export const resetPasswordConfirm = async (uid, token, new_password1, new_password2) => {
+    try {
+        const res = await api.post('auth/password/reset/confirm/', {
+            uid,
+            token,
+            new_password1,
+            new_password2,
+        });
+
+        return { data: res.data, error: null };
+    } catch (err) {
+        console.log(err);
+
+        return {
+            data: null,
+            error: err.response.data?.detail || 'Something went wrong',
+        };
+    }
+};
