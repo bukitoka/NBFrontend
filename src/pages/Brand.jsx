@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
+import { apiGet } from "../api/ApiService";
 
 // simple icons
 import {
@@ -15,6 +16,7 @@ import MobileMenu from "../components/MobileMenu";
 import Footer from "../components/Footer";
 import { fetchProducts } from "../api/ProductApi";
 import { getParamValue } from "../tools/urlParams";
+import api from "../tools/api";
 // import { productSkeleton } from "../components/skeleton/productItem/ProductItemSkeleton";
 
 const navigation = {
@@ -268,7 +270,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-const Barand = () => {
+const Brand = () => {
   const [open, setOpen] = useState(false);
 
   const [arrproducts, setProducts] = useState([]);
@@ -280,26 +282,21 @@ const Barand = () => {
   const baseurl = import.meta.env.VITE_API_BASE_URL;
 
   useEffect(() => {
-    setTimeout(() => {
-      getProducts(null);
-    }, 3000);
+    getBrand();
   }, []);
 
-  const getProducts = async (page) => {
-    try {
-      const productsData = await fetchProducts(page);
-      console.log(productsData);
-      setProducts(productsData.results);
-      setNextPage(getParamValue("page", productsData.next));
-      setPrevPage(getParamValue("page", productsData.previous));
-      setCount(productsData.count);
+  const getBrand = async () => {
+    await apiGet('brand/', (data) => onBrandSucces(data), (error) => onBrandError(error))
+  }
 
-      setLoading(false);
-    } catch (error) {
-      setError(error);
-      setLoading(false);
-    }
-  };
+  const onBrandSucces = (data) => {
+    console.log(data);
+  }
+
+  const onBrandError = (error) => {
+    console.log(error);
+  }
+
   return (
     <div className="bg-white">
       {/* Mobile Navigation */}
@@ -323,13 +320,7 @@ const Barand = () => {
         <div className="bg-white pt-[130px] lg:pt-[86px]  bg-red-400">
           <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
             <div className="mt-8 grid grid-cols-1 gap-y-12 sm:grid-cols-2 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8">
-              {
-                //                   loading ? (
-                //     [...Array(10).keys()].map((i) => (
-                //       <ProductSkeleton />
-                //     ))
-                //   ) :
-
+              {/* {
                 (arrproducts.map((product) => (
                   <div key={product.id}>
                     <div className="relative">
@@ -355,11 +346,11 @@ const Barand = () => {
                       </div>
                     </div>
                   </div>
-                )))}
+                )))} */}
             </div>
 
             {/* <!-- component --> */}
-            <div className="flex items-center justify-center mt-8">
+            {/* <div className="flex items-center justify-center mt-8">
               <ul className="flex items-center -mx-[6px]">
                 <li className="px-[6px]">
                   <a href="#" className="w-9 h-9 flex items-center justify-center rounded-md  border border-[#EDEFF1]text-[#838995] text-base hover:text-8xl" onClick={() => getProducts(prevPage)}>
@@ -381,7 +372,7 @@ const Barand = () => {
                   </a>
                 </li>
               </ul>
-            </div>
+            </div> */}
           </div>
         </div>
       </main>
