@@ -8,6 +8,8 @@ import Cookies from 'js-cookie';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { insertCartItem } from "../api/CartApi";
+import { apiPost } from '../api/ApiService';
+import ProductReviews from '../components/ProductReviews';
 
 
 // simple icons
@@ -41,6 +43,10 @@ const product = {
     { name: 'Washed Black', bgColor: 'bg-gray-700', selectedColor: 'ring-gray-700' },
     { name: 'White', bgColor: 'bg-white', selectedColor: 'ring-gray-400' },
     { name: 'Washed Gray', bgColor: 'bg-gray-500', selectedColor: 'ring-gray-500' },
+  ],
+  sizes: [
+    { name: '400 ml', inStock: true },
+    { name: '800 ml', inStock: true },
   ],
   description: `
     <p>The Zip Tote Basket is the perfect midpoint between shopping tote and comfy backpack. With convertible straps, you can hand carry, should sling, or backpack this convenient and spacious bag. The zip top and durable canvas construction keeps your goods protected for all-day use.</p>
@@ -307,6 +313,7 @@ function classNames(...classes) {
 export default function ProductDetail() {
   const { slug } = useParams();
   const [selectedColor, setSelectedColor] = useState(product.colors[0])
+  const [selectedSize, setSelectedSize] = useState(product.sizes[2])
   const [newProduct, setProduct] = useState({});
   const [stocks, setStock] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -318,8 +325,6 @@ export default function ProductDetail() {
 
 
   const allUserData = useAuthStore((state) => state.allUserData);
-
-
 
   useEffect(() => {
     getProductdetail(slug);
@@ -351,6 +356,21 @@ export default function ProductDetail() {
     }
     // console.log(newProduct)
   }
+
+  const addWishList = async (productId) => {
+    await apiPost('wishlist/', {
+      product: productId,
+    }, (respone) => onSucessAddWishList(respone), (error) => onErrorAddWishList(error));
+  }
+
+  const onSucessAddWishList = (response) => {
+    console.log(response)
+  }
+
+  const onErrorAddWishList = (error) => {
+    console.log(error)
+  }
+
 
   // open and close mobile menu
   const [open, setOpen] = useState(false)
@@ -431,7 +451,7 @@ export default function ProductDetail() {
                         <StarIcon
                           key={rating}
                           className={classNames(
-                            product.rating > rating ? 'text-indigo-500' : 'text-gray-300',
+                            product.rating > rating ? 'text-yellow-500' : 'text-gray-300',
                             'h-5 w-5 flex-shrink-0'
                           )}
                           aria-hidden="true"
@@ -447,8 +467,9 @@ export default function ProductDetail() {
 
                   <div
                     className="space-y-6 text-base text-gray-700"
-                    dangerouslySetInnerHTML={{ __html: product.description }}
-                  />
+                  >
+                    <p>{newProduct.description}</p>
+                  </div>
                 </div>
 
                 <form className="mt-6">
@@ -488,17 +509,53 @@ export default function ProductDetail() {
                     </RadioGroup>
                   </div>
 
+                  {/* Sizes */}
+                  <div className="mt-8">
+                    <div className="flex items-center justify-between">
+                      <h2 className="text-sm font-medium text-gray-900">Size</h2>
+                      <a href="#" className="text-sm font-medium text-indigo-600 hover:text-indigo-500">
+                        See sizing chart
+                      </a>
+                    </div>
+
+                    <RadioGroup value={selectedSize} onChange={setSelectedSize} className="mt-2">
+                      <RadioGroup.Label className="sr-only">Choose a size</RadioGroup.Label>
+                      <div className="grid grid-cols-3 gap-3 sm:grid-cols-6">
+                        {product.sizes.map((size) => (
+                          <RadioGroup.Option
+                            key={size.name}
+                            value={size}
+                            className={({ active, checked }) =>
+                              classNames(
+                                size.inStock ? 'cursor-pointer focus:outline-none' : 'cursor-not-allowed opacity-25',
+                                active ? 'ring-2 ring-yellow-500 ring-offset-2' : '',
+                                checked
+                                  ? 'border-transparent bg-yellow-500 text-white hover:bg-yellow-500'
+                                  : 'border-gray-200 bg-white text-gray-900 hover:bg-gray-50',
+                                'flex items-center justify-center rounded-md border py-3 px-3 text-sm font-medium uppercase sm:flex-1'
+                              )
+                            }
+                            disabled={!size.inStock}
+                          >
+                            <RadioGroup.Label as="span">{size.name}</RadioGroup.Label>
+                          </RadioGroup.Option>
+                        ))}
+                      </div>
+                    </RadioGroup>
+                  </div>
+
                   <div className="mt-10 flex">
                     <button
                       type="button"
                       onClick={() => addToCart(newProduct.id, stocks[0].id ?? null)}
-                      className="flex max-w-xs flex-1 items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50 sm:w-full"
+                      className="flex max-w-xs flex-1 items-center justify-center rounded-md border border-transparent bg-zinc-800 px-8 py-3 text-base font-medium text-white hover:bg-yellow-500 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 focus:ring-offset-gray-50 sm:w-full"
                     >
                       Add to cart
                     </button>
 
                     <button
                       type="button"
+                      onClick={() => addWishList(newProduct.id)}
                       className="ml-4 flex items-center justify-center rounded-md px-3 py-3 text-gray-400 hover:bg-gray-100 hover:text-gray-500"
                     >
                       <HeartIcon className="h-6 w-6 flex-shrink-0" aria-hidden="true" />
@@ -558,6 +615,9 @@ export default function ProductDetail() {
 
         </div>
       </main>
+
+      {/* Product reviews */}
+      <ProductReviews />
       {/* Footer */}
       <Footer />
     </div>

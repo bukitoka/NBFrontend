@@ -17,6 +17,7 @@ import Google from "./pages/GoogleCallBack"
 import VerifyEmail from "./pages/VerifyEmail"
 import Cart from "./pages/Cart"
 import CheckOut from "./pages/Checkout"
+import Brand from "./pages/Brand"
 import 'react-loading-skeleton/dist/skeleton.css'
 
 const App = () => {
@@ -42,6 +43,7 @@ const App = () => {
           <Route path="/verify-email" element={<VerifyEmail />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/checkout" element={<CheckOut />} />
+          <Route path="/brand" element={<Brand />} />
 
         </Routes>
       </MainWrapper>
