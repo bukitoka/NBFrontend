@@ -1,7 +1,8 @@
 import { Fragment, useState, useEffect } from 'react'
 import { Popover, Transition } from '@headlessui/react'
-import { NavLink } from 'react-router-dom'
-import { fetchCartItems } from '../api/CartApi'
+import { NavLink, Link } from 'react-router-dom'
+import { apiGet } from '../api/ApiService'
+
 
 // hero icons
 import {
@@ -11,7 +12,9 @@ import {
   UserIcon,
   LanguageIcon,
   MicrophoneIcon,
-  ChevronDownIcon
+  ChevronDownIcon,
+  ChatBubbleBottomCenterTextIcon,
+  Square3Stack3DIcon
 } from '@heroicons/react/24/outline'
 import { ShoppingBagIcon } from '@heroicons/react/20/solid'
 
@@ -29,6 +32,8 @@ import useAuthStore from '../store/authStore'
 const Navbar = ({ setOpen, classNames }) => {
 
   const [isShowingArray, setIsShowingArray] = useState([]);
+  const [searchResult, setSearchResult] = useState([]);
+  const [keyWord, setKeyWord] = useState('');
 
   const handlePanel = (index) => {
     setIsShowingArray((prevArray) => {
@@ -37,6 +42,29 @@ const Navbar = ({ setOpen, classNames }) => {
       return newArray;
     });
   };
+
+
+  const search = async (keyword) => {
+    await apiGet(`search/?q=${keyword}`, (data) => onSuccessSearch(data), (err) => onErrorSearch(err));
+  }
+
+  const onSuccessSearch = (data) => {
+    console.log("Success");
+    console.log(data);
+    setKeyWord('');
+  }
+
+  const onErrorSearch = (error) => {
+    console.log("Error");
+    console.log(error);
+    setKeyWord('');
+  }
+
+  const handleSearch = () => {
+
+    search(keyWord);
+
+  }
 
   const { categories, loading, error, fetchCategories } = useCategoryStore();
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
@@ -75,7 +103,7 @@ const Navbar = ({ setOpen, classNames }) => {
               <div className="flex h-16 items-center justify-between mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 {/* Logo (lg+) */}
                 <div className="hidden lg:flex lg:flex-1 lg:items-center">
-                  <a href="#">
+                  <a href="/">
                     <span className="sr-only">NanoBeepa</span>
                     <img
                       className="h-8 w-auto"
@@ -88,8 +116,8 @@ const Navbar = ({ setOpen, classNames }) => {
 
                 {/* Wide search field */}
                 <div className="hidden h-full lg:flex mr-20">
-                  <div className="flex items-center py-4 md:mx-auto md:max-w-3xl lg:mx-0 lg:max-w-sm xl:px-0">
-                    <a href="#" className="hidden lg:block lg:mr-4 p-2 rounded-full bg-white/10 hover:bg-white/20 text-gray-300 hover:text-gray-100">
+                  <div className="flex items-center py-4 md:mx-auto md:max-w-2xl lg:mx-0 lg:max-w-sm xl:px-0">
+                    <a href="#" className="hidden lg:block lg:mr-4 p-2 rounded-full bg-white/10 hover:bg-white/20 text-gray-300 hover:text-gray-100" onClick={() => handleSearch()}>
                       <span className="sr-only">Speech</span>
                       <MicrophoneIcon className="h-5 w-5" aria-hidden="true" />
                     </a>
@@ -97,7 +125,7 @@ const Navbar = ({ setOpen, classNames }) => {
                       Search
                     </label>
                     <div className="relative">
-                      <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                      <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3" onClick={() => handleSearch()}>
                         <MagnifyingGlassIcon className="h-5 w-5 text-gray-300" aria-hidden="true" />
                       </div>
                       <input
@@ -108,6 +136,8 @@ const Navbar = ({ setOpen, classNames }) => {
                                                   sm:text-sm sm:leading-6 hover:bg-white/20 hover:ring-1 hover:ring-inset hover:ring-gray-400"
                         placeholder="Search anything"
                         type="search"
+                        value={keyWord}
+                        onChange={(e) => setKeyWord(e.target.value)}
                       />
                     </div>
                   </div>
@@ -141,7 +171,7 @@ const Navbar = ({ setOpen, classNames }) => {
                     <a href="#" className="hidden p-2 lg:flex text-gray-200 hover:text-yellow-500">
                       <span className="sr-only">Help</span>
                       <QuestionMarkCircleIcon className="h-5 w-5" aria-hidden="true" />
-                      <span className="text-sm font-medium ml-2"> Help </span>
+                      <span className="text-sm font-medium ml-2">Your Voice</span>
                     </a>
 
                     {/* Language */}
@@ -257,7 +287,7 @@ const Navbar = ({ setOpen, classNames }) => {
                   )}
 
                   <a
-                    href="#"
+                    href="/brand"
                     className="flex py-3 items-center text-sm font-medium text-gray-200 hover:text-yellow-500"
                   >
                     BRANDS
@@ -272,7 +302,7 @@ const Navbar = ({ setOpen, classNames }) => {
                     href="#"
                     className="flex py-3 items-center text-sm font-medium text-gray-200 hover:text-yellow-500"
                   >
-                    SALES & PROMO
+                    SALE & PROMO
                   </a>
 
                 </div>

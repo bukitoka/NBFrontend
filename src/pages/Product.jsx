@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
+import { Link } from "react-router-dom";
 
 // simple icons
 import {
@@ -15,7 +16,6 @@ import MobileMenu from "../components/MobileMenu";
 import Footer from "../components/Footer";
 import { fetchProducts } from "../api/ProductApi";
 import { getParamValue } from "../tools/urlParams";
-// import { productSkeleton } from "../components/skeleton/productItem/ProductItemSkeleton";
 
 const navigation = {
   categories: [
@@ -353,28 +353,30 @@ const Products = () => {
 
                 (arrproducts.map((product) => (
                   <div key={product.id}>
-                    <div className="relative">
-                      <div className="relative h-72 w-full overflow-hidden rounded-lg">
-                        <img
-                          src={`${product.cover}`}
-                          alt={product.name}
-                          className="h-full w-full object-cover object-center"
-                        />
+                    <Link to={`/products/${product.slug}`}>
+                      <div className="relative">
+                        <div className="relative h-72 w-full overflow-hidden rounded-lg">
+                          <img
+                            src={`${product.cover}`}
+                            alt={product.name}
+                            className="h-full w-full object-cover object-center"
+                          />
+                        </div>
+                        <div className="relative mt-4">
+                          <a href={"/products/" + product.slug} className="text-sm font-medium text-gray-900 font-bold">
+                            {product.name}
+                          </a>
+                          <p className="mt-1 text-sm text-gray-500">Discount: {product.discount}</p>
+                          <h4 className="text-sm">Rp.{product.min_price} - Rp.{product.max_price} </h4>
+                        </div>
+                        <div className="absolute inset-x-0 top-0 flex h-72 items-end justify-end overflow-hidden rounded-lg p-4">
+                          <div
+                            aria-hidden="true"
+                            className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-black opacity-50"
+                          />
+                        </div>
                       </div>
-                      <div className="relative mt-4">
-                        <a href={"/products/" + product.slug} className="text-sm font-medium text-gray-900 font-bold">
-                          {product.name}
-                        </a>
-                        <p className="mt-1 text-sm text-gray-500">Discount: {product.discount}</p>
-                        <h4 className="text-sm">Rp.{product.min_price} - Rp.{product.max_price} </h4>
-                      </div>
-                      <div className="absolute inset-x-0 top-0 flex h-72 items-end justify-end overflow-hidden rounded-lg p-4">
-                        <div
-                          aria-hidden="true"
-                          className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-black opacity-50"
-                        />
-                      </div>
-                    </div>
+                    </Link>
                   </div>
                 )))}
             </div>
