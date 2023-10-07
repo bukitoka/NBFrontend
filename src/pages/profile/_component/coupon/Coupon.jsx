@@ -31,23 +31,20 @@ const Coupon = () => {
 
   return (
     <>
-      {
-        coupons.map((coupon) => {
-          return (
-            <>
-              <div className={`flex flex-row text-zinc-800 my-1`}>
-                <ReceiptPercentIcon className={` max-h-8`} />
-                <div>
-                  <p className='flex items-center justify-center ms-1 text-center'>{coupon.name} </p>
-                  <p className='flex items-center justify-center ms-1 text-center'>{coupon.discount_value}</p>
-                  <p className='flex items-center justify-center ms-1 text-center'>{coupon.prefix_code} {coupon.private_code}</p>
-                </div>
-              </div>
 
-            </>
-          )
-        })
-      }
+      <ul role="list" className="">
+        {coupons.map((coupon) => (
+
+          <li key={coupon.id} className="flex gap-x-4 py-5">
+            <ReceiptPercentIcon className={` max-h-8`} />
+            <div className="min-w-0">
+              <p className="text-sm font-semibold leading-6 text-gray-900">{coupon.name}</p>
+              <p className="text-sm font-semibold leading-6 text-gray-900">{coupon.discount_value}% | {coupon.prefix_code} {coupon.private_code}</p>
+            </div>
+
+          </li>
+        ))}
+      </ul>
     </>
   );
 }

@@ -1,75 +1,45 @@
-import { logout } from '../../../../tools/auth'
-import useAuthStore from "../../../../store/authStore";
-import api from '../../../../tools/api';
 import { useState, useEffect } from 'react';
-import { apiGet } from '../../../../api/ApiService'
+import {
+  ReceiptPercentIcon,
+  GlobeAltIcon,
+  PencilIcon,
+  BuildingOfficeIcon
+} from '@heroicons/react/24/solid'
 
-import { PaperClipIcon } from '@heroicons/react/24/solid'
-
-const Coupon = () => {
-  const allUserData = useAuthStore((state) => state.allUserData);
-  const [userDetails, setUserDetails] = useState({});
-  const [shippingList, setShippingList] = useState(null);
-
-
-  // fetch user detailsz
-  const fetchCoupons = async () => {
-    await apiGet('coupons/', (data) => onGetCouponsSuccess(data), (err) => onGetCouponsError(err))
-  };
-
-  const onGetCouponsSuccess = (response) => {
-    console.log(response)
-  }
-
-  const onGetCouponsError = (error) => {
-    console.log(error)
-  }
-
-
-  const handleLogout = async () => {
-    const { error } = await logout();
-    if (!error) {
-      window.location.reload();
-    }
-  };
+const Setting = () => {
 
   useEffect(() => {
-    fetchCoupons();
+
   }, []);
 
   return (
     <>
-      {/* <div className="bg-gray-50 px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-3 rounded-lg">
-        <dt className="text-sm font-medium leading-6 text-gray-900">Name</dt>
-        <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{userDetails.first_name} {userDetails.last_name}</dd>
+      <div className="bg-white">
+        <ul role="list" className="">
+          <li className="flex gap-x-4 py-5 hover:bg-zinc-100 rounded-lg px-4 hover:text-yellow-500">
+            <GlobeAltIcon className={` max-h-4`} />
+            <div className="min-w-0  flex items-center justify-center">
+              <p className=" ms-1 text-center text-sm font-semibold ">Language</p>
+            </div>
+          </li>
+          <li className="flex gap-x-4 py-5 hover:bg-zinc-100 rounded-lg px-4 hover:text-yellow-500">
+            <PencilIcon className={` max-h-4`} />
+            <div className="min-w-0  flex items-center justify-center">
+              <p className=" ms-1 text-center text-sm font-semibold ">Edit Profile</p>
+            </div>
+          </li>
+          <li className="flex gap-x-4 py-5 hover:bg-zinc-100 rounded-lg px-4 hover:text-yellow-500">
+            <BuildingOfficeIcon className={` max-h-4`} />
+            <div className="min-w-0  flex items-center justify-center">
+              <p className=" ms-1 text-center text-sm font-semibold ">address</p>
+            </div>
+          </li>
+        </ul>
+
       </div>
-      <div className="bg-white px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-3">
-        <dt className="text-sm font-medium leading-6 text-gray-900">Email</dt>
-        <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{userDetails.email}</dd>
-      </div>
-      <div className="bg-gray-50 px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-3 rounded-lg">
-        <dt className="text-sm font-medium leading-6 text-gray-900">Phone Number</dt>
-        <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{userDetails.user_details?.phone_number ?? '-'}</dd>
-      </div>
-      <div className="bg-white px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-3">
-        <dt className="text-sm font-medium leading-6 text-gray-900">Birth Date</dt>
-        <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{userDetails.user_details?.date_of_birth ?? '-'}</dd>
-      </div>
-      <div className="bg-gray-50 px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-3 rounded-lg">
-        <dt className="text-sm font-medium leading-6 text-gray-900">Gender</dt>
-        <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{userDetails.user_details?.gender ?? '-'}</dd>
-      </div>
-      <div className="bg-white px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-3">
-        <dt className="text-sm font-medium leading-6 text-gray-900">Kab/Kec</dt>
-        <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{shippingList?.destination?.route}</dd>
-      </div>
-      <div className="bg-gray-50 px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-3 rounded-lg">
-        <dt className="text-sm font-medium leading-6 text-gray-900">Detail</dt>
-        <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{shippingList?.receiver_address}</dd>
-      </div> */}
     </>
   );
 }
 
-export default Coupon
+export default Setting
 

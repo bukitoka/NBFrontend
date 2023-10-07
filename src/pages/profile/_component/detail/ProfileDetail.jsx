@@ -4,8 +4,6 @@ import api from '../../../../tools/api';
 import { useState, useEffect } from 'react';
 import { apiGet } from '../../../../api/ApiService'
 
-import { PaperClipIcon } from '@heroicons/react/24/solid'
-
 const ProfileDetail = () => {
   const allUserData = useAuthStore((state) => state.allUserData);
   const [userDetails, setUserDetails] = useState({});
