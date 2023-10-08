@@ -2,7 +2,8 @@ import { logout } from '../../../../tools/auth'
 import useAuthStore from "../../../../store/authStore";
 import api from '../../../../tools/api';
 import { useState, useEffect } from 'react';
-import { apiGet,  } from '../../../../api/ApiService'
+import { apiGet, apiPatchRoute } from '../../../../api/ApiService'
+import { ToastContainer, toast } from 'react-toastify';
 import {
   PencilSquareIcon,
   XMarkIcon
@@ -15,22 +16,22 @@ import './ProfileDetail.css'
 
 const ProfileDetail = () => {
   const allUserData = useAuthStore((state) => state.allUserData);
-  const [userDetails, setUserDetails] = useState({});
+  const [temporaryUser, setTemporaryUser] = useState({});
   const [shippingList, setShippingList] = useState(null);
   const [isEdit, setIsEdit] = useState(false);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
-  const [birthDay, setBirthDay] = useState('');
+  const [dateOfBirth, setDateOfBirth] = useState('');
   const [email, setEmail] = useState('');
   const [address, setAddress] = useState('');
   const [detailAddress, setDetailAddress] = useState('');
   const [gender, setGender] = useState('');
   const [startDate, setStartDate] = useState(new Date());
 
-  const [value, setValue] = useState({
-    startDate: new Date(),
-    endDate: new Date().setMonth(11)
+  const [datePickerValue, setDatePickerValue] = useState({
+    startDate: "2023-01-01",
+    endDate: "2023-01-01",
   });
 
 
@@ -38,18 +39,38 @@ const ProfileDetail = () => {
   const fetchUserDetails = async () => {
     const { data, error } = await api.get('/api/account/' + allUserData + '/');
     if (!error) {
-      console.log(data);
       if (data != null) {
         setUserData(data);
       }
-      setUserDetails(data);
+      setTemporaryUser(data);
     } else {
       console.log(error);
     }
   };
 
   const updateProfile = async () => {
+    await apiPatchRoute(`/auth/user/`, {
+      first_name: firstName,
+      last_name: lastName,
+      user_details: {
+        phone_number: phoneNumber,
+        gender: gender,
+        date_of_birth: dateOfBirth
+      }
+    }, (data) => onProfileUpdateSuccess(data), (error) => onProfileUpdateError(error))
+  }
 
+  const handleGenderChange = (e) => { setGender(e.target.value) }
+
+  const onProfileUpdateSuccess = (data) => {
+    setUserData(data);
+    setTemporaryUser(data);
+    setIsEdit(false);
+    toast.success("Your Profile Has been updated.");
+  }
+
+  const onProfileUpdateError = (error) => {
+    console.log(error);
   }
 
   const setUserData = (userData) => {
@@ -57,8 +78,12 @@ const ProfileDetail = () => {
     setLastName(userData.last_name);
     setEmail(userData.email);
     setPhoneNumber(userData.user_details.phone_number);
-    setBirthDay(userData.user_details.date_of_birth);
+    setDateOfBirth(userData.user_details.date_of_birth);
     setGender(userData.user_details.gender)
+    // setDatePickerValue({
+    //   startDate: userData.user_details.date_of_birth,
+    //   endDate: userData.user_details.date_of_birth,
+    // })
   }
 
   const getShippingData = async () => {
@@ -76,21 +101,18 @@ const ProfileDetail = () => {
 
   }
 
-  const handleLogout = async () => {
-    console.log('logout')
-    // const { error } = await logout();
-    // if (!error) {
-    //   window.location.reload();
-    // }
-  };
-
   const changeMode = () => {
+    if (isEdit) {
+      setUserData(temporaryUser);
+    }
+
+    // change mode
     setIsEdit(!isEdit)
   }
 
-  const handleValueChange = (newValue) => {
-    console.log("newValue:", newValue);
-    setValue(newValue);
+  const handleValueChange = (selectedDate) => {
+    setDateOfBirth(selectedDate.startDate)
+    setDatePickerValue(selectedDate)
   }
 
   const handleUpdateAdress = () => {
@@ -104,6 +126,11 @@ const ProfileDetail = () => {
 
   return (
     <form>
+      <ToastContainer
+        toastClassName="rounded-lg"
+        bodyClassName="text-sm font-semibold"
+        position="top-center"
+      />
       <div className='flex flex-col'>
         <div className='flex justify-end pb-4'>
           {isEdit ? <XMarkIcon className='h-6 w-6 text-zinc-800 hover:text-yellow-500' onClick={changeMode} /> :
@@ -153,7 +180,7 @@ const ProfileDetail = () => {
         {/* email */}
         <div className="grid grid-rows-2 lg:grid-rows-none bg-gray-50 lg:grid-cols-4 px-4 py-4 rounded-lg gap-1 lg:gap-6">
           <dt className="text-sm font-medium leading-6 text-gray-900">Email</dt>
-          <dd className="lg:col-span-2 mt-1 pl-1 text-sm text-gray-700">{userDetails.email}</dd>
+          <dd className="lg:col-span-2 mt-1 pl-1 text-sm text-gray-700">{email}</dd>
         </div>
 
         {/* phone number */}
@@ -181,7 +208,7 @@ const ProfileDetail = () => {
           {
             isEdit ? <>
               <Datepicker
-                value={value}
+                value={datePickerValue}
                 onChange={handleValueChange}
                 asSingle={true}
                 useRange={false}
@@ -192,7 +219,7 @@ const ProfileDetail = () => {
                 inputClassName={`w-full relative transition-all duration-300 py-2 pl-4 pr-0 w-full border-gray-100 dark:bg-slate-800 dark:text-white/80 dark:border-slate-600 rounded-lg tracking-wide font-light text-sm placeholder-gray-400 bg-white focus:ring disabled:opacity-40 disabled:cursor-not-allowed focus:border-yellow-500 focus:ring-yellow-500/20`}
               />
             </> :
-              <dd className="mt-0 pl-2 text-sm text-gray-700 lg:col-span-2">{dayjs(birthDay).format('MMMM D, YYYY') ?? '-'}</dd>
+              <dd className="mt-0 pl-2 text-sm text-gray-700 lg:col-span-2">{dayjs(dateOfBirth).format('MMMM D, YYYY') ?? '-'}</dd>
           }
         </div>
         {/* Gender */}
@@ -207,6 +234,8 @@ const ProfileDetail = () => {
                     name="notification-method"
                     type="radio"
                     value="male"
+                    onChange={(e) => handleGenderChange(e)}
+                    defaultChecked={gender == 'male'}
                     className="h-3 w-3 border-gray-300 text-yellow-500 focus:ring-yellow-500"
                   />
                   <label htmlFor="male" className="ml-3 block text-sm font-medium leading-6 text-gray-900">
@@ -219,6 +248,8 @@ const ProfileDetail = () => {
                     name="notification-method"
                     type="radio"
                     value="female"
+                    defaultChecked={gender == 'female'}
+                    onChange={(e) => handleGenderChange(e)}
                     className="h-3 w-3 border-gray-300 text-yellow-500 focus:ring-yellow-500"
                   />
                   <label htmlFor="female" className="ml-3 block text-sm font-medium leading-6 text-gray-900">
@@ -247,7 +278,7 @@ const ProfileDetail = () => {
           isEdit ? <div className='flex items-center justify-center mt-3'>
             <button
               type="button"
-              onClick={handleLogout}
+              onClick={() => updateProfile()}
               className="mt-4 bg-yellow-600 border border-transparent rounded-lg py-2 px-4 inline-flex justify-center text-sm font-medium text-white hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
               Update
             </button>

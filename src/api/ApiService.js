@@ -121,8 +121,8 @@ export const apiPatch = async (path, data, onSuccess, onError) => {
   * @returns
  */
 export const apiPatchRoute = async (path, data, onSuccess, onError) => {
-    try {
-      const response = await api.patch(`${API_BASE_URL} ${path}`, data);
+  try {
+      const response = await api.patch(`${API_BASE_URL}${path}`, data);
       if (response.status === 200 || response.status === 201) {
         onSuccess(response.data);
         return;
@@ -133,4 +133,4 @@ export const apiPatchRoute = async (path, data, onSuccess, onError) => {
       onError(error);
       throw error;
     }
-  }
+}
