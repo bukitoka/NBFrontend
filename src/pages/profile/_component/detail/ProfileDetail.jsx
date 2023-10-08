@@ -80,10 +80,10 @@ const ProfileDetail = () => {
     setPhoneNumber(userData.user_details.phone_number);
     setDateOfBirth(userData.user_details.date_of_birth);
     setGender(userData.user_details.gender)
-    // setDatePickerValue({
-    //   startDate: userData.user_details.date_of_birth,
-    //   endDate: userData.user_details.date_of_birth,
-    // })
+    setDatePickerValue({
+      startDate: userData.user_details.date_of_birth,
+      endDate: userData.user_details.date_of_birth,
+    })
   }
 
   const getShippingData = async () => {
