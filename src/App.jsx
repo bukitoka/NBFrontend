@@ -18,7 +18,7 @@ import VerifyEmail from "./pages/VerifyEmail"
 import Cart from "./pages/Cart"
 import CheckOut from "./pages/Checkout"
 import Brand from "./pages/Brand"
-import 'react-loading-skeleton/dist/skeleton.css'
+
 
 const App = () => {
   return (

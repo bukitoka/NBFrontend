@@ -393,7 +393,7 @@ const Profile = () => {
               <div className="grid-cols-1 rounded-xl border bg-white p-8 text-center">
                 <div className="flex justify-center">
                   <div className="rounded-full bg-slate-800 p-2">
-                    <img className="h-40 w-40 rounded-full" src="https://images.unsplash.com/photo-1694878982063-9c41c1d94f4c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2670&q=80" alt="" srcSet="" />
+                    <img className="h-40 w-40 rounded-full" src={userDetails.avatar} alt="" srcSet="" />
                   </div>
                 </div>
                 <div className="mt-8">
@@ -465,27 +465,6 @@ const Profile = () => {
                       </ScrollMenu>
                     </div>
                   </div>
-
-                  {/* <ul>
-                  <li
-                    className={`cursor-pointer ${selectedMenuItem === 'item1' ? 'text-blue-500 font-bold' : ''}`}
-                    onClick={() => handleMenuItemClick('item1')}
-                  >
-                    Menu Item 1
-                  </li>
-                  <li
-                    className={`cursor-pointer ${selectedMenuItem === 'item2' ? 'text-blue-500 font-bold' : ''}`}
-                    onClick={() => handleMenuItemClick('item2')}
-                  >
-                    Menu Item 2
-                  </li>
-                  <li
-                    className={`cursor-pointer ${selectedMenuItem === 'item3' ? 'text-blue-500 font-bold' : ''}`}
-                    onClick={() => handleMenuItemClick('item3')}
-                  >
-                    Menu Item 3
-                  </li>
-                </ul> */}
                 </div>
               </div>
             </div>
