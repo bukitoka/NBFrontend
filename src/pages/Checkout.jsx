@@ -4,7 +4,7 @@ import { Dialog, Popover, RadioGroup, Tab, Transition } from '@headlessui/react'
 import { useLocation } from 'react-router-dom'
 import { fetchCartItems } from '../api/CartApi'
 import { apiGet, apiPost } from '../api/ApiService'
-import Modal from '../components/modal'
+import Modal from '../components/Modal'
 import NewAddressModal from './confirmOrder/component/addNewAddress'
 import ConfirmOrder from '../components/ConfirmOrder'
 import {

@@ -3,11 +3,12 @@ import { Dialog, Transition } from '@headlessui/react'
 import { ExclamationTriangleIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import RadioGroup from './RadioGroup'
 
-export default function Example({ open, setOpen, openModalNewAddress }) {
+export default function Modal({ open, setOpen, openModalNewAddress }) {
   const [selected, setSelected] = useState(null)
 
   const handleSelected = (value) => {
     setSelected(value);
+    setOpen(false)
   }
 
   return (

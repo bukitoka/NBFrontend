@@ -9,10 +9,10 @@ import {
   XMarkIcon
 } from '@heroicons/react/24/solid'
 import dayjs from 'dayjs';
-// import DatePicker from "react-datepicker";
-// import DatePicker from 'react-date-picker';
 import Datepicker from "react-tailwindcss-datepicker";
 import './ProfileDetail.css'
+import Modal from "../../../../components/Modal"
+// import Modal from "components/Modal"
 
 const ProfileDetail = () => {
   const allUserData = useAuthStore((state) => state.allUserData);
@@ -28,6 +28,11 @@ const ProfileDetail = () => {
   const [detailAddress, setDetailAddress] = useState('');
   const [gender, setGender] = useState('');
   const [startDate, setStartDate] = useState(new Date());
+  const [open, setOpen] = useState(false)
+
+  const handleOpenModalNewAddress = () => {
+    setOpen(false);
+  }
 
   const [datePickerValue, setDatePickerValue] = useState({
     startDate: "2023-01-01",
@@ -116,6 +121,7 @@ const ProfileDetail = () => {
   }
 
   const handleUpdateAdress = () => {
+    setOpen(true)
     console.log('update address')
   }
 
@@ -287,6 +293,8 @@ const ProfileDetail = () => {
 
 
       </div>
+      {/* modal change address  */}
+      <Modal open={open} setOpen={setOpen} openModalNewAddress={handleOpenModalNewAddress} />
     </form>
   );
 }
