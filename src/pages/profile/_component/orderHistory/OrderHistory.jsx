@@ -194,6 +194,17 @@ export default function OrderHistory() {
                   </ul>
                 </div>
               ))}
+
+              { /* if order is empty */
+                orders.length == 0 &&
+                <div className="flex justify-center items-center">
+                  <div className="text-center">
+                    <h1 className="text-3xl font-semibold">You don't have any order yet</h1>
+                    <p className="text-gray-500">Let's find some item to buy</p>
+                    <a href="/products" className="bg-yellow-500 text-white px-4 py-2 rounded-md mt-4">Shop Now</a>
+                  </div>
+                </div>
+              }
             </div>
           </div>
         </div>

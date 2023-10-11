@@ -1,8 +1,7 @@
 import { logout } from '../../../../tools/auth'
 import useAuthStore from "../../../../store/authStore";
-import api from '../../../../tools/api';
 import { useState, useEffect } from 'react';
-import { apiGet, apiPatchRoute } from '../../../../api/ApiService'
+import { apiGet, apiGetRoute, apiPatchRoute } from '../../../../api/ApiService'
 import { ToastContainer, toast } from 'react-toastify';
 import {
   PencilSquareIcon,
@@ -12,6 +11,7 @@ import dayjs from 'dayjs';
 import Datepicker from "react-tailwindcss-datepicker";
 import './ProfileDetail.css'
 import Modal from "../../../../components/Modal"
+import NewAddressModal from '../../../confirmOrder/component/addNewAddress'
 // import Modal from "components/Modal"
 
 const ProfileDetail = () => {
@@ -29,29 +29,31 @@ const ProfileDetail = () => {
   const [gender, setGender] = useState('');
   const [startDate, setStartDate] = useState(new Date());
   const [open, setOpen] = useState(false)
+  const [openModalNewAdress, setModalNewAddress] = useState(false)
 
   const handleOpenModalNewAddress = () => {
     setOpen(false);
+    setModalNewAddress(true)
   }
 
   const [datePickerValue, setDatePickerValue] = useState({
-    startDate: "2023-01-01",
-    endDate: "2023-01-01",
+    startDate: null,
+    endDate: null,
   });
 
+  const getUserData = async () => {
+    await apiGetRoute(`/auth/user/`, (data) => onGetUserDataSuccess(data), (error) => onGetUserDataError(error))
+  }
 
-  // fetch user detailsz
-  const fetchUserDetails = async () => {
-    const { data, error } = await api.get('/api/account/' + allUserData + '/');
-    if (!error) {
-      if (data != null) {
-        setUserData(data);
-      }
-      setTemporaryUser(data);
-    } else {
-      console.log(error);
-    }
-  };
+  const onGetUserDataSuccess = (data) => {
+    setUserData(data);
+    setTemporaryUser(data);
+  }
+
+  const onGetUserDataError = (error) => {
+    console.log(error);
+  }
+
 
   const updateProfile = async () => {
     await apiPatchRoute(`/auth/user/`, {
@@ -126,7 +128,8 @@ const ProfileDetail = () => {
   }
 
   useEffect(() => {
-    fetchUserDetails();
+    // fetchUserDetails();
+    getUserData();
     getShippingData();
   }, []);
 
@@ -295,6 +298,7 @@ const ProfileDetail = () => {
       </div>
       {/* modal change address  */}
       <Modal open={open} setOpen={setOpen} openModalNewAddress={handleOpenModalNewAddress} />
+      <NewAddressModal open={openModalNewAdress} setOpen={setModalNewAddress} />
     </form>
   );
 }

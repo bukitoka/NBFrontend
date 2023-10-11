@@ -134,3 +134,26 @@ export const apiPatchRoute = async (path, data, onSuccess, onError) => {
       throw error;
     }
 }
+
+
+/**
+ * Api service for get route
+ * @param {*} path
+ * @param {*} onSuccess
+ * @param {*} onError
+ * @returns
+ */
+export const apiGetRoute = async (path, onSuccess, onError) => {
+  try {
+    const response = await api.get(`${API_BASE_URL}${path}`);
+    if (response.status === 200 || response.status === 201) {
+      onSuccess(response.data);
+      return;
+    }
+    onError(response.data);
+    return;
+  } catch (error) {
+    onError(error);
+    throw error;
+  }
+}
