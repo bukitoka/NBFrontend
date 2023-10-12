@@ -2,6 +2,7 @@ import { logout } from '../../../../tools/auth'
 import useAuthStore from "../../../../store/authStore";
 import { useState, useEffect } from 'react';
 import { apiGet } from '../../../../api/ApiService'
+import { FiShoppingBag } from 'react-icons/fi'
 
 import {
   ReceiptPercentIcon,
@@ -44,6 +45,14 @@ const Coupon = () => {
 
           </li>
         ))}
+
+        {
+          coupons.length === 0 &&
+          <div className="flex flex-col justify-center items-center">
+            <FiShoppingBag className="text-6xl text-gray-400" />
+            <p className='mt-2'>You don't have any coupon</p>
+          </div>
+        }
       </ul>
     </>
   );

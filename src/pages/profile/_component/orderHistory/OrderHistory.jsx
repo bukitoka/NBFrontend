@@ -4,6 +4,7 @@ import { EllipsisVerticalIcon } from '@heroicons/react/24/outline'
 import { CheckCircleIcon } from '@heroicons/react/20/solid'
 import { apiGet } from '../../../../api/ApiService'
 import { useEffect, useState } from 'react'
+import { FiShoppingBag } from 'react-icons/fi'
 import dayjs from 'dayjs';
 
 
@@ -197,12 +198,9 @@ export default function OrderHistory() {
 
               { /* if order is empty */
                 orders.length == 0 &&
-                <div className="flex justify-center items-center">
-                  <div className="text-center">
-                    <h1 className="text-3xl font-semibold">You don't have any order yet</h1>
-                    <p className="text-gray-500">Let's find some item to buy</p>
-                    <a href="/products" className="bg-yellow-500 text-white px-4 py-2 rounded-md mt-4">Shop Now</a>
-                  </div>
+                <div className="flex flex-col justify-center items-center">
+                  <FiShoppingBag className="text-6xl text-gray-400" />
+                  <p className='mt-2'>you don't have wishlist, please check product item</p>
                 </div>
               }
             </div>
