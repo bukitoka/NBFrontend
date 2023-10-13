@@ -1,7 +1,7 @@
 import { logout } from '../../tools/auth'
 import useAuthStore from "../../store/authStore";
 import api from '../../tools/api';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {
   UserCircleIcon, ShoppingBagIcon,
   Cog6ToothIcon,
@@ -15,6 +15,7 @@ import {
   SiFacebook,
   SiTiktok,
 } from "@icons-pack/react-simple-icons";
+import { PiPencilSimple } from 'react-icons/pi'
 import { ScrollMenu, VisibilityContext } from "react-horizontal-scrolling-menu";
 import "react-horizontal-scrolling-menu/dist/styles.css";
 import useDrag from "./_component/useDrag";
@@ -27,6 +28,8 @@ import Coupon from './_component/coupon/Coupon';
 import Setting from './_component/setting/Setting'
 
 import { Card } from "./_component/menuItem/card";
+
+import { apiPatchRoute, apiGetRoute } from '~/api/ApiService';
 
 import Navbar from "../../components/Navbar";
 import MobileMenu from "../../components/MobileMenu";
@@ -308,6 +311,9 @@ function classNames(...classes) {
 }
 
 const Profile = () => {
+  const [selectedFile, setSelectedFile] = useState(null);
+  const fileInputRef = useRef(null);
+
   const [open, setOpen] = useState(false);
 
   const [items] = useState(menuItems);
@@ -347,15 +353,18 @@ const Profile = () => {
   const allUserData = useAuthStore((state) => state.allUserData);
   const [userDetails, setUserDetails] = useState({});
 
-  // fetch user detailsz
-  const fetchUserDetails = async () => {
-    const { data, error } = await api.get('/api/account/' + allUserData + '/');
-    if (!error) {
-      setUserDetails(data);
-    } else {
-      console.log(error);
-    }
-  };
+
+  const getUserData = async () => {
+    await apiGetRoute('/auth/user/', (data) => onGetUserDataSuccess(data), (error) => onGetUserDataError(error))
+  }
+
+  const onGetUserDataSuccess = (data) => {
+    setUserDetails(data)
+  }
+
+  const onGetUserDataError = (error) => {
+    console.log(error)
+  }
 
   const handleLogout = async () => {
     const { error } = await logout();
@@ -364,8 +373,43 @@ const Profile = () => {
     }
   };
 
+  // update image profile
+  const updateImageProfile = async (avatarData) => {
+    const formData = new FormData();
+    formData.append('avatar', avatarData, avatarData.name);
+
+    await apiPatchRoute('/auth/user/', formData,
+      (data) => onUpdateImageProfileSuccess(data),
+      (error) => onUpdateImageProfileError(error));
+    // await apiPatchRoute('/auth/user/', {
+    //   avatar: avatarData
+    // }, (data) => onUpdateImageProfileSuccess(data), (error) => onUpdateImageProfileError(error))
+  }
+
+  const onUpdateImageProfileSuccess = (data) => {
+    console.log("Image uploaded successfully.");
+    console.log(data)
+    getUserData();
+  }
+
+  const onUpdateImageProfileError = (error) => {
+    console.error("Image upload failed.");
+    console.log(error)
+  }
+
+  const handleFileInputChange = async (event) => {
+    console.log("test Upload")
+    const file = event.target.files[0];
+    // const formData = new FormData();
+    // formData.append('avatar', file);
+
+    await updateImageProfile(file);
+  };
+
+
+
   useEffect(() => {
-    fetchUserDetails();
+    getUserData();
   }, []);
 
   return (
@@ -392,7 +436,17 @@ const Profile = () => {
             <div className="grid w-full grid-cols-1 lg:w-2/5 h-1/5">
               <div className="grid-cols-1 rounded-xl border bg-white p-8 text-center">
                 <div className="flex justify-center">
-                  <div className="rounded-full bg-slate-800 p-2">
+                  <div className="rounded-full bg-slate-800 p-2 relative">
+                    <button className="absolute bottom-0 right-0 rounded-full bg-white p-2 ring-1 ring-yellow-500 mb-2 mr-2" onClick={() => fileInputRef.current.click()}>
+                      <PiPencilSimple className='h-4 w-4 text-zinc-800 hover:text-yellow-500' />
+                    </button>
+                    <input
+                      name='avatar'
+                      type="file"
+                      ref={fileInputRef}
+                      className='hidden'
+                      onChange={handleFileInputChange}
+                    />
                     <img className="h-40 w-40 rounded-full" src={userDetails.avatar} alt="" srcSet="" />
                   </div>
                 </div>
@@ -503,3 +557,81 @@ const Profile = () => {
 
 export default Profile
 
+
+
+// import React, { useState, useEffect, useRef } from 'react';
+// import { SiWhatsapp, SiInstagram, SiFacebook, SiTiktok } from "@icons-pack/react-simple-icons";
+// import { PiPencilSimple } from 'react-icons/pi';
+// import { ScrollMenu } from "react-horizontal-scrolling-menu";
+// import "react-horizontal-scrolling-menu/dist/styles.css";
+// import Navbar from "../../components/Navbar";
+// import MobileMenu from "../../components/MobileMenu";
+// import ProfileDetail from './_component/detail/ProfileDetail';
+// import OrderHistory from './_component/orderHistory/OrderHistory';
+// import WishList from './_component/wishlist/WishList';
+// import Coupon from './_component/coupon/Coupon';
+// import Setting from './_component/setting/Setting';
+// import { Card } from "./_component/menuItem/card";
+
+// const Profile = () => {
+//   const [selectedFile, setSelectedFile] = useState(null);
+//   const fileInputRef = useRef(null);
+//   // ... (other state variables)
+
+//   // Update image profile
+//   const updateImageProfile = async (formData) => {
+//     try {
+//       const response = await apiPatchRoute('/auth/user/', formData);
+//       if (response.status === 200) {
+//         // Handle success
+//         console.log("Image uploaded successfully.");
+//       } else {
+//         // Handle failure
+//         console.error("Image upload failed.");
+//       }
+//     } catch (error) {
+//       console.error("Error uploading image: ", error);
+//     }
+//   };
+
+//   const handleFileInputChange = (event) => {
+//     const file = event.target.files[0];
+//     setSelectedFile(file);
+//   };
+
+//   const handleUpdateImageProfile = async () => {
+//     if (selectedFile) {
+//       const formData = new FormData();
+//       formData.append('image', selectedFile);
+
+//       // Call the "updateImageProfile" function with the formData as a parameter
+//       updateImageProfile(formData);
+//     }
+//   };
+
+//   // ... (other functions)
+
+//   return (
+//     // ... (JSX content)
+//     <div className="grid-cols-1 rounded-xl border bg-white p-8 text-center">
+//       <div className="flex justify-center">
+//         <div className="rounded-full bg-slate-800 p-2 relative">
+//           <button className="absolute bottom-0 right-0 rounded-full bg-white p-2 ring-1 ring-yellow-500 mb-2 mr-2" onClick={() => fileInputRef.current.click()}>
+//             <PiPencilSimple className='h-4 w-4 text-zinc-800 hover:text-yellow-500' />
+//           </button>
+//           <input
+//             name='avatar'
+//             type='file'
+//             ref={fileInputRef}
+//             className='hidden'
+//             onChange={handleFileInputChange}
+//           />
+//           <img className="h-40 w-40 rounded-full" src={userDetails.avatar} alt="" srcSet="" />
+//         </div>
+//       </div>
+//     </div>
+//     // ... (other JSX content)
+//   );
+// }
+
+// export default Profile;

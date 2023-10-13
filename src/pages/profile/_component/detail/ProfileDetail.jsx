@@ -48,6 +48,7 @@ const ProfileDetail = () => {
   const onGetUserDataSuccess = (data) => {
     setUserData(data);
     setTemporaryUser(data);
+    console.log(data);
   }
 
   const onGetUserDataError = (error) => {

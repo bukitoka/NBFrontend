@@ -200,7 +200,7 @@ export default function OrderHistory() {
                 orders.length == 0 &&
                 <div className="flex flex-col justify-center items-center">
                   <FiShoppingBag className="text-6xl text-gray-400" />
-                  <p className='mt-2'>you don't have wishlist, please check product item</p>
+                  <p className='mt-2'>you don't have an order record please visit the product page</p>
                 </div>
               }
             </div>
