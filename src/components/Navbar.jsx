@@ -1,8 +1,7 @@
-import { Fragment, useState, useEffect } from 'react'
-import { Popover, Transition } from '@headlessui/react'
-import { NavLink, Link } from 'react-router-dom'
-import { apiGet } from '../api/ApiService'
-
+import { Fragment, useState, useEffect } from "react"
+import { Popover, Transition } from "@headlessui/react"
+import { NavLink, Link } from "react-router-dom"
+import { apiGet } from "../api/ApiService"
 
 // hero icons
 import {
@@ -14,85 +13,84 @@ import {
   MicrophoneIcon,
   ChevronDownIcon,
   ChatBubbleBottomCenterTextIcon,
-  Square3Stack3DIcon
-} from '@heroicons/react/24/outline'
-import { ShoppingBagIcon } from '@heroicons/react/20/solid'
-
+  Square3Stack3DIcon,
+} from "@heroicons/react/24/outline"
+import { ShoppingBagIcon } from "@heroicons/react/24/solid"
 // images
-import { nbwhite } from '../assets'
+import { nbwhite } from "../assets"
 
 // components
 import TopBanner from "../components/TopBanner"
 
 // store
-import useCategoryStore from '../store/categoryStore';
-import useAuthStore from '../store/authStore'
-
+import useCategoryStore from "../store/categoryStore"
+import useAuthStore from "../store/authStore"
 
 const Navbar = ({ setOpen, classNames }) => {
-
-  const [isShowingArray, setIsShowingArray] = useState([]);
-  const [searchResult, setSearchResult] = useState([]);
-  const [keyWord, setKeyWord] = useState('');
+  const [isShowingArray, setIsShowingArray] = useState([])
+  const [searchResult, setSearchResult] = useState([])
+  const [keyWord, setKeyWord] = useState("")
 
   const handlePanel = (index) => {
     setIsShowingArray((prevArray) => {
-      const newArray = [...prevArray];
-      newArray[index] = !newArray[index];
-      return newArray;
-    });
-  };
-
+      const newArray = [...prevArray]
+      newArray[index] = !newArray[index]
+      return newArray
+    })
+  }
 
   const search = async (keyword) => {
-    await apiGet(`search/?q=${keyword}`, (data) => onSuccessSearch(data), (err) => onErrorSearch(err));
+    await apiGet(
+      `search/?q=${keyword}`,
+      (data) => onSuccessSearch(data),
+      (err) => onErrorSearch(err)
+    )
   }
 
   const onSuccessSearch = (data) => {
-    console.log("Success");
-    console.log(data);
-    setKeyWord('');
+    console.log("Success")
+    console.log(data)
+    setKeyWord("")
   }
 
   const onErrorSearch = (error) => {
-    console.log("Error");
-    console.log(error);
-    setKeyWord('');
+    console.log("Error")
+    console.log(error)
+    setKeyWord("")
   }
 
   const handleSearch = () => {
-
-    search(keyWord);
-
+    search(keyWord)
   }
 
-  const { categories, loading, error, fetchCategories } = useCategoryStore();
-  const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
+  const { categories, loading, error, fetchCategories } = useCategoryStore()
+  const isLoggedIn = useAuthStore((state) => state.isLoggedIn)
 
-  const [totalItems, setTotalItems] = useState(0);
+  const [totalItems, setTotalItems] = useState(0)
 
   useEffect(() => {
-    fetchCategories();
-    fetchCart();
-  }, []);
+    fetchCategories()
+    fetchCart()
+  }, [])
 
   const fetchCart = async () => {
-    await fetchCartItems((data) => onSuccessLoadCart(data), (err) => onErrorLoadCart(err));
+    await fetchCartItems(
+      (data) => onSuccessLoadCart(data),
+      (err) => onErrorLoadCart(err)
+    )
   }
 
   function onSuccessLoadCart(data) {
-    setTotalItems(data.cart_items.length);
+    setTotalItems(data.cart_items.length)
   }
 
   function onErrorLoadCart(error) {
-    console.log(error);
+    console.log(error)
   }
 
   return (
     <div className="bg-transparent">
-
       <header className="w-full z-40 top-0 fixed">
-
         {/* Top Banner */}
         <TopBanner />
 
@@ -102,22 +100,25 @@ const Navbar = ({ setOpen, classNames }) => {
             <div className="bg-transparent lg:border-b border-gray-800 border-b-0">
               <div className="flex h-16 items-center justify-between mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 {/* Logo (lg+) */}
-                <div className="hidden lg:flex lg:flex-1 lg:items-center">
-                  <a href="/">
-                    <span className="sr-only">NanoBeepa</span>
-                    <img
-                      className="h-8 w-auto"
-                      src={nbwhite}
-                      alt="NanoBeepa"
-                    />
-                  </a>
-                  <h1 className='text-2xl font-semibold bg-clip-text text-transparent bg-gradient-to-t from-yellow-500 to-yellow-50 pt-2 ml-3'>NanoBeepa</h1>
-                </div>
+                <a
+                  href="/"
+                  className="hidden lg:flex lg:flex-1 lg:items-center"
+                >
+                  <span className="sr-only">NanoBeepa</span>
+                  <img className="h-8 w-auto" src={nbwhite} alt="NanoBeepa" />
+                  <h1 className="text-2xl font-semibold bg-clip-text text-transparent bg-gradient-to-t from-yellow-500 to-yellow-50 pt-2 ml-3">
+                    NanoBeepa
+                  </h1>
+                </a>
 
                 {/* Wide search field */}
                 <div className="hidden h-full lg:flex mr-20">
                   <div className="flex items-center py-4 md:mx-auto md:max-w-2xl lg:mx-0 lg:max-w-sm xl:px-0">
-                    <a href="#" className="hidden lg:block lg:mr-4 p-2 rounded-full bg-white/10 hover:bg-white/20 text-gray-300 hover:text-gray-100" onClick={() => handleSearch()}>
+                    <a
+                      href="#"
+                      className="hidden lg:block lg:mr-4 p-2 rounded-full bg-white/10 hover:bg-white/20 text-gray-300 hover:text-gray-100"
+                      onClick={() => handleSearch()}
+                    >
                       <span className="sr-only">Speech</span>
                       <MicrophoneIcon className="h-5 w-5" aria-hidden="true" />
                     </a>
@@ -125,8 +126,14 @@ const Navbar = ({ setOpen, classNames }) => {
                       Search
                     </label>
                     <div className="relative">
-                      <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3" onClick={() => handleSearch()}>
-                        <MagnifyingGlassIcon className="h-5 w-5 text-gray-300" aria-hidden="true" />
+                      <div
+                        className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"
+                        onClick={() => handleSearch()}
+                      >
+                        <MagnifyingGlassIcon
+                          className="h-5 w-5 text-gray-300"
+                          aria-hidden="true"
+                        />
                       </div>
                       <input
                         id="search"
@@ -156,49 +163,68 @@ const Navbar = ({ setOpen, classNames }) => {
 
                   <a href="#" className="ml-6 flex">
                     <span className="sr-only">NanoBeepa</span>
-                    <img
-                      src={nbwhite}
-                      alt="NanoBeepa"
-                      className="h-8 w-auto"
-                    />
-                    <h1 className='text-xl font-semibold bg-clip-text text-transparent bg-gradient-to-t from-yellow-500 to-yellow-50 pt-2 ml-3'>NanoBeepa</h1>
+                    <img src={nbwhite} alt="NanoBeepa" className="h-8 w-auto" />
+                    <h1 className="text-xl font-semibold bg-clip-text text-transparent bg-gradient-to-t from-yellow-500 to-yellow-50 pt-2 ml-3">
+                      NanoBeepa
+                    </h1>
                   </a>
                 </div>
 
                 <div className="flex flex-1 items-center justify-end">
                   <div className="flex items-center lg:ml-8">
                     {/* Help */}
-                    <a href="#" className="hidden p-2 lg:flex text-gray-200 hover:text-yellow-500">
-                      <span className="sr-only">Help</span>
-                      <QuestionMarkCircleIcon className="h-5 w-5" aria-hidden="true" />
-                      <span className="text-sm font-medium ml-2">Your Voice</span>
+                    <a
+                      href="#"
+                      className="hidden p-2 lg:flex text-gray-200 hover:text-yellow-500"
+                    >
+                      <span className="sr-only">FeedBack</span>
+                      <span className="text-sm font-medium ml-2">FeedBack</span>
                     </a>
 
                     {/* Language */}
-                    <a href="#" className="hidden lg:flex lg:ml-6 text-gray-200 hover:text-yellow-500">
+                    <a
+                      href="#"
+                      className="hidden lg:flex lg:ml-6 text-gray-200 hover:text-yellow-500"
+                    >
                       <span className="sr-only">Language</span>
                       <LanguageIcon className="h-5 w-5" aria-hidden="true" />
                       <span className="text-sm font-medium ml-2"> EN </span>
                     </a>
 
                     {/* Login */}
-                    <a href={isLoggedIn ? 'account' : 'signin'} className="hidden lg:flex lg:ml-6 text-gray-400 lg:text-gray-200 hover:text-yellow-500">
-                      <span className="sr-only"> {isLoggedIn ? 'Account' : 'Sign In'} </span>
-                      <UserIcon className="h-6 w-6 lg:h-5 lg:w-5" aria-hidden="true" />
+                    <a
+                      href={isLoggedIn ? "account" : "signin"}
+                      className="hidden lg:flex lg:ml-6 text-gray-400 lg:text-gray-200 hover:text-yellow-500"
+                    >
+                      <span className="sr-only">
+                        {" "}
+                        {isLoggedIn ? "Account" : "Sign In"}{" "}
+                      </span>
+                      <UserIcon
+                        className="h-6 w-6 lg:h-5 lg:w-5"
+                        aria-hidden="true"
+                      />
 
                       {/* Show profile if user logged in */}
-                      <span className="hidden lg:block text-sm font-medium ml-2"> {isLoggedIn ? 'Account' : 'Sign In'} </span>
-
+                      <span className="hidden lg:block text-sm font-medium ml-2">
+                        {" "}
+                        {isLoggedIn ? "Account" : "Sign In"}{" "}
+                      </span>
                     </a>
 
                     {/* Cart */}
                     <div className="ml-4 flow-root lg:ml-8">
-                      <a href="/cart" className="group -m-2 flex items-center p-2">
+                      <a
+                        href="/cart"
+                        className="group -m-2 flex items-center p-2"
+                      >
                         <ShoppingBagIcon
                           className="h-6 w-6 lg:h-5 lg:w-5 flex-shrink-0 text-gray-200 group-hover:text-yellow-500"
                           aria-hidden="true"
                         />
-                        <span className="ml-2 text-sm font-medium text-gray-200 group-hover:text-yellow-500">{totalItems}</span>
+                        <span className="ml-2 text-sm font-medium text-gray-200 group-hover:text-yellow-500">
+                          {totalItems}
+                        </span>
                         <span className="sr-only">items in cart, view bag</span>
                       </a>
                     </div>
@@ -224,17 +250,26 @@ const Navbar = ({ setOpen, classNames }) => {
                         <div className="relative flex">
                           <Popover.Button
                             className={classNames(
-                              isShowingArray[index] ? 'border-b-yellow-600 text-yellow-600' : 'border-b-transparent text-gray-200 hover:text-yellow-500',
-                              'relative z-10 py-3 flex items-center border-b-2 focus:outline-0 text-sm font-medium transition-colors duration-200 ease-out'
+                              isShowingArray[index]
+                                ? "border-b-yellow-600 text-yellow-600"
+                                : "border-b-transparent text-gray-200 hover:text-yellow-500",
+                              "relative z-10 py-3 flex items-center border-b-2 focus:outline-0 text-sm font-medium transition-colors duration-200 ease-out"
                             )}
                             onMouseEnter={() => handlePanel(index)}
                             onMouseLeave={() => handlePanel(index)}
                             onClick={() => handlePanel(index)}
                           >
-                            {category.name} <ChevronDownIcon className={classNames(isShowingArray[index] ? 'rotate-180 transform' : '', 'ml-3 w-4 h-4')} />
+                            {category.name}{" "}
+                            <ChevronDownIcon
+                              className={classNames(
+                                isShowingArray[index]
+                                  ? "rotate-180 transform"
+                                  : "",
+                                "ml-3 w-4 h-4"
+                              )}
+                            />
                           </Popover.Button>
                         </div>
-
 
                         <Transition
                           show={isShowingArray[index]}
@@ -248,17 +283,22 @@ const Navbar = ({ setOpen, classNames }) => {
                           leaveFrom="opacity-100"
                           leaveTo="opacity-0"
                         >
-                          <Popover.Panel
-                            className="absolute inset-x-0 top-full text-sm text-gray-500" >
+                          <Popover.Panel className="absolute inset-x-0 top-full text-sm text-gray-500">
                             {/* Presentational element used to render the bottom shadow, if we put the shadow on the actual panel it pokes out the top, so we use this shorter element to hide the top of the shadow */}
-                            <div className="absolute inset-0 top-1/2 bg-white shadow" aria-hidden="true" />
+                            <div
+                              className="absolute inset-0 top-1/2 bg-white shadow"
+                              aria-hidden="true"
+                            />
 
                             <div className="relative bg-white">
                               <div className="mx-auto max-w-7xl px-8">
                                 <div className="grid grid-cols-4 gap-x-8 gap-y-10 py-16">
                                   {category.subcategory.map((section) => (
                                     <div key={section.name}>
-                                      <p id={`${section.name}-heading`} className="font-medium text-gray-900">
+                                      <p
+                                        id={`${section.name}-heading`}
+                                        className="font-medium text-gray-900"
+                                      >
                                         {section.name}
                                       </p>
                                       <ul
@@ -268,7 +308,16 @@ const Navbar = ({ setOpen, classNames }) => {
                                       >
                                         {section.subsubcategory.map((item) => (
                                           <li key={item.name} className="flex">
-                                            <a href={category.slug + '/' + section.slug + '/' + item.slug} className="hover:text-gray-800">
+                                            <a
+                                              href={
+                                                category.slug +
+                                                "/" +
+                                                section.slug +
+                                                "/" +
+                                                item.slug
+                                              }
+                                              className="hover:text-gray-800"
+                                            >
                                               {item.name}
                                             </a>
                                           </li>
@@ -283,8 +332,7 @@ const Navbar = ({ setOpen, classNames }) => {
                         </Transition>
                       </div>
                     </Popover>
-                  )
-                  )}
+                  ))}
 
                   <a
                     href="/brand"
@@ -304,7 +352,6 @@ const Navbar = ({ setOpen, classNames }) => {
                   >
                     SALE & PROMO
                   </a>
-
                 </div>
               </div>
             </Popover.Group>
@@ -313,7 +360,10 @@ const Navbar = ({ setOpen, classNames }) => {
             {/* Search Mobile Version */}
             <div className="d-flex h-full border-t border-t-zinc-800 lg:border-t-0 w-full lg:hidden px-4 py-3">
               <div className="flex items-center">
-                <a href="#" className="p-2 mr-3 rounded-full bg-white/10 text-gray-300 hover:bg-white/20 hover:text-gray-100">
+                <a
+                  href="#"
+                  className="p-2 mr-3 rounded-full bg-white/10 text-gray-300 hover:bg-white/20 hover:text-gray-100"
+                >
                   <span className="sr-only">Speech</span>
                   <MicrophoneIcon className="h-5 w-5" aria-hidden="true" />
                 </a>
@@ -322,7 +372,10 @@ const Navbar = ({ setOpen, classNames }) => {
                 </label>
                 <div className="relative w-full">
                   <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                    <MagnifyingGlassIcon className="h-5 w-5 text-gray-300" aria-hidden="true" />
+                    <MagnifyingGlassIcon
+                      className="h-5 w-5 text-gray-300"
+                      aria-hidden="true"
+                    />
                   </div>
                   <input
                     id="search_mobile"
