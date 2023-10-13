@@ -1,123 +1,235 @@
+import { useEffect } from "react"
+import dayjs from "dayjs"
+import { nbwhite } from "../assets"
+import {
+  SiFacebook,
+  SiInstagram,
+  SiYoutube,
+  SiTiktok,
+  SiWhatsapp,
+} from "@icons-pack/react-simple-icons"
+import {
+  ChatBubbleLeftRightIcon,
+  EnvelopeIcon,
+} from "@heroicons/react/24/solid"
 
-const footerNavigation = {
-  shop: [
-    { name: 'Bags', href: '#' },
-    { name: 'Tees', href: '#' },
-    { name: 'Objects', href: '#' },
-    { name: 'Home Goods', href: '#' },
-    { name: 'Accessories', href: '#' },
+const navigation = {
+  support: [
+    { name: "FAQ", href: "/faq" },
+    { name: "Product Return", href: "/return" },
+    { name: "Product Request", href: "/product-request" },
+    { name: "Bug Report", href: "/bug-report" },
+    { name: "How to Order", href: "/how-to-order" },
+    { name: "How to Pay", href: "/how-to-pay" },
+    { name: "Track Order", href: "/track-order" },
   ],
   company: [
-    { name: 'Who we are', href: '#' },
-    { name: 'Sustainability', href: '#' },
-    { name: 'Press', href: '#' },
-    { name: 'Careers', href: '#' },
-    { name: 'Terms & Conditions', href: '#' },
-    { name: 'Privacy', href: '#' },
+    { name: "About", href: "/about" },
+    { name: "Blog", href: "/blog" },
+    { name: "Jobs", href: "/jobs" },
+    { name: "Investors", href: "/investor" },
+    { name: "Business Partners", href: "/business-partners" },
   ],
-  account: [
-    { name: 'Manage Account', href: '#' },
-    { name: 'Returns & Exchanges', href: '#' },
-    { name: 'Redeem a Gift Card', href: '#' },
+  legal: [
+    { name: "Return Policy", href: "/claim" },
+    { name: "Privacy Policy", href: "/privacy" },
+    { name: "Terms & Conditions", href: "/terms" },
+    { name: "Credits", href: "/credits" },
   ],
-  connect: [
-    { name: 'Contact Us', href: '#' },
-    { name: 'Twitter', href: '#' },
-    { name: 'Instagram', href: '#' },
-    { name: 'Pinterest', href: '#' },
+  customerCare: [
+    {
+      name: "Contact Us",
+      href: "/contact-us",
+      icon: (props) => <ChatBubbleLeftRightIcon {...props} />,
+    },
+    {
+      name: "081234567890",
+      href: "#",
+      icon: (props) => <SiWhatsapp {...props} />,
+    },
+    {
+      name: "cs@nanobeepa.com",
+      href: "#",
+      icon: (props) => <EnvelopeIcon {...props} />,
+    },
+  ],
+  social: [
+    {
+      name: "Facebook",
+      href: "https://www.facebook.com/nanobeepa",
+      icon: (props) => <SiFacebook {...props} />,
+    },
+    {
+      name: "Instagram",
+      href: "https://www.instagram.com/nanobeepa",
+      icon: (props) => <SiInstagram {...props} />,
+    },
+    {
+      name: "X",
+      href: "https://www.x.com/nanobeepa",
+      icon: (props) => (
+        <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
+          <path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z" />
+        </svg>
+      ),
+    },
+    {
+      name: "YouTube",
+      href: "https://www.youtube.com/nanobeepa",
+      icon: (props) => <SiYoutube {...props} />,
+    },
+    {
+      name: "TikTok",
+      href: "https://www.tiktok.com/nanobeepa",
+      icon: (props) => <SiTiktok {...props} />,
+    },
   ],
 }
 
 const Footer = () => {
+  useEffect(() => {
+    // get current year using day js
+    const year = dayjs().format("YYYY")
+    // set current year to footer
+    document.getElementById("year").innerHTML = year
+  }, [])
+
   return (
-    <footer aria-labelledby="footer-heading" className="bg-zinc-900">
+    <footer
+      className="bg-zinc-900  border-t border-b-zinc-800"
+      aria-labelledby="footer-heading"
+    >
       <h2 id="footer-heading" className="sr-only">
         Footer
       </h2>
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="py-20 xl:grid xl:grid-cols-3 xl:gap-8">
-          <div className="grid grid-cols-2 gap-8 xl:col-span-2">
-            <div className="space-y-12 md:grid md:grid-cols-2 md:gap-8 md:space-y-0">
-              <div>
-                <h3 className="text-sm font-medium text-white">Shop</h3>
-                <ul role="list" className="mt-6 space-y-6">
-                  {footerNavigation.shop.map((item) => (
-                    <li key={item.name} className="text-sm">
-                      <a href={item.href} className="text-gray-300 hover:text-white">
-                        {item.name}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div>
-                <h3 className="text-sm font-medium text-white">Company</h3>
-                <ul role="list" className="mt-6 space-y-6">
-                  {footerNavigation.company.map((item) => (
-                    <li key={item.name} className="text-sm">
-                      <a href={item.href} className="text-gray-300 hover:text-white">
-                        {item.name}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+      <div className="mx-auto max-w-7xl px-6 pb-8 pt-12 lg:px-8">
+        <div className="xl:grid xl:grid-cols-3 xl:gap-8">
+          <div className="space-y-8">
+            <div className="flex flex-1 items-center">
+              <img className="h-7 w-auto" src={nbwhite} alt="NanoBeepa" />
+              <h1 className="text-2xl font-semibold bg-clip-text text-transparent bg-gradient-to-t from-yellow-500 to-yellow-50 pt-2 ml-3">
+                NanoBeepa
+              </h1>
             </div>
-            <div className="space-y-12 md:grid md:grid-cols-2 md:gap-8 md:space-y-0">
-              <div>
-                <h3 className="text-sm font-medium text-white">Account</h3>
-                <ul role="list" className="mt-6 space-y-6">
-                  {footerNavigation.account.map((item) => (
-                    <li key={item.name} className="text-sm">
-                      <a href={item.href} className="text-gray-300 hover:text-white">
-                        {item.name}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div>
-                <h3 className="text-sm font-medium text-white">Connect</h3>
-                <ul role="list" className="mt-6 space-y-6">
-                  {footerNavigation.connect.map((item) => (
-                    <li key={item.name} className="text-sm">
-                      <a href={item.href} className="text-gray-300 hover:text-white">
-                        {item.name}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          </div>
-          <div className="mt-12 md:mt-16 xl:mt-0">
-            <p className="mt-6 text-sm text-gray-300">Subscribe</p>
-            <form className="mt-2 flex sm:max-w-md">
-              <label htmlFor="email-address" className="sr-only">
-                Email address
-              </label>
-              <input
-                id="email-address"
-                type="text"
-                autoComplete="email"
-                required
-                className="w-full min-w-0 appearance-none rounded-md border border-white bg-white px-4 py-2 text-base text-gray-900 placeholder-gray-500 shadow-sm focus:border-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-900"
-              />
-              <div className="ml-4 flex-shrink-0">
-                <button
-                  type="submit"
-                  className="flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-900"
+            <p className="leading-6 text-gray-300">
+              NanoBeepa focus on providing the best products for your beauty
+              needs. We care about your beauty and we want to make sure you get
+              the best products from carefully selected brands.
+            </p>
+            <div className="flex space-x-6">
+              {navigation.social.map((item) => (
+                <a
+                  key={item.name}
+                  href={item.href}
+                  className="text-gray-500 hover:text-gray-400"
                 >
-                  Subscribe
-                </button>
+                  <span className="sr-only">{item.name}</span>
+                  <item.icon className="h-5 w-5" aria-hidden="true" />
+                </a>
+              ))}
+            </div>
+          </div>
+          <div className="mt-16 grid grid-cols-2 gap-8 xl:col-span-2 xl:mt-0">
+            <div className="md:grid md:grid-cols-2 md:gap-8">
+              <div>
+                <h3 className="text-sm font-semibold leading-6 text-white">
+                  Support
+                </h3>
+                <ul role="list" className="mt-6 space-y-4">
+                  {navigation.support.map((item) => (
+                    <li key={item.name}>
+                      <a
+                        href={item.href}
+                        className="text-sm leading-6 text-gray-300 hover:text-white"
+                      >
+                        {item.name}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
               </div>
-            </form>
+              <div className="mt-10 md:mt-0">
+                <h3 className="text-sm font-semibold leading-6 text-white">
+                  Company
+                </h3>
+                <ul role="list" className="mt-6 space-y-4">
+                  {navigation.company.map((item) => (
+                    <li key={item.name}>
+                      <a
+                        href={item.href}
+                        className="text-sm leading-6 text-gray-300 hover:text-white"
+                      >
+                        {item.name}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+            <div className="md:grid md:grid-cols-2 md:gap-8">
+              <div>
+                <h3 className="text-sm font-semibold leading-6 text-white">
+                  Legal
+                </h3>
+                <ul role="list" className="mt-6 space-y-4">
+                  {navigation.legal.map((item) => (
+                    <li key={item.name}>
+                      <a
+                        href={item.href}
+                        className="text-sm leading-6 text-gray-300 hover:text-white"
+                      >
+                        {item.name}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div className="mt-10 md:mt-0">
+                <h3 className="text-sm font-semibold leading-6 text-white">
+                  Customer Care
+                </h3>
+                <ul role="list" className="mt-6 space-y-4">
+                  {navigation.customerCare.map((item) => (
+                    <li
+                      key={item.name}
+                      className="flex flex-1 items-center text-gray-300 hover:text-white"
+                    >
+                      <item.icon className="h-5 w-5" aria-hidden="true" />
+                      <a href={item.href} className="text-sm leading-6 ml-3">
+                        {item.name}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
           </div>
         </div>
-
-        <div className="border-t border-gray-800 py-10">
-          <p className="text-sm text-gray-400">Copyright &copy; 2021 Your Company, Inc.</p>
+      </div>
+      <div className="mx-auto flex items-center max-w-7xl px-6 lg:px-8 py-8 text-sm leading-6 text-gray-300">
+        <div className="pr-6 hidden lg:block">Payment Method:</div>
+        <div className="pr-6 block lg:hidden">Payment:</div>
+        <div className="flex flex-1 gap-x-4 overflow-x-scroll rounded-lg">
+          <div className="bg-zinc-700 rounded-lg py-2 px-4">BCA</div>
+          <div className="bg-zinc-700 rounded-lg py-2 px-4">BCA</div>
+          <div className="bg-zinc-700 rounded-lg py-2 px-4">BCA</div>
+          <div className="bg-zinc-700 rounded-lg py-2 px-4">BCA</div>
+          <div className="bg-zinc-700 rounded-lg py-2 px-4">BCA</div>
+          <div className="bg-zinc-700 rounded-lg py-2 px-4">BCA</div>
+          <div className="bg-zinc-700 rounded-lg py-2 px-4">BCA</div>
+          <div className="bg-zinc-700 rounded-lg py-2 px-4">BCA</div>
+          <div className="bg-zinc-700 rounded-lg py-2 px-4">BCA</div>
+          <div className="bg-zinc-700 rounded-lg py-2 px-4">BCA</div>
+          <div className="bg-zinc-700 rounded-lg py-2 px-4">BCA</div>
+          <div className="bg-zinc-700 rounded-lg py-2 px-4">BCA</div>
         </div>
+      </div>
+      <hr className="border-white/10" />
+      <div className="mx-auto text-center max-w-7xl px-6 lg:px-8 py-6">
+        <p className="text-sm leading-6 text-gray-400">
+          &copy; <span id="year"></span> PT. Inayat Bunga Perdana. All rights
+          reserved.
+        </p>
       </div>
     </footer>
   )
