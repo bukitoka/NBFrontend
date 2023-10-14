@@ -19,6 +19,7 @@ import CategorySection from '../components/CategorySection'
 import BrandSection from '../components/BrandSection'
 import StorySection from '../components/StorySection'
 import OtherPromo from '../components/OtherPromo'
+import InvestorSection from '../components/InvestorSection'
 import Footer from '../components/Footer'
 
 const navigation = {
@@ -349,6 +350,9 @@ const Home = () => {
 
         {/* Stats */}
         <Stats />
+        
+        {/* Investor section */}
+        <InvestorSection />
 
 
       </main>
