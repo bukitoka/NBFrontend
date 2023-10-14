@@ -2,7 +2,7 @@ import { Fragment } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 import { EllipsisVerticalIcon } from '@heroicons/react/24/outline'
 import { CheckCircleIcon } from '@heroicons/react/20/solid'
-import { apiGet } from '../../../../api/ApiService'
+import { apiGet } from '@/api/ApiService'
 import { useEffect, useState } from 'react'
 import { FiShoppingBag } from 'react-icons/fi'
 import dayjs from 'dayjs';

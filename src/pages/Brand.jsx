@@ -16,6 +16,7 @@ import MobileMenu from "../components/MobileMenu";
 import Footer from "../components/Footer";
 import { fetchProducts } from "../api/ProductApi";
 import { getParamValue } from "../tools/urlParams";
+import { nbDefaultImage } from "@/assets/";
 import api from "../tools/api";
 // import { productSkeleton } from "../components/skeleton/productItem/ProductItemSkeleton";
 
@@ -330,6 +331,7 @@ const Brand = () => {
                             src={brand.cover}
                             alt={brand.name}
                             className="h-full w-full object-cover object-center"
+                            onError={(e) => (e.target.src = nbDefaultImage)}
                           />
                         </div>
                         <div className="relative mt-4">

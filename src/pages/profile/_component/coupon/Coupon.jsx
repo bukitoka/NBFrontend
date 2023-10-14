@@ -1,7 +1,7 @@
-import { logout } from '../../../../tools/auth'
-import useAuthStore from "../../../../store/authStore";
+import { logout } from '@/tools/auth'
+import useAuthStore from "@/store/authStore";
 import { useState, useEffect } from 'react';
-import { apiGet } from '../../../../api/ApiService'
+import { apiGet } from '@/api/ApiService'
 import { FiShoppingBag } from 'react-icons/fi'
 
 import {
