@@ -30,6 +30,12 @@ const Navbar = ({ setOpen, classNames }) => {
   const [isShowingArray, setIsShowingArray] = useState([])
   const [searchResult, setSearchResult] = useState([])
   const [keyWord, setKeyWord] = useState("")
+  // alfabet array
+  const alfabet = [
+    "A", "B", "C", "D", "E", "F", "G", "H", "I", "J",
+    "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T",
+    "U", "V", "X", "Y", "Z", "#"
+  ]
 
   const handlePanel = (index) => {
     setIsShowingArray((prevArray) => {
@@ -74,10 +80,7 @@ const Navbar = ({ setOpen, classNames }) => {
   }, [])
 
   const fetchCart = async () => {
-    await fetchCartItems(
-      (data) => onSuccessLoadCart(data),
-      (err) => onErrorLoadCart(err)
-    )
+    await apiGet(`cart/`, (data) => onSuccessLoadCart(data), (err) => onErrorLoadCart(err))
   }
 
   function onSuccessLoadCart(data) {
@@ -257,7 +260,6 @@ const Navbar = ({ setOpen, classNames }) => {
                             )}
                             onMouseEnter={() => handlePanel(index)}
                             onMouseLeave={() => handlePanel(index)}
-                            onClick={() => handlePanel(index)}
                           >
                             {category.name}{" "}
                             <ChevronDownIcon
@@ -334,12 +336,83 @@ const Navbar = ({ setOpen, classNames }) => {
                     </Popover>
                   ))}
 
-                  <a
+                  {/* <a
                     href="/brand"
                     className="flex py-3 items-center text-sm font-medium text-gray-200 hover:text-yellow-500"
                   >
                     BRANDS
-                  </a>
+                  </a> */}
+
+
+                  <Popover key={`newkey`} className="flex">
+                    <div>
+                      <div className="relative flex">
+                        <Popover.Button
+                          className={classNames(
+                            isShowingArray[3]
+                              ? "border-b-yellow-600 text-yellow-600"
+                              : "border-b-transparent text-gray-200 hover:text-yellow-500",
+                            "relative z-10 py-3 flex items-center border-b-2 focus:outline-0 text-sm font-medium transition-colors duration-200 ease-out"
+                          )}
+                          onMouseEnter={() => handlePanel(3)}
+                          onMouseLeave={() => handlePanel(3)}
+                          onClick={() => handlePanel(3)}
+                        >
+                          {`BRANDS`}{" "}
+                          <ChevronDownIcon
+                            className={classNames(
+                              isShowingArray[3]
+                                ? "rotate-180 transform"
+                                : "",
+                              "ml-3 w-4 h-4"
+                            )}
+                          />
+                        </Popover.Button>
+                      </div>
+
+                      <Transition
+                        show={isShowingArray[3]}
+                        onMouseEnter={() => handlePanel(3)}
+                        onMouseLeave={() => handlePanel(3)}
+                        as={Fragment}
+                        enter="transition ease-out duration-200"
+                        enterFrom="opacity-0"
+                        enterTo="opacity-100"
+                        leave="transition ease-in duration-150"
+                        leaveFrom="opacity-100"
+                        leaveTo="opacity-0"
+                      >
+                        <Popover.Panel className="absolute inset-x-0 top-full text-sm text-gray-500">
+                          {/* Presentational element used to render the bottom shadow, if we put the shadow on the actual panel it pokes out the top, so we use this shorter element to hide the top of the shadow */}
+                          <div
+                            className="absolute inset-0 top-1/2 bg-white shadow"
+                            aria-hidden="true"
+                          />
+
+                          <div className="relative bg-white">
+                            <div className="flex gap-4 mx-auto max-w-7xl px-8 py-16">
+
+
+                              {/* maaping alfabet as link */}
+                              {
+                                alfabet.map((item) => (
+                                  <a
+                                    href={`/brand/${item}`}
+                                    className="hover:text-gray-800"
+                                  >
+                                    {item}
+                                  </a>
+                                ))
+
+                              }
+
+                            </div>
+                          </div>
+                        </Popover.Panel>
+                      </Transition>
+                    </div>
+                  </Popover>
+
                   <a
                     href="#"
                     className="flex py-3 items-center text-sm font-medium text-gray-200 hover:text-yellow-500"

@@ -1,7 +1,7 @@
 import { logout } from '../../tools/auth'
 import useAuthStore from "../../store/authStore";
-import api from '../../tools/api';
 import { useState, useEffect, useRef } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
 import {
   UserCircleIcon, ShoppingBagIcon,
   Cog6ToothIcon,
@@ -16,7 +16,7 @@ import {
   SiTiktok,
 } from "@icons-pack/react-simple-icons";
 import { PiPencilSimple } from 'react-icons/pi'
-import { ScrollMenu, VisibilityContext } from "react-horizontal-scrolling-menu";
+import { ScrollMenu, VisibilityContext, constants } from "react-horizontal-scrolling-menu";
 import "react-horizontal-scrolling-menu/dist/styles.css";
 import useDrag from "./_component/useDrag";
 import './styles/profile.css'
@@ -28,8 +28,9 @@ import Coupon from './_component/coupon/Coupon';
 import Setting from './_component/setting/Setting'
 
 import { Card } from "./_component/menuItem/card";
+// import api from '@/tools/api';
 
-import { apiPatchRoute, apiGetRoute } from '@/api/ApiService';
+import { apiPatchMultipart, apiGetRoute } from '@/api/ApiService';
 
 import Navbar from "@/components/Navbar";
 import MobileMenu from "../../components/MobileMenu";
@@ -363,25 +364,19 @@ const Profile = () => {
     console.log(error)
   }
 
-  const handleLogout = async () => {
-    const { error } = await logout();
-    if (!error) {
-      window.location.reload();
-    }
-  };
-
   // update image profile
   const updateImageProfile = async (avatarData) => {
     const formData = new FormData();
     formData.append('avatar', avatarData, avatarData.name);
 
-    await apiPatchRoute('/auth/user/', formData,
+    await apiPatchMultipart('/auth/user/', formData,
       (data) => onUpdateImageProfileSuccess(data),
       (error) => onUpdateImageProfileError(error));
   }
 
   const onUpdateImageProfileSuccess = (data) => {
     getUserData();
+    toast.success("Your profile image has been updated");
   }
 
   const onUpdateImageProfileError = (error) => {
@@ -401,6 +396,11 @@ const Profile = () => {
 
   return (
     <>
+      <ToastContainer
+        toastClassName="rounded-lg"
+        bodyClassName="text-sm font-semibold"
+        position="top-center"
+      />
       <MobileMenu
         open={open}
         setOpen={setOpen}
