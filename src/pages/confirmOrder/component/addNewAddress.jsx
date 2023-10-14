@@ -35,12 +35,6 @@ export default function Example({ open, setOpen }) {
   // success callback
   const onSuccess = data => {
     setShippingList(data.results);
-    // console.log("on success data " + data.results.length);
-    // if (data.results.length > 0) {
-    //   setDialogHeight(`730px`);
-    // } else {
-    //   setDialogHeight(`500px`);
-    // }
   };
 
   // error callback
@@ -77,7 +71,7 @@ export default function Example({ open, setOpen }) {
       destination: selectedValue.value
     }
 
-    apiPost(`shipping/`, data, (res) => onErrorSaving(res), (res) => onSuccessSaving(res))
+    apiPost(`shipping/`, data, (res) => onSuccessSaving(res), (res) => onErrorSaving(res))
   }
 
   function onSuccessSaving(data) {
@@ -86,6 +80,7 @@ export default function Example({ open, setOpen }) {
   }
 
   function onErrorSaving(error) {
+    setOpen(false)
     console.log("error saving");
     resetForm()
   }
@@ -255,7 +250,7 @@ export default function Example({ open, setOpen }) {
 
                               <div className="sm:col-span-2 ">
                                 <label htmlFor="company" className="block text-sm font-medium text-gray-700 text-start">
-                                  Kec/Kab
+                                  Kecamatan/Kabupaten
                                 </label>
                                 <div className="mt-1 ">
 

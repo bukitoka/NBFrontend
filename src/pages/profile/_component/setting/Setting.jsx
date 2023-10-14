@@ -1,15 +1,21 @@
 import { useState, useEffect } from 'react';
 import {
-  ReceiptPercentIcon,
   GlobeAltIcon,
-  PencilIcon,
-  BuildingOfficeIcon
 } from '@heroicons/react/24/solid'
+
+import { TbSettingsDollar, TbLogout } from 'react-icons/tb'
+import { logout } from '@/tools/auth'
 
 const Setting = () => {
 
-  useEffect(() => {
+  const handleLogout = async () => {
+    const { error } = await logout();
+    if (!error) {
+      window.location.reload();
+    }
+  };
 
+  useEffect(() => {
   }, []);
 
   return (
@@ -23,17 +29,18 @@ const Setting = () => {
             </div>
           </li>
           <li className="flex gap-x-4 py-5 hover:bg-zinc-100 rounded-lg px-4 hover:text-yellow-500">
-            <PencilIcon className={` max-h-4`} />
+            <TbSettingsDollar className={` max-h-4`} />
             <div className="min-w-0  flex items-center justify-center">
-              <p className=" ms-1 text-center text-sm font-semibold ">Edit Profile</p>
+              <p className=" ms-1 text-center text-sm font-semibold ">Currency</p>
             </div>
           </li>
-          <li className="flex gap-x-4 py-5 hover:bg-zinc-100 rounded-lg px-4 hover:text-yellow-500">
-            <BuildingOfficeIcon className={` max-h-4`} />
+          <li className="flex gap-x-4 py-5 hover:bg-zinc-100 rounded-lg px-4 hover:text-yellow-500" onClick={handleLogout} >
+            <TbLogout className={` max-h-4`} />
             <div className="min-w-0  flex items-center justify-center">
-              <p className=" ms-1 text-center text-sm font-semibold ">address</p>
+              <p className=" ms-1 text-center text-sm font-semibold ">Logout</p>
             </div>
           </li>
+
         </ul>
 
       </div>

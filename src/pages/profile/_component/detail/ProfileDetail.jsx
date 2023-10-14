@@ -1,7 +1,7 @@
-import { logout } from '../../../../tools/auth'
-import useAuthStore from "../../../../store/authStore";
+
+import useAuthStore from "@/store/authStore";
 import { useState, useEffect } from 'react';
-import { apiGet, apiGetRoute, apiPatchRoute } from '../../../../api/ApiService'
+import { apiGet, apiGetRoute, apiPatchRoute } from '@/api/ApiService'
 import { ToastContainer, toast } from 'react-toastify';
 import {
   PencilSquareIcon,
@@ -10,8 +10,8 @@ import {
 import dayjs from 'dayjs';
 import Datepicker from "react-tailwindcss-datepicker";
 import './ProfileDetail.css'
-import Modal from "../../../../components/Modal"
-import NewAddressModal from '../../../confirmOrder/component/addNewAddress'
+import Modal from "@/components/Modal"
+import NewAddressModal from '@/pages/confirmOrder/component/addNewAddress'
 // import Modal from "components/Modal"
 
 const ProfileDetail = () => {
@@ -48,6 +48,7 @@ const ProfileDetail = () => {
   const onGetUserDataSuccess = (data) => {
     setUserData(data);
     setTemporaryUser(data);
+    console.log(data);
   }
 
   const onGetUserDataError = (error) => {
