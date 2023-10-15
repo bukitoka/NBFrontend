@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import { apiGet } from "../api/ApiService";
+import { useParams } from 'react-router-dom';
 
 // simple icons
 import {
@@ -18,7 +19,6 @@ import { fetchProducts } from "../api/ProductApi";
 import { getParamValue } from "../tools/urlParams";
 import { nbDefaultImage } from "@/assets/";
 import api from "../tools/api";
-// import { productSkeleton } from "../components/skeleton/productItem/ProductItemSkeleton";
 
 const navigation = {
   categories: [
@@ -272,6 +272,7 @@ function classNames(...classes) {
 }
 
 const Brand = () => {
+  const { startWith } = useParams();
   const [open, setOpen] = useState(false);
   const [brands, setBrands] = useState([]);
   const [arrproducts, setProducts] = useState([]);
@@ -287,7 +288,7 @@ const Brand = () => {
   }, []);
 
   const getBrand = async () => {
-    await apiGet('brand/', (data) => onBrandSucces(data), (error) => onBrandError(error))
+    await apiGet(`brand/${startWith ? '?name__istartswith=' + startWith : ''}`, (data) => onBrandSucces(data), (error) => onBrandError(error))
   }
 
   const onBrandSucces = (data) => {
@@ -323,8 +324,8 @@ const Brand = () => {
             <div className="mt-8 grid grid-cols-1 gap-y-12 sm:grid-cols-2 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8">
               {
                 (brands.map((brand) => (
-                  < a href="#" className="group">
-                    <div key={brand.id}>
+                  < a href={`/brand-detail/${brand.slug}`} className="group" key={brand.id}>
+                    <div>
                       <div className="relative">
                         <div className="relative h-72 w-full overflow-hidden rounded-lg">
                           <img
@@ -335,9 +336,9 @@ const Brand = () => {
                           />
                         </div>
                         <div className="relative mt-4">
-                          <a href="#" className="text-sm font-medium text-gray-900 font-bold">
+                          <p className="text-sm font-medium text-gray-900 font-bold">
                             {brand.name}
-                          </a>
+                          </p>
                           <p className="mt-1 text-sm text-gray-500">{brand.description}</p>
 
                         </div>

@@ -34,7 +34,7 @@ const Navbar = ({ setOpen, classNames }) => {
   const alfabet = [
     "A", "B", "C", "D", "E", "F", "G", "H", "I", "J",
     "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T",
-    "U", "V", "X", "Y", "Z", "#"
+    "U", "V", "X", "Y", "Z",
   ]
 
   const handlePanel = (index) => {
@@ -196,7 +196,7 @@ const Navbar = ({ setOpen, classNames }) => {
 
                     {/* Login */}
                     <a
-                      href={isLoggedIn ? "account" : "signin"}
+                      href={isLoggedIn ? "/account/" : "/signin/"}
                       className="hidden lg:flex lg:ml-6 text-gray-400 lg:text-gray-200 hover:text-yellow-500"
                     >
                       <span className="sr-only">
@@ -399,6 +399,7 @@ const Navbar = ({ setOpen, classNames }) => {
                                   <a
                                     href={`/brand/${item}`}
                                     className="hover:text-gray-800"
+                                    key={item}
                                   >
                                     {item}
                                   </a>
