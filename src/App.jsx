@@ -18,6 +18,8 @@ import VerifyEmail from "./pages/VerifyEmail"
 import Cart from "./pages/Cart"
 import CheckOut from "./pages/Checkout"
 import Brand from "./pages/Brand"
+import BrandDetail from "./pages/BrandDetail"
+
 
 
 const App = () => {
@@ -43,7 +45,8 @@ const App = () => {
           <Route path="/verify-email" element={<VerifyEmail />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/checkout" element={<CheckOut />} />
-          <Route path="/brand" element={<Brand />} />
+          <Route path="/brand/:startWith?" element={<Brand />} />
+          <Route path="/brand-detail/:slug?" element={<BrandDetail />} />
 
         </Routes>
       </MainWrapper>

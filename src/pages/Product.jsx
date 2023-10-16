@@ -363,9 +363,9 @@ const Products = () => {
                           />
                         </div>
                         <div className="relative mt-4">
-                          <a href={"/products/" + product.slug} className="text-sm font-medium text-gray-900 font-bold">
+                          <p className="text-sm font-medium text-gray-900 font-bold">
                             {product.name}
-                          </a>
+                          </p>
                           <p className="mt-1 text-sm text-gray-500">Discount: {product.discount}</p>
                           <h4 className="text-sm">Rp.{product.min_price} - Rp.{product.max_price} </h4>
                         </div>
