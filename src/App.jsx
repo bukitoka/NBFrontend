@@ -19,6 +19,7 @@ import Cart from "./pages/Cart"
 import CheckOut from "./pages/Checkout"
 import Brand from "./pages/Brand"
 import ResetPassword from "./pages/ResetPassword"
+import BrandDetail from "./pages/BrandDetail"
 
 const App = () => {
   return (
@@ -44,6 +45,8 @@ const App = () => {
           <Route path="/cart" element={<Cart />} />
           <Route path="/checkout" element={<CheckOut />} />
           <Route path="/brand" element={<Brand />} />
+          <Route path="/brand/:startWith?" element={<Brand />} />
+          <Route path="/brand-detail/:slug?" element={<BrandDetail />} />
           <Route
             path="/reset-password/:uid/:token"
             element={<ResetPassword />}
