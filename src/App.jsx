@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom"
 
 // layouts
 import MainWrapper from "./layouts/MainWrapper"
@@ -18,7 +18,7 @@ import VerifyEmail from "./pages/VerifyEmail"
 import Cart from "./pages/Cart"
 import CheckOut from "./pages/Checkout"
 import Brand from "./pages/Brand"
-
+import ResetPassword from "./pages/ResetPassword"
 
 const App = () => {
   return (
@@ -44,7 +44,10 @@ const App = () => {
           <Route path="/cart" element={<Cart />} />
           <Route path="/checkout" element={<CheckOut />} />
           <Route path="/brand" element={<Brand />} />
-
+          <Route
+            path="/reset-password/:uid/:token"
+            element={<ResetPassword />}
+          />
         </Routes>
       </MainWrapper>
     </BrowserRouter>
