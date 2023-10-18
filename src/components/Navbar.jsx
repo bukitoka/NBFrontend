@@ -241,7 +241,7 @@ const Navbar = ({ setOpen, classNames }) => {
               <div className="flex w-full h-full">
                 <div className="flex space-x-8">
                   <a
-                    href="#"
+                    href="/new-arrival"
                     className="flex py-3 items-center text-sm font-medium text-gray-200 hover:text-yellow-500"
                   >
                     NEW ARRIVALS

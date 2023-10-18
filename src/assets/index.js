@@ -3,5 +3,6 @@ import nanobeepa from './nanobeepa.png';
 import nbwhite from './nbwhite.png';
 import google from './google.svg';
 import nbDefaultImage from './nbDefaultImage.png'
+import staticBanner from './banner.jpg'
 
-export { background, nanobeepa, nbwhite, google, nbDefaultImage };
+export { background, nanobeepa, nbwhite, google, nbDefaultImage, staticBanner };

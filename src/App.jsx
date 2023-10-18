@@ -19,6 +19,8 @@ import Cart from "./pages/Cart"
 import CheckOut from "./pages/Checkout"
 import Brand from "./pages/Brand"
 import BrandDetail from "./pages/BrandDetail"
+import NewArrival from "./pages/NewArrival"
+
 
 
 
@@ -47,6 +49,7 @@ const App = () => {
           <Route path="/checkout" element={<CheckOut />} />
           <Route path="/brand/:startWith?" element={<Brand />} />
           <Route path="/brand-detail/:slug?" element={<BrandDetail />} />
+          <Route path="/new-arrival" element={<NewArrival />} />
 
         </Routes>
       </MainWrapper>

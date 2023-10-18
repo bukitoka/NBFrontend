@@ -268,7 +268,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-const Products = () => {
+const NewArrival = () => {
   const [open, setOpen] = useState(false);
 
   const [arrproducts, setProducts] = useState([]);
@@ -280,31 +280,8 @@ const Products = () => {
   const baseurl = import.meta.env.VITE_API_BASE_URL;
 
   useEffect(() => {
-    setTimeout(() => {
-      getProducts(null);
-    }, 3000);
+    getProducts(null);
   }, []);
-
-  // const ProductSkeleton = () => {
-  //   return (
-  //     <div className="relative">
-  //       <div className="relative h-72 w-full overflow-hidden rounded-lg">
-  //         <Skeleton height={280} width={280} /> {/* Adjust width and height as needed */}
-  //       </div>
-  //       <div className="relative mt-4">
-  //         <Skeleton height={20} width={120} /> {/* Adjust width as needed */}
-  //       </div>
-  //       <div className="absolute inset-x-0 top-0 flex h-72 items-end justify-end overflow-hidden rounded-lg p-4">
-  //         <div aria-hidden="true" className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-black opacity-50" />
-  //         <Skeleton height={24} width={60} /> {/* Adjust width as needed */}
-  //       </div>
-  //       <div className="mt-6">
-  //         <Skeleton height={40} width={120} /> {/* Adjust width as needed */}
-  //       </div>
-  //     </div>
-  //   );
-  // };
-
 
   const getProducts = async (page) => {
     try {
@@ -415,4 +392,4 @@ const Products = () => {
   );
 };
 
-export default Products;
+export default NewArrival;

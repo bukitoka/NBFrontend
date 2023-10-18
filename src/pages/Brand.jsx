@@ -339,7 +339,7 @@ const Brand = () => {
                           <p className="text-sm font-medium text-gray-900 font-bold">
                             {brand.name}
                           </p>
-                          <p className="mt-1 text-sm text-gray-500">{brand.description}</p>
+                          <p className="mt-1 text-sm text-gray-500 truncate">{brand.description}</p>
 
                         </div>
                         <div className="absolute inset-x-0 top-0 flex h-72 items-end justify-end overflow-hidden rounded-lg p-4">
