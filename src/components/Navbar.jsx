@@ -311,13 +311,14 @@ const Navbar = ({ setOpen, classNames }) => {
                                         {section.subsubcategory.map((item) => (
                                           <li key={item.name} className="flex">
                                             <a
-                                              href={
-                                                category.slug +
-                                                "/" +
-                                                section.slug +
-                                                "/" +
-                                                item.slug
-                                              }
+                                              // href={
+                                              //   category.slug +
+                                              //   "/" +
+                                              //   section.slug +
+                                              //   "/" +
+                                              //   item.slug
+                                              // }
+                                              href={`/category/${item.slug}`}
                                               className="hover:text-gray-800"
                                             >
                                               {item.name}

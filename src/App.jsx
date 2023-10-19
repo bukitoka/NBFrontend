@@ -20,6 +20,7 @@ import CheckOut from "./pages/Checkout"
 import Brand from "./pages/Brand"
 import BrandDetail from "./pages/BrandDetail"
 import NewArrival from "./pages/NewArrival"
+import Category from "./pages/Category";
 
 
 
@@ -50,6 +51,7 @@ const App = () => {
           <Route path="/brand/:startWith?" element={<Brand />} />
           <Route path="/brand-detail/:slug?" element={<BrandDetail />} />
           <Route path="/new-arrival" element={<NewArrival />} />
+          <Route path="/category/:slug?" element={<Category />} />
 
         </Routes>
       </MainWrapper>
