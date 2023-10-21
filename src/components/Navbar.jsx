@@ -1,19 +1,14 @@
 import { Fragment, useState, useEffect } from "react"
 import { Popover, Transition } from "@headlessui/react"
-import { NavLink, Link } from "react-router-dom"
 import { apiGet } from "../api/ApiService"
 
 // hero icons
 import {
   Bars3Icon,
-  MagnifyingGlassIcon,
-  QuestionMarkCircleIcon,
   UserIcon,
   LanguageIcon,
-  MicrophoneIcon,
   ChevronDownIcon,
-  ChatBubbleBottomCenterTextIcon,
-  Square3Stack3DIcon,
+  HeartIcon,
 } from "@heroicons/react/24/outline"
 import { ShoppingBagIcon } from "@heroicons/react/24/solid"
 // images
@@ -21,6 +16,7 @@ import { nbwhite } from "../assets"
 
 // components
 import TopBanner from "../components/TopBanner"
+import Search from "@/components/Search"
 
 // store
 import useCategoryStore from "../store/categoryStore"
@@ -28,13 +24,34 @@ import useAuthStore from "../store/authStore"
 
 const Navbar = ({ setOpen, classNames }) => {
   const [isShowingArray, setIsShowingArray] = useState([])
-  const [searchResult, setSearchResult] = useState([])
   const [keyWord, setKeyWord] = useState("")
   // alfabet array
   const alfabet = [
-    "A", "B", "C", "D", "E", "F", "G", "H", "I", "J",
-    "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T",
-    "U", "V", "X", "Y", "Z",
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+    "I",
+    "J",
+    "K",
+    "L",
+    "M",
+    "N",
+    "O",
+    "P",
+    "Q",
+    "R",
+    "S",
+    "T",
+    "U",
+    "V",
+    "X",
+    "Y",
+    "Z",
   ]
 
   const handlePanel = (index) => {
@@ -80,7 +97,11 @@ const Navbar = ({ setOpen, classNames }) => {
   }, [])
 
   const fetchCart = async () => {
-    await apiGet(`cart/`, (data) => onSuccessLoadCart(data), (err) => onErrorLoadCart(err))
+    await apiGet(
+      `cart/`,
+      (data) => onSuccessLoadCart(data),
+      (err) => onErrorLoadCart(err)
+    )
   }
 
   function onSuccessLoadCart(data) {
@@ -116,41 +137,7 @@ const Navbar = ({ setOpen, classNames }) => {
 
                 {/* Wide search field */}
                 <div className="hidden h-full lg:flex mr-20">
-                  <div className="flex items-center py-4 md:mx-auto md:max-w-2xl lg:mx-0 lg:max-w-sm xl:px-0">
-                    <a
-                      href="#"
-                      className="hidden lg:block lg:mr-4 p-2 rounded-full bg-white/10 hover:bg-white/20 text-gray-300 hover:text-gray-100"
-                      onClick={() => handleSearch()}
-                    >
-                      <span className="sr-only">Speech</span>
-                      <MicrophoneIcon className="h-5 w-5" aria-hidden="true" />
-                    </a>
-                    <label htmlFor="search" className="sr-only">
-                      Search
-                    </label>
-                    <div className="relative">
-                      <div
-                        className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"
-                        onClick={() => handleSearch()}
-                      >
-                        <MagnifyingGlassIcon
-                          className="h-5 w-5 text-gray-300"
-                          aria-hidden="true"
-                        />
-                      </div>
-                      <input
-                        id="search"
-                        name="search"
-                        className="block w-[400px] rounded-full border-0 bg-white/10 py-2 pl-10 pr-3 text-gray-100
-                                                 placeholder:text-gray-300 focus:ring-1 focus:ring-inset focus:ring-gray-400 focus:bg-white/20
-                                                  sm:text-sm sm:leading-6 hover:bg-white/20 hover:ring-1 hover:ring-inset hover:ring-gray-400"
-                        placeholder="Search anything"
-                        type="search"
-                        value={keyWord}
-                        onChange={(e) => setKeyWord(e.target.value)}
-                      />
-                    </div>
-                  </div>
+                  <Search />
                 </div>
 
                 {/* Mobile menu and search (lg-) */}
@@ -180,8 +167,9 @@ const Navbar = ({ setOpen, classNames }) => {
                       href="#"
                       className="hidden p-2 lg:flex text-gray-200 hover:text-yellow-500"
                     >
-                      <span className="sr-only">FeedBack</span>
-                      <span className="text-sm font-medium ml-2">FeedBack</span>
+                      <span className="sr-only">Feedback</span>
+                      <HeartIcon className="h-5 w-5" aria-hidden="true" />
+                      <span className="text-sm font-medium ml-2">Feedback</span>
                     </a>
 
                     {/* Language */}
@@ -201,7 +189,7 @@ const Navbar = ({ setOpen, classNames }) => {
                     >
                       <span className="sr-only">
                         {" "}
-                        {isLoggedIn ? "Account" : "Sign In"}{" "}
+                        {isLoggedIn ? "Account" : "Login"}{" "}
                       </span>
                       <UserIcon
                         className="h-6 w-6 lg:h-5 lg:w-5"
@@ -211,7 +199,7 @@ const Navbar = ({ setOpen, classNames }) => {
                       {/* Show profile if user logged in */}
                       <span className="hidden lg:block text-sm font-medium ml-2">
                         {" "}
-                        {isLoggedIn ? "Account" : "Sign In"}{" "}
+                        {isLoggedIn ? "Account" : "Login"}{" "}
                       </span>
                     </a>
 
@@ -222,10 +210,10 @@ const Navbar = ({ setOpen, classNames }) => {
                         className="group -m-2 flex items-center p-2"
                       >
                         <ShoppingBagIcon
-                          className="h-6 w-6 lg:h-5 lg:w-5 flex-shrink-0 text-gray-200 group-hover:text-yellow-500"
+                          className="h-7 w-7 flex-shrink-0 text-yellow-500 group-hover:text-yellow-600"
                           aria-hidden="true"
                         />
-                        <span className="ml-2 text-sm font-medium text-gray-200 group-hover:text-yellow-500">
+                        <span className="ml-2 text-sm font-medium text-yellow-500 group-hover:text-yellow-600">
                           {totalItems}
                         </span>
                         <span className="sr-only">items in cart, view bag</span>
@@ -336,14 +324,6 @@ const Navbar = ({ setOpen, classNames }) => {
                     </Popover>
                   ))}
 
-                  {/* <a
-                    href="/brand"
-                    className="flex py-3 items-center text-sm font-medium text-gray-200 hover:text-yellow-500"
-                  >
-                    BRANDS
-                  </a> */}
-
-
                   <Popover key={`newkey`} className="flex">
                     <div>
                       <div className="relative flex">
@@ -356,14 +336,11 @@ const Navbar = ({ setOpen, classNames }) => {
                           )}
                           onMouseEnter={() => handlePanel(3)}
                           onMouseLeave={() => handlePanel(3)}
-                          onClick={() => handlePanel(3)}
                         >
                           {`BRANDS`}{" "}
                           <ChevronDownIcon
                             className={classNames(
-                              isShowingArray[3]
-                                ? "rotate-180 transform"
-                                : "",
+                              isShowingArray[3] ? "rotate-180 transform" : "",
                               "ml-3 w-4 h-4"
                             )}
                           />
@@ -391,22 +368,16 @@ const Navbar = ({ setOpen, classNames }) => {
 
                           <div className="relative bg-white">
                             <div className="flex gap-4 mx-auto max-w-7xl px-8 py-16">
-
-
                               {/* maaping alfabet as link */}
-                              {
-                                alfabet.map((item) => (
-                                  <a
-                                    href={`/brand/${item}`}
-                                    className="hover:text-gray-800"
-                                    key={item}
-                                  >
-                                    {item}
-                                  </a>
-                                ))
-
-                              }
-
+                              {alfabet.map((item) => (
+                                <a
+                                  href={`/brand/${item}`}
+                                  className="hover:text-gray-800"
+                                  key={item}
+                                >
+                                  {item}
+                                </a>
+                              ))}
                             </div>
                           </div>
                         </Popover.Panel>
@@ -432,36 +403,8 @@ const Navbar = ({ setOpen, classNames }) => {
             {/* End flyout menu */}
 
             {/* Search Mobile Version */}
-            <div className="d-flex h-full border-t border-t-zinc-800 lg:border-t-0 w-full lg:hidden px-4 py-3">
-              <div className="flex items-center">
-                <a
-                  href="#"
-                  className="p-2 mr-3 rounded-full bg-white/10 text-gray-300 hover:bg-white/20 hover:text-gray-100"
-                >
-                  <span className="sr-only">Speech</span>
-                  <MicrophoneIcon className="h-5 w-5" aria-hidden="true" />
-                </a>
-                <label htmlFor="search_mobile" className="sr-only">
-                  Search
-                </label>
-                <div className="relative w-full">
-                  <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                    <MagnifyingGlassIcon
-                      className="h-5 w-5 text-gray-300"
-                      aria-hidden="true"
-                    />
-                  </div>
-                  <input
-                    id="search_mobile"
-                    name="search"
-                    className="w-full rounded-full border-0 bg-white/10 py-1.5 pl-10 pr-3 text-gray-100
-                                            placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-gray-400 focus:bg-white/20
-                                            sm:text-sm sm:leading-6 hover:bg-white/20 hover:ring-1 hover:ring-inset hover:ring-gray-400"
-                    placeholder="Search anything"
-                    type="search"
-                  />
-                </div>
-              </div>
+            <div className="d-flex h-full border-t border-t-zinc-800 lg:border-t-0 w-full lg:hidden px-4">
+              <Search />
             </div>
           </div>
         </nav>
