@@ -1,6 +1,35 @@
 import { useEffect } from "react"
 import dayjs from "dayjs"
-import { nbwhite } from "../assets"
+import {
+  nbwhite,
+  bank1,
+  bank2,
+  bank3,
+  bank4,
+  bank5,
+  bank6,
+  bank7,
+  bank8,
+  bank9,
+  bank10,
+  bank11,
+  bank12,
+  bank13,
+  bank14,
+  bank15,
+  bank16,
+  bank17,
+  bank18,
+  bank19,
+  bank20,
+  bank21,
+  bank22,
+  bank23,
+  bank24,
+  bank25,
+  bank26,
+} from "@/assets"
+
 import {
   SiFacebook,
   SiInstagram,
@@ -207,21 +236,44 @@ const Footer = () => {
         </div>
       </div>
       <div className="mx-auto flex items-center max-w-7xl px-6 lg:px-8 py-8 text-sm leading-6 text-gray-300">
-        <div className="pr-6 hidden lg:block">Payment Method:</div>
-        <div className="pr-6 block lg:hidden">Payment:</div>
-        <div className="flex flex-1 gap-x-4 overflow-x-scroll rounded-lg">
-          <div className="bg-zinc-700 rounded-lg py-2 px-4">BCA</div>
-          <div className="bg-zinc-700 rounded-lg py-2 px-4">BCA</div>
-          <div className="bg-zinc-700 rounded-lg py-2 px-4">BCA</div>
-          <div className="bg-zinc-700 rounded-lg py-2 px-4">BCA</div>
-          <div className="bg-zinc-700 rounded-lg py-2 px-4">BCA</div>
-          <div className="bg-zinc-700 rounded-lg py-2 px-4">BCA</div>
-          <div className="bg-zinc-700 rounded-lg py-2 px-4">BCA</div>
-          <div className="bg-zinc-700 rounded-lg py-2 px-4">BCA</div>
-          <div className="bg-zinc-700 rounded-lg py-2 px-4">BCA</div>
-          <div className="bg-zinc-700 rounded-lg py-2 px-4">BCA</div>
-          <div className="bg-zinc-700 rounded-lg py-2 px-4">BCA</div>
-          <div className="bg-zinc-700 rounded-lg py-2 px-4">BCA</div>
+        <div className="pr-2 hidden lg:block">Payment Method:</div>
+        <div className="pr-2 block lg:hidden">Payment:</div>
+        <div className="flex flex-1 gap-x-2 overflow-x-scroll rounded-sm">
+          {[
+            bank1,
+            bank2,
+            bank3,
+            bank4,
+            bank5,
+            bank6,
+            bank7,
+            bank8,
+            bank9,
+            bank10,
+            bank11,
+            bank12,
+            bank13,
+            bank14,
+            bank15,
+            bank16,
+            bank17,
+            bank18,
+            bank19,
+            bank20,
+            bank21,
+            bank22,
+            bank23,
+            bank24,
+            bank25,
+            bank26,
+          ].map((item, index) => (
+            <img
+              key={index}
+              className="h-8 w-auto"
+              src={item}
+              alt="Payment Method"
+            />
+          ))}
         </div>
       </div>
       <hr className="border-white/10" />
