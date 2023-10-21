@@ -10,6 +10,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { insertCartItem } from "../api/CartApi";
 import { apiPost } from '../api/ApiService';
 import ProductReviews from '../components/ProductReviews';
+import { nbDefaultImage } from '@/assets';
 
 
 // simple icons
@@ -395,16 +396,16 @@ export default function ProductDetail() {
                 {/* Image selector */}
                 <div className="mx-auto mt-6 hidden w-full max-w-2xl sm:block lg:max-w-none">
                   <Tab.List className="grid grid-cols-4 gap-6">
-                    {product.images.map((image) => (
+                    {stocks.map((stock) => (
                       <Tab
-                        key={image.id}
+                        key={stock.id}
                         className="relative flex h-24 cursor-pointer items-center justify-center rounded-md bg-white text-sm font-medium uppercase text-gray-900 hover:bg-gray-50 focus:outline-none focus:ring focus:ring-opacity-50 focus:ring-offset-4"
                       >
                         {({ selected }) => (
                           <>
-                            <span className="sr-only">{image.name}</span>
+                            <span className="sr-only">{stock.name}</span>
                             <span className="absolute inset-0 overflow-hidden rounded-md">
-                              <img src={image.src} alt="" className="h-full w-full object-cover object-center" />
+                              <img src={stock.image} alt="" className="h-full w-full object-cover object-center" onError={(e) => (e.target.src = nbDefaultImage)} />
                             </span>
                             <span
                               className={classNames(
@@ -421,12 +422,13 @@ export default function ProductDetail() {
                 </div>
 
                 <Tab.Panels className="aspect-h-1 aspect-w-1 w-full">
-                  {product.images.map((image) => (
-                    <Tab.Panel key={image.id}>
+                  {stocks.map((stock) => (
+                    <Tab.Panel key={stock.id}>
                       <img
-                        src={image.src}
-                        alt={image.alt}
+                        src={stock.image}
+                        alt={stock.size}
                         className="h-full w-full object-cover object-center sm:rounded-lg"
+                        onError={(e) => (e.target.src = nbDefaultImage)}
                       />
                     </Tab.Panel>
                   ))}
@@ -511,23 +513,23 @@ export default function ProductDetail() {
 
                   {/* Sizes */}
                   <div className="mt-8">
-                    <div className="flex items-center justify-between">
+                    {/* <div className="flex items-center justify-between">
                       <h2 className="text-sm font-medium text-gray-900">Size</h2>
                       <a href="#" className="text-sm font-medium text-indigo-600 hover:text-indigo-500">
                         See sizing chart
                       </a>
-                    </div>
+                    </div> */}
 
                     <RadioGroup value={selectedSize} onChange={setSelectedSize} className="mt-2">
                       <RadioGroup.Label className="sr-only">Choose a size</RadioGroup.Label>
                       <div className="grid grid-cols-3 gap-3 sm:grid-cols-6">
-                        {product.sizes.map((size) => (
+                        {stocks.map((stock) => (
                           <RadioGroup.Option
-                            key={size.name}
-                            value={size}
+                            key={stock.id}
+                            value={stock.size}
                             className={({ active, checked }) =>
                               classNames(
-                                size.inStock ? 'cursor-pointer focus:outline-none' : 'cursor-not-allowed opacity-25',
+                                true ? 'cursor-pointer focus:outline-none' : 'cursor-not-allowed opacity-25',
                                 active ? 'ring-2 ring-yellow-500 ring-offset-2' : '',
                                 checked
                                   ? 'border-transparent bg-yellow-500 text-white hover:bg-yellow-500'
@@ -535,9 +537,9 @@ export default function ProductDetail() {
                                 'flex items-center justify-center rounded-md border py-3 px-3 text-sm font-medium uppercase sm:flex-1'
                               )
                             }
-                            disabled={!size.inStock}
+                          // disabled={!size.inStock}
                           >
-                            <RadioGroup.Label as="span">{size.name}</RadioGroup.Label>
+                            <RadioGroup.Label as="span">{stock.size}</RadioGroup.Label>
                           </RadioGroup.Option>
                         ))}
                       </div>

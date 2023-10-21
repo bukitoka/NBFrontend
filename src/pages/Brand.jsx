@@ -19,6 +19,7 @@ import { fetchProducts } from "../api/ProductApi";
 import { getParamValue } from "../tools/urlParams";
 import { nbDefaultImage } from "@/assets/";
 import api from "../tools/api";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 const navigation = {
   categories: [
@@ -354,6 +355,24 @@ const Brand = () => {
                 )))
               }
             </div>
+          </div>
+          <div className="flex items-center justify-center mt-8 mb-4">
+            <ul className="flex items-center -mx-[6px]">
+              <li className="px-[6px]">
+                <a href="#" className="w-9 h-9 flex items-center justify-center rounded-md text-lg border border-[#EDEFF1]text-[#838995] text-base hover:text-xl" onClick={() => getProducts(prevPage)}>
+                  <span>
+                    <FaChevronLeft className="h-15 w-8" />
+                  </span>
+                </a>
+              </li>
+              <li className="px-[6px]">
+                <a href="#" className=" w-9 h-9 flex items-center text-lg justify-center rounded-md border  border-[#EDEFF1]text-[#838995] text-base hover:text-xl" onClick={() => getProducts(nextPage)}>
+                  <span>
+                    <FaChevronRight className="h-15 w-8" />
+                  </span>
+                </a>
+              </li>
+            </ul>
           </div>
         </div>
       </main>

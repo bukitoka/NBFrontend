@@ -11,7 +11,6 @@ import {
   SiTiktok,
 } from "@icons-pack/react-simple-icons";
 
-import { AiOutlineRight, AiOutlineLeft } from "react-icons/ai";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 // components
@@ -272,7 +271,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-const Products = () => {
+const NewArrival = () => {
   const [open, setOpen] = useState(false);
 
   const [arrproducts, setProducts] = useState([]);
@@ -376,7 +375,7 @@ const Products = () => {
             </div>
 
             {/* <!-- component --> */}
-            <div className="flex items-center justify-center mt-8">
+            <div className="flex items-center justify-center mt-8 mb-4">
               <ul className="flex items-center -mx-[6px]">
                 <li className="px-[6px]">
                   <a href="#" className="w-9 h-9 flex items-center justify-center rounded-md text-lg border border-[#EDEFF1]text-[#838995] text-base hover:text-xl" onClick={() => getProducts(prevPage)}>
@@ -404,4 +403,4 @@ const Products = () => {
   );
 };
 
-export default Products;
+export default NewArrival;
