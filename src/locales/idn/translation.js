@@ -28,6 +28,12 @@ export default {
   // end of Product Detail Page translation
 
   // footer page translation
-  footer_Description: "NanoBeepa fokus pada penyediaan produk terbaik untuk kebutuhan kecantikan Anda. Kami peduli dengan kecantikan Anda dan kami ingin memastikan Anda mendapatkan produk terbaik dari merek-merek yang dipilih dengan cermat."
+  footer_Description: "NanoBeepa fokus pada penyediaan produk terbaik untuk kebutuhan kecantikan Anda. Kami peduli dengan kecantikan Anda dan kami ingin memastikan Anda mendapatkan produk terbaik dari merek-merek yang dipilih dengan cermat.",
   // end of footer page translation
+
+   // Top Promo section translation
+  topPromo_Title: "Promo spesial untuk Anda!",
+  topPromo_Description: "Belanja kecantikan dengan promo eksklusif setiap hari. Selamat berbelanja",
+  topPromo_browseAll :"Telusuri semua promo"
+  // end of Top Promo section translation
 }

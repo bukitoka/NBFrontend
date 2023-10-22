@@ -28,7 +28,12 @@ export default {
   // end of Product Detail Page translation
 
   // footer page translation
-  footer_Description: "NanoBeepa focus on providing the best products for your beauty needs. We care about your beauty and we want to make sure you get the best products from carefully selected brands."
+  footer_Description: "NanoBeepa focus on providing the best products for your beauty needs. We care about your beauty and we want to make sure you get the best products from carefully selected brands.",
   // end of footer page translation
 
+  // Top Promo section translation
+  topPromo_Title: "Special promo for you!",
+  topPromo_Description: "Beauty shopping with exclusive promos everyday. Happy shopping!",
+  topPromo_browseAll :"Browse all promo"
+  // end of Top Promo section translation
 }

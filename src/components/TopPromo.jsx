@@ -9,12 +9,10 @@ const TopPromo = () => {
         <div className="mx-auto max-w-2xl lg:max-w-none">
           <div className="text-center">
             <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-
-              {/* {t('home.title')} */}
-              {t('test')}
-              Special promo for you!
+              {t('topPromo_Title')}
             </h2>
             <p className="mt-4 text-lg leading-8 text-gray-600">
+              {t('topPromo_Description')}
               Beauty shopping with exclusive promos everyday. Happy shopping!
             </p>
           </div>
@@ -41,7 +39,7 @@ const TopPromo = () => {
         </div>
         <div className="flex justify-center mt-8 w-full">
           <a href="#" className="bg-black group hover:bg-yellow-600 flex py-2 px-6 text-sm text-white rounded-full">
-            Browse all promo  <ChevronRightIcon className="w-5 h-5 ml-2 group-hover:ml-4 ease-linear duration-150" />
+            {t('topPromo_browseAll')}<ChevronRightIcon className="w-5 h-5 ml-2 group-hover:ml-4 ease-linear duration-150" />
           </a>
         </div>
       </div>

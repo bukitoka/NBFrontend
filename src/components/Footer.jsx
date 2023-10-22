@@ -117,7 +117,7 @@ const navigation = {
 }
 
 const Footer = () => {
-  const { t } = useTranslation()
+  const { t } = useTranslation()    
   useEffect(() => {
     // get current year using day js
     const year = dayjs().format("YYYY")
