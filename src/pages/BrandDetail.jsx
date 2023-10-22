@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { apiGet } from "@/api/ApiService";
 import { useParams } from 'react-router-dom';
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 // simple icons
 import {
@@ -284,6 +285,8 @@ const BrandDetail = () => {
   const [count, setCount] = useState(0);
   const baseurl = import.meta.env.VITE_API_BASE_URL;
 
+  const { t, i18n } = useTranslation();
+
   useEffect(() => {
     getBrandDetail();
   }, []);
@@ -357,7 +360,7 @@ const BrandDetail = () => {
           <div className="grid gap-2 lg:flex mt-4 px-6 py-2 lg:gap-4">
             <div className="w-full lg:w-1/5 h-full">
               <div className="w-full h-full flex flex-col">
-                <h3 className=" pl-3 font-bold ">About Brand</h3>
+                <h3 className=" pl-3 font-bold ">{t('brandDetail_AboutBrand')}</h3>
                 {
                   brand != null ? <div className="mt-2 p-3 flex flex-col rounded-lg">
                     <div className="flex flex-row">

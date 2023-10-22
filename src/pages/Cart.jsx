@@ -4,6 +4,7 @@ import useAuthStore from '../store/authStore';
 import { useNavigate } from 'react-router-dom';
 import { fetchCartItems } from '../api/CartApi'
 import { apiPatch, apiPost, apiDelete } from '../api/ApiService';
+import { useTranslation } from 'react-i18next';
 
 // simple icons
 import {
@@ -283,6 +284,8 @@ export default function Cart() {
   let testAllCartId = [];
   let testListSelectedId = [];
 
+  const { t } = useTranslation();
+
   const baseurl = import.meta.env.VITE_API_BASE_URL;
   const altImage = import.meta.env.VITE_API_NO_IMAGE_URL;
 
@@ -470,7 +473,7 @@ export default function Cart() {
                   </div>
                   <div className="ml-3 text-sm leading-6">
                     <label htmlFor="comments" className="font-medium text-gray-900">
-                      All
+                      {t('cartPageSelectAll')}
                     </label>
                   </div>
                 </div>
@@ -543,7 +546,7 @@ export default function Cart() {
                 className="mt-16 rounded-lg bg-white px-4 py-6 sm:p-6 lg:col-span-5 lg:mt-0 lg:p-8"
               >
                 <h2 id="summary-heading" className="text-lg font-medium text-gray-900">
-                  Order summary
+                  {t('cartPageOrderSummary')}
                 </h2>
 
                 <dl className="mt-6 space-y-4">
@@ -584,7 +587,7 @@ export default function Cart() {
                     disabled={listSelectedId.length === 0}
                     className={`w-full rounded-md border border-transparent ${listSelectedId.length === 0 ? 'bg-gray-300' : 'bg-zinc-800 '} px-4 py-3 text-base font-medium text-white shadow-sm  focus:outline-none focus:ring-white hover:${listSelectedId.length === 0 ? 'bg-gray-300' : 'bg-yellow-500'}`}
                   >
-                    Checkout
+                    {t('cartPageCheckout')}
                   </button>
                 </div>
               </section>

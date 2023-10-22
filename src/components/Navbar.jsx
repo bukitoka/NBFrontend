@@ -17,6 +17,7 @@ import { nbwhite } from "../assets"
 // components
 import TopBanner from "../components/TopBanner"
 import Search from "@/components/Search"
+import LanguageOption from "./Language"
 
 // store
 import useCategoryStore from "../store/categoryStore"
@@ -49,6 +50,7 @@ const Navbar = ({ setOpen, classNames }) => {
     "T",
     "U",
     "V",
+    "W",
     "X",
     "Y",
     "Z",
@@ -173,14 +175,7 @@ const Navbar = ({ setOpen, classNames }) => {
                     </a>
 
                     {/* Language */}
-                    <a
-                      href="#"
-                      className="hidden lg:flex lg:ml-6 text-gray-200 hover:text-yellow-500"
-                    >
-                      <span className="sr-only">Language</span>
-                      <LanguageIcon className="h-5 w-5" aria-hidden="true" />
-                      <span className="text-sm font-medium ml-2"> EN </span>
-                    </a>
+                    <LanguageOption />
 
                     {/* Login */}
                     <a
@@ -227,10 +222,10 @@ const Navbar = ({ setOpen, classNames }) => {
             {/* Flyout menus */}
             <Popover.Group className="hidden h-full lg:flex mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
               <div className="flex w-full h-full">
-                <div className="flex space-x-8">
+                <div className="flex space-x-5">
                   <a
                     href="/new-arrival"
-                    className="flex py-3 items-center text-sm font-medium text-gray-200 hover:text-yellow-500"
+                    className="flex py-3 items-center text-sm font-medium  text-gray-200 hover:text-yellow-500"
                   >
                     NEW ARRIVALS
                   </a>
@@ -255,7 +250,7 @@ const Navbar = ({ setOpen, classNames }) => {
                                 isShowingArray[index]
                                   ? "rotate-180 transform"
                                   : "",
-                                "ml-3 w-4 h-4"
+                                "ml-1 w-4 h-4"
                               )}
                             />
                           </Popover.Button>
@@ -282,7 +277,7 @@ const Navbar = ({ setOpen, classNames }) => {
 
                             <div className="relative bg-white">
                               <div className="mx-auto max-w-7xl px-8">
-                                <div className="grid grid-cols-4 gap-x-8 gap-y-10 py-16">
+                                <div className="grid grid-cols-5 gap-x-4  gap-y-5 py-16">
                                   {category.subcategory.map((section) => (
                                     <div key={section.name}>
                                       <p
@@ -299,13 +294,6 @@ const Navbar = ({ setOpen, classNames }) => {
                                         {section.subsubcategory.map((item) => (
                                           <li key={item.name} className="flex">
                                             <a
-                                              // href={
-                                              //   category.slug +
-                                              //   "/" +
-                                              //   section.slug +
-                                              //   "/" +
-                                              //   item.slug
-                                              // }
                                               href={`/category/${item.slug}`}
                                               className="hover:text-gray-800"
                                             >
@@ -330,28 +318,28 @@ const Navbar = ({ setOpen, classNames }) => {
                       <div className="relative flex">
                         <Popover.Button
                           className={classNames(
-                            isShowingArray[3]
+                            isShowingArray[categories.length + 1]
                               ? "border-b-yellow-600 text-yellow-600"
                               : "border-b-transparent text-gray-200 hover:text-yellow-500",
                             "relative z-10 py-3 flex items-center border-b-2 focus:outline-0 text-sm font-medium transition-colors duration-200 ease-out"
                           )}
-                          onMouseEnter={() => handlePanel(3)}
-                          onMouseLeave={() => handlePanel(3)}
+                          onMouseEnter={() => handlePanel(categories.length + 1)}
+                          onMouseLeave={() => handlePanel(categories.length + 1)}
                         >
                           {`BRANDS`}{" "}
                           <ChevronDownIcon
                             className={classNames(
-                              isShowingArray[3] ? "rotate-180 transform" : "",
-                              "ml-3 w-4 h-4"
+                              isShowingArray[categories.length + 1] ? "rotate-180 transform" : "",
+                              "ml-1 w-4 h-4"
                             )}
                           />
                         </Popover.Button>
                       </div>
 
                       <Transition
-                        show={isShowingArray[3]}
-                        onMouseEnter={() => handlePanel(3)}
-                        onMouseLeave={() => handlePanel(3)}
+                        show={isShowingArray[categories.length + 1]}
+                        onMouseEnter={() => handlePanel(categories.length + 1)}
+                        onMouseLeave={() => handlePanel(categories.length + 1)}
                         as={Fragment}
                         enter="transition ease-out duration-200"
                         enterFrom="opacity-0"

@@ -11,6 +11,8 @@ import { insertCartItem } from "../api/CartApi";
 import { apiPost } from '../api/ApiService';
 import ProductReviews from '../components/ProductReviews';
 import { nbDefaultImage } from '@/assets';
+import { useTranslation } from 'react-i18next';
+// import priceFormat from '@/tools';
 
 
 // simple icons
@@ -26,6 +28,7 @@ import Navbar from "../components/Navbar"
 import MobileMenu from "../components/MobileMenu"
 import Footer from '../components/Footer'
 import { fetchProduct } from '../api/ProductApi'
+import { t } from 'i18next';
 
 const product = {
   name: 'Zip Tote Basket',
@@ -319,6 +322,7 @@ export default function ProductDetail() {
   const [stocks, setStock] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { t } = useTranslation();
 
 
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
@@ -326,6 +330,21 @@ export default function ProductDetail() {
 
 
   const allUserData = useAuthStore((state) => state.allUserData);
+
+  const formatNumber = (number) => {
+    const numberString = number.toString();
+    const parts = [];
+    let i = numberString.length;
+
+    while (i > 0) {
+      parts.unshift(numberString.substring(i - 3, i));
+      i -= 3;
+    }
+
+    const formatted = parts.join(".");
+    return formatted;
+  };
+
 
   useEffect(() => {
     getProductdetail(slug);
@@ -441,7 +460,10 @@ export default function ProductDetail() {
 
                 <div className="mt-3">
                   <h2 className="sr-only">Product information</h2>
-                  <p className="text-3xl tracking-tight text-gray-900">{newProduct.min_price}</p>
+                  {/* <p className="text-3xl tracking-tight text-gray-900">{newProduct.min_price}</p> */}
+                  {/* <p className="text-3xl tracking-tight text-gray-900">RP. {formatNumber(newProduct.min_price)}</p> */}
+                  <p className="text-3xl tracking-tight text-gray-900">RP. {newProduct.min_price}</p>
+                  {/* <p className="text-3xl tracking-tight text-gray-900">{formatRupiah(`${newProduct.min_price}`)}</p> */}
                 </div>
 
                 {/* Reviews */}
@@ -461,16 +483,6 @@ export default function ProductDetail() {
                       ))}
                     </div>
                     <p className="sr-only">{product.rating} out of 5 stars</p>
-                  </div>
-                </div>
-
-                <div className="mt-6">
-                  <h3 className="sr-only">Description</h3>
-
-                  <div
-                    className="space-y-6 text-base text-gray-700"
-                  >
-                    <p>{newProduct.description}</p>
                   </div>
                 </div>
 
@@ -552,7 +564,7 @@ export default function ProductDetail() {
                       onClick={() => addToCart(newProduct.id, stocks[0].id ?? null)}
                       className="flex max-w-xs flex-1 items-center justify-center rounded-md border border-transparent bg-zinc-800 px-8 py-3 text-base font-medium text-white hover:bg-yellow-500 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 focus:ring-offset-gray-50 sm:w-full"
                     >
-                      Add to cart
+                      {t('productDetail_Add_to_Cart')}
                     </button>
 
                     <button
@@ -581,7 +593,7 @@ export default function ProductDetail() {
                                 <span
                                   className={classNames(open ? 'text-indigo-600' : 'text-gray-900', 'text-sm font-medium')}
                                 >
-                                  {detail.name}
+                                  {t('productDetail_Description')}
                                 </span>
                                 <span className="ml-6 flex items-center">
                                   {open ? (

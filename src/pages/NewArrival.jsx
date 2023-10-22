@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import { Link } from "react-router-dom";
-import { nbDefaultImage, staticBanner } from "@/assets";
+import { nbDefaultImage, staticBanner, nodata } from "@/assets";
 
 // simple icons
 import {
@@ -371,28 +371,45 @@ const NewArrival = () => {
                       </div>
                     </Link>
                   </div>
-                )))}
+                )))
+              }
             </div>
+            {
+              (arrproducts.length === 0) ?
+                <div className="text-center w-full flex justify-items-center pb-5">
+                  <div>
+                    <img src={nodata} className="w-80 mx-auto mt-2" />
+                    Data not found
+                  </div>
+                </div> : <></>
+            }
 
             {/* <!-- component --> */}
-            <div className="flex items-center justify-center mt-8 mb-4">
-              <ul className="flex items-center -mx-[6px]">
-                <li className="px-[6px]">
-                  <a href="#" className="w-9 h-9 flex items-center justify-center rounded-md text-lg border border-[#EDEFF1]text-[#838995] text-base hover:text-xl" onClick={() => getProducts(prevPage)}>
-                    <span>
-                      <FaChevronLeft className="h-15 w-8" />
-                    </span>
-                  </a>
-                </li>
-                <li className="px-[6px]">
-                  <a href="#" className=" w-9 h-9 flex items-center text-lg justify-center rounded-md border  border-[#EDEFF1]text-[#838995] text-base hover:text-xl" onClick={() => getProducts(nextPage)}>
-                    <span>
-                      <FaChevronRight className="h-15 w-8" />
-                    </span>
-                  </a>
-                </li>
-              </ul>
-            </div>
+            {
+              (arrproducts.length === 0) ?
+                <></> :
+                <div className="flex items-center justify-center mt-8 mb-4">
+                  <ul className="flex items-center -mx-[6px]">
+                    <li className="px-[6px]">
+                      <a href="#" className="w-9 h-9 flex items-center justify-center rounded-md text-lg border border-[#EDEFF1]text-[#838995] text-base hover:text-xl" onClick={() => getProducts(prevPage)}>
+                        <span>
+                          <FaChevronLeft className="h-15 w-8" />
+                        </span>
+                      </a>
+                    </li>
+                    <li className="px-[6px]">
+                      <a href="#" className=" w-9 h-9 flex items-center text-lg justify-center rounded-md border  border-[#EDEFF1]text-[#838995] text-base hover:text-xl" onClick={() => getProducts(nextPage)}>
+                        <span>
+                          <FaChevronRight className="h-15 w-8" />
+                        </span>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+
+            }
+
+
           </div>
         </div>
       </main>

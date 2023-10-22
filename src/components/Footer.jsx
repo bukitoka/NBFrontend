@@ -41,6 +41,7 @@ import {
   ChatBubbleLeftRightIcon,
   EnvelopeIcon,
 } from "@heroicons/react/24/solid"
+import { useTranslation } from "react-i18next"
 
 const navigation = {
   support: [
@@ -116,6 +117,7 @@ const navigation = {
 }
 
 const Footer = () => {
+  const { t } = useTranslation()
   useEffect(() => {
     // get current year using day js
     const year = dayjs().format("YYYY")
@@ -141,9 +143,7 @@ const Footer = () => {
               </h1>
             </div>
             <p className="leading-6 text-gray-300">
-              NanoBeepa focus on providing the best products for your beauty
-              needs. We care about your beauty and we want to make sure you get
-              the best products from carefully selected brands.
+              {t('footer_Description')}
             </p>
             <div className="flex space-x-6">
               {navigation.social.map((item) => (
