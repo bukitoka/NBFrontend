@@ -28,7 +28,6 @@ import Navbar from "../components/Navbar"
 import MobileMenu from "../components/MobileMenu"
 import Footer from '../components/Footer'
 import { fetchProduct } from '../api/ProductApi'
-import { t } from 'i18next';
 
 const product = {
   name: 'Zip Tote Basket',
@@ -322,7 +321,7 @@ export default function ProductDetail() {
   const [stocks, setStock] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const { t } = useTranslation();
+  const { t , i18n } = useTranslation();
 
 
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
@@ -612,9 +611,12 @@ export default function ProductDetail() {
                             </h3>
                             <Disclosure.Panel as="div" className="prose prose-sm pb-6">
                               <ul role="list">
-                                {detail.items.map((item) => (
+                                <p>
+                                   {newProduct.description}
+                                </p>
+                                {/* {detail.items.map((item) => (
                                   <li key={item}>{item}</li>
-                                ))}
+                                ))} */}
                               </ul>
                             </Disclosure.Panel>
                           </>

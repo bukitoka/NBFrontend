@@ -34,6 +34,7 @@ import { apiPatchMultipart, apiGetRoute } from '@/api/ApiService';
 
 import Navbar from "@/components/Navbar";
 import MobileMenu from "../../components/MobileMenu";
+import { useTranslation } from 'react-i18next';
 
 const navigation = {
   categories: [
@@ -312,6 +313,7 @@ function classNames(...classes) {
 }
 
 const Profile = () => {
+  const { t } = useTranslation()
   const fileInputRef = useRef(null);
 
   const [open, setOpen] = useState(false);
@@ -452,29 +454,29 @@ const Profile = () => {
                           className={`p-2 rounded-lg ${selected === item.id ? 'bg-zinc-100 ' : ''} hover:bg-zinc-100 mb-2`}>
                           {item.id === 1 ? <div className={`flex flex-row ${selected === item.id ? 'text-yellow-500' : 'text-zinc-800'}  hover:text-yellow-500`}>
                             < UserCircleIcon className={` max-h-8`} />
-                            <p className='flex items-center justify-center ms-1 text-center'>Profile</p>
+                            <p className='flex items-center justify-center ms-1 text-center'>{t('profilePage_Profile')}</p>
                           </div> : <></>}
 
                           {item.id === 2 ? <div className={`flex flex-row ${selected === item.id ? ' text-yellow-500' : 'text-zinc-800'} hover:text-yellow-500`}>
                             <ShoppingBagIcon className={` max-h-8`} />
-                            <p className='flex items-center justify-center ms-1 text-center'>Order History</p>
+                            <p className='flex items-center justify-center ms-1 text-center'>{t('profilePage_Orders')}</p>
                           </div> : <></>}
 
                           {item.id === 3 ?
                             <div className={`flex flex-row ${selected === item.id ? ' text-yellow-500' : 'text-zinc-800'} hover:text-yellow-500`}>
                               <HeartIcon className={` max-h-8`} />
-                              <p className='flex items-center justify-center ms-1 text-center'>wishList </p>
+                              <p className='flex items-center justify-center ms-1 text-center'>{t('profilePage_Wishlist')} </p>
                             </div> : <></>}
                           {item.id === 4 ?
                             <div className={`flex flex-row ${selected === item.id ? ' text-yellow-500' : 'text-zinc-800'} hover:text-yellow-500`}>
                               <ReceiptPercentIcon className={` max-h-8`} />
-                              <p className='flex items-center justify-center ms-1 text-center'>Voucher </p>
+                              <p className='flex items-center justify-center ms-1 text-center'>{t('profilePage_Voucher')}</p>
                             </div>
                             : <></>}
                           {item.id === 5 ?
                             <div className={`flex flex-row ${selected === item.id ? ' text-yellow-500' : 'text-zinc-800'} hover:text-yellow-500`}>
                               <Cog6ToothIcon className={` max-h-8`} />
-                              <p className='flex items-center justify-center ms-1 text-center'>Settings</p>
+                              <p className='flex items-center justify-center ms-1 text-center'>{t('profilePage_Settings')}</p>
                             </div> : <></>}
                         </div>
                       </>

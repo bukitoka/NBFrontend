@@ -1,7 +1,9 @@
 import "keen-slider/keen-slider.min.css"
 import { useKeenSlider } from "keen-slider/react"
+import { useTranslation } from "react-i18next"
 
 const InvestorSection = () => {
+  const { t } = useTranslation()
   const animation = { duration: 50000, easing: (t) => t }
   const [sliderRef] = useKeenSlider({
     loop: true,
@@ -33,11 +35,10 @@ const InvestorSection = () => {
     <div className="bg-white pb-24">
       <div className="text-center">
         <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-          Our Investor
+          {t('investorSection_Title')}
         </h2>
         <p className="mt-4 text-lg leading-8 text-gray-600">
-          We are backed by top-class investors with deep experience in the
-          industry.
+          {t('investorSection_Description')}
         </p>
       </div>
       <div className="mt-12 mx-auto max-w-7xl px-6 lg:px-8">
