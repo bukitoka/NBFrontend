@@ -4,7 +4,6 @@ import { StarIcon } from '@heroicons/react/20/solid'
 import { HeartIcon, MinusIcon, PlusIcon } from '@heroicons/react/24/outline'
 import { useParams } from 'react-router-dom';
 import useAuthStore from '../store/authStore';
-import Cookies from 'js-cookie';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { insertCartItem } from "../api/CartApi";
@@ -12,7 +11,11 @@ import { apiPost } from '../api/ApiService';
 import ProductReviews from '../components/ProductReviews';
 import { nbDefaultImage } from '@/assets';
 import { useTranslation } from 'react-i18next';
-// import priceFormat from '@/tools';
+import { languageOptions } from '@/constant/constant'
+import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
+import { priceFormatter } from '@/tools/reformat'
+const baseurl = import.meta.env.VITE_API_BASE_URL;
+
 
 
 // simple icons
@@ -321,29 +324,14 @@ export default function ProductDetail() {
   const [stocks, setStock] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const { t , i18n } = useTranslation();
+  const [productImages, setProductImages] = useState([]);
+  const [totalRating, setTotalRating] = useState(0);
+  const { t, i18n } = useTranslation();
+  const [price, setPrice] = useState(0);
+
 
 
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
-
-
-
-  const allUserData = useAuthStore((state) => state.allUserData);
-
-  const formatNumber = (number) => {
-    const numberString = number.toString();
-    const parts = [];
-    let i = numberString.length;
-
-    while (i > 0) {
-      parts.unshift(numberString.substring(i - 3, i));
-      i -= 3;
-    }
-
-    const formatted = parts.join(".");
-    return formatted;
-  };
-
 
   useEffect(() => {
     getProductdetail(slug);
@@ -355,6 +343,9 @@ export default function ProductDetail() {
       console.log(productsData)
       setProduct(productsData.product);
       setStock(productsData.stock);
+      setPrice(productsData.stock?.first()?.price ?? 0);
+      setProductImages(productsData.images);
+      setTotalRating(productsData.total_rating);
       setLoading(false);
     } catch (error) {
       setError(error);
@@ -414,20 +405,20 @@ export default function ProductDetail() {
                 {/* Image selector */}
                 <div className="mx-auto mt-6 hidden w-full max-w-2xl sm:block lg:max-w-none">
                   <Tab.List className="grid grid-cols-4 gap-6">
-                    {stocks.map((stock) => (
+                    {productImages.map((productImage) => (
                       <Tab
-                        key={stock.id}
+                        key={productImage.id}
                         className="relative flex h-24 cursor-pointer items-center justify-center rounded-md bg-white text-sm font-medium uppercase text-gray-900 hover:bg-gray-50 focus:outline-none focus:ring focus:ring-opacity-50 focus:ring-offset-4"
                       >
                         {({ selected }) => (
                           <>
-                            <span className="sr-only">{stock.name}</span>
+                            <span className="sr-only">{productImage.id}</span>
                             <span className="absolute inset-0 overflow-hidden rounded-md">
-                              <img src={stock.image} alt="" className="h-full w-full object-cover object-center" onError={(e) => (e.target.src = nbDefaultImage)} />
+                              <img src={`${baseurl}${productImage.image} `} alt="" className="h-full w-full object-cover object-center" onError={(e) => (e.target.src = nbDefaultImage)} />
                             </span>
                             <span
                               className={classNames(
-                                selected ? 'ring-indigo-500' : 'ring-transparent',
+                                selected ? 'ring-yellow-500' : 'ring-transparent',
                                 'pointer-events-none absolute inset-0 rounded-md ring-2 ring-offset-2'
                               )}
                               aria-hidden="true"
@@ -440,11 +431,10 @@ export default function ProductDetail() {
                 </div>
 
                 <Tab.Panels className="aspect-h-1 aspect-w-1 w-full">
-                  {stocks.map((stock) => (
-                    <Tab.Panel key={stock.id}>
+                  {productImages.map((productImage) => (
+                    <Tab.Panel key={productImage.id}>
                       <img
-                        src={stock.image}
-                        alt={stock.size}
+                        src={`${baseurl}${productImage.image}`}
                         className="h-full w-full object-cover object-center sm:rounded-lg"
                         onError={(e) => (e.target.src = nbDefaultImage)}
                       />
@@ -459,10 +449,7 @@ export default function ProductDetail() {
 
                 <div className="mt-3">
                   <h2 className="sr-only">Product information</h2>
-                  {/* <p className="text-3xl tracking-tight text-gray-900">{newProduct.min_price}</p> */}
-                  {/* <p className="text-3xl tracking-tight text-gray-900">RP. {formatNumber(newProduct.min_price)}</p> */}
-                  <p className="text-3xl tracking-tight text-gray-900">RP. {newProduct.min_price}</p>
-                  {/* <p className="text-3xl tracking-tight text-gray-900">{formatRupiah(`${newProduct.min_price}`)}</p> */}
+                  <p className="text-3xl tracking-tight text-gray-900">RP. {priceFormatter(newProduct.min_price ?? 0)}</p>
                 </div>
 
                 {/* Reviews */}
@@ -470,7 +457,7 @@ export default function ProductDetail() {
                   <h3 className="sr-only">Reviews</h3>
                   <div className="flex items-center">
                     <div className="flex items-center">
-                      {[0, 1, 2, 3, 4].map((rating) => (
+                      {[0..totalRating].map((rating) => (
                         <StarIcon
                           key={rating}
                           className={classNames(
@@ -538,6 +525,7 @@ export default function ProductDetail() {
                           <RadioGroup.Option
                             key={stock.id}
                             value={stock.size}
+                            // onClick={ }
                             className={({ active, checked }) =>
                               classNames(
                                 true ? 'cursor-pointer focus:outline-none' : 'cursor-not-allowed opacity-25',
@@ -548,7 +536,6 @@ export default function ProductDetail() {
                                 'flex items-center justify-center rounded-md border py-3 px-3 text-sm font-medium uppercase sm:flex-1'
                               )
                             }
-                          // disabled={!size.inStock}
                           >
                             <RadioGroup.Label as="span">{stock.size}</RadioGroup.Label>
                           </RadioGroup.Option>
@@ -583,28 +570,22 @@ export default function ProductDetail() {
                   </h2>
 
                   <div className="divide-y divide-gray-200 border-t">
-                    {product.details.map((detail) => (
-                      <Disclosure as="div" key={detail.name}>
+                    {newProduct.description && (
+                      <Disclosure as="div">
                         {({ open }) => (
                           <>
                             <h3>
                               <Disclosure.Button className="group relative flex w-full items-center justify-between py-6 text-left">
                                 <span
-                                  className={classNames(open ? 'text-indigo-600' : 'text-gray-900', 'text-sm font-medium')}
+                                  className={classNames(open ? 'text-yellow-500' : 'text-gray-900', 'text-sm font-medium')}
                                 >
                                   {t('productDetail_Description')}
                                 </span>
                                 <span className="ml-6 flex items-center">
                                   {open ? (
-                                    <MinusIcon
-                                      className="block h-6 w-6 text-indigo-400 group-hover:text-indigo-500"
-                                      aria-hidden="true"
-                                    />
+                                    <FaChevronUp className='block h-4 w-4 text-yellow-500 text-sm' aria-hidden="true" />
                                   ) : (
-                                    <PlusIcon
-                                      className="block h-6 w-6 text-gray-400 group-hover:text-gray-500"
-                                      aria-hidden="true"
-                                    />
+                                    <FaChevronDown className='block h-4 w-4 text-gray-400 text-sm' aria-hidden="true" />
                                   )}
                                 </span>
                               </Disclosure.Button>
@@ -612,17 +593,14 @@ export default function ProductDetail() {
                             <Disclosure.Panel as="div" className="prose prose-sm pb-6">
                               <ul role="list">
                                 <p>
-                                   {newProduct.description}
+                                  {i18n.language == languageOptions.english ? newProduct.description : newProduct.description_id}
                                 </p>
-                                {/* {detail.items.map((item) => (
-                                  <li key={item}>{item}</li>
-                                ))} */}
                               </ul>
                             </Disclosure.Panel>
                           </>
                         )}
                       </Disclosure>
-                    ))}
+                    )}
                   </div>
                 </section>
               </div>
