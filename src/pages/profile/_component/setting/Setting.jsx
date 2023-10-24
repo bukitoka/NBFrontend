@@ -28,12 +28,12 @@ const Setting = () => {
               <p className=" ms-1 text-center text-sm font-semibold ">Language</p>
             </div>
           </li>
-          <li className="flex gap-x-4 py-5 hover:bg-zinc-100 rounded-lg px-4 hover:text-yellow-500">
+          {/* <li className="flex gap-x-4 py-5 hover:bg-zinc-100 rounded-lg px-4 hover:text-yellow-500">
             <TbSettingsDollar className={` max-h-4`} />
             <div className="min-w-0  flex items-center justify-center">
               <p className=" ms-1 text-center text-sm font-semibold ">Currency</p>
             </div>
-          </li>
+          </li> */}
           <li className="flex gap-x-4 py-5 hover:bg-zinc-100 rounded-lg px-4 hover:text-yellow-500" onClick={handleLogout} >
             <TbLogout className={` max-h-4`} />
             <div className="min-w-0  flex items-center justify-center">

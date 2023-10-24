@@ -1,180 +1,412 @@
-import { Popover, Transition } from '@headlessui/react'
-import { ChevronDownIcon } from '@heroicons/react/20/solid'
-import { Fragment } from 'react'
+import { useState, useEffect } from "react";
+import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
+import { Link, useParams } from "react-router-dom";
+import { nbDefaultImage, staticBanner } from "@/assets";
+import { apiGet } from "@/api/ApiService";
 
-const solutions = [
-    {
-        name: 'Insights',
-        description: 'Measure actions your users take',
-        href: '##',
-        icon: IconOne,
-    },
-    {
-        name: 'Automations',
-        description: 'Create your own targeted content',
-        href: '##',
-        icon: IconTwo,
-    },
-    {
-        name: 'Reports',
-        description: 'Keep track of your growth',
-        href: '##',
-        icon: IconThree,
-    },
-]
+// simple icons
+import {
+  SiWhatsapp,
+  SiInstagram,
+  SiFacebook,
+  SiTiktok,
+} from "@icons-pack/react-simple-icons";
 
-export default function Category() {
-    return (
-        <div className="w-full">
-            <div className="flex justify-center top-16 w-full max-w-sm px-4">
-                <Popover className="relative">
-                    {({ open }) => (
-                        <>
-                            <Popover.Button
-                                className={`
-                ${open ? '' : 'text-opacity-90'}
-                group inline-flex items-center rounded-md bg-orange-700 px-3 py-2 text-base font-medium text-white hover:text-opacity-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75`}
-                            >
-                                <span>Solutions</span>
-                                <ChevronDownIcon
-                                    className={`${open ? '' : 'text-opacity-70'}
-                  ml-2 h-5 w-5 text-orange-300 transition duration-150 ease-in-out group-hover:text-opacity-80`}
-                                    aria-hidden="true"
-                                />
-                            </Popover.Button>
-                            <Transition
-                                as={Fragment}
-                                enter="transition ease-out duration-200"
-                                enterFrom="opacity-0 translate-y-1"
-                                enterTo="opacity-100 translate-y-0"
-                                leave="transition ease-in duration-150"
-                                leaveFrom="opacity-100 translate-y-0"
-                                leaveTo="opacity-0 translate-y-1"
-                            >
-                                <Popover.Panel className="absolute left-1/2 z-10 mt-3 w-screen max-w-sm -translate-x-1/2 transform px-4 sm:px-0 lg:max-w-3xl">
-                                    <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
-                                        <div className="relative grid gap-8 bg-white p-7 lg:grid-cols-2">
-                                            {solutions.map((item) => (
-                                                <a
-                                                    key={item.name}
-                                                    href={item.href}
-                                                    className="-m-3 flex items-center rounded-lg p-2 transition duration-150 ease-in-out hover:bg-gray-50 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50"
-                                                >
-                                                    <div className="flex h-10 w-10 shrink-0 items-center justify-center text-white sm:h-12 sm:w-12">
-                                                        <item.icon aria-hidden="true" />
-                                                    </div>
-                                                    <div className="ml-4">
-                                                        <p className="text-sm font-medium text-gray-900">
-                                                            {item.name}
-                                                        </p>
-                                                        <p className="text-sm text-gray-500">
-                                                            {item.description}
-                                                        </p>
-                                                    </div>
-                                                </a>
-                                            ))}
-                                        </div>
-                                        <div className="bg-gray-50 p-4">
-                                            <a
-                                                href="##"
-                                                className="flow-root rounded-md px-2 py-2 transition duration-150 ease-in-out hover:bg-gray-100 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50"
-                                            >
-                                                <span className="flex items-center">
-                                                    <span className="text-sm font-medium text-gray-900">
-                                                        Documentation
-                                                    </span>
-                                                </span>
-                                                <span className="block text-sm text-gray-500">
-                                                    Start integrating products and tools
-                                                </span>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </Popover.Panel>
-                            </Transition>
-                        </>
-                    )}
-                </Popover>
+import { AiOutlineRight, AiOutlineLeft } from "react-icons/ai";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+
+// components
+import Navbar from "../components/Navbar";
+import MobileMenu from "../components/MobileMenu";
+import Footer from "../components/Footer";
+import { fetchProducts } from "../api/ProductApi";
+import { getParamValue } from "../tools/urlParams";
+
+const navigation = {
+  categories: [
+    {
+      id: "categories",
+      name: "Shop by category",
+      featured: [
+        {
+          name: "New Arrivals",
+          href: "#",
+          imageSrc:
+            "https://tailwindui.com/img/ecommerce-images/mega-menu-category-01.jpg",
+          imageAlt: "New arrivals on display.",
+        },
+        {
+          name: "Top Sales",
+          href: "#",
+          imageSrc:
+            "https://tailwindui.com/img/ecommerce-images/mega-menu-category-02.jpg",
+          imageAlt: "Top sale items on display.",
+        },
+      ],
+      sections: [
+        {
+          id: "skin_care",
+          name: "Skin Care",
+          items: [
+            {
+              name: "Cleanser",
+              href: "#",
+              subItems: [
+                { name: "Cleanser", href: "#" },
+                { name: "Exfoliator", href: "#" },
+                { name: "Face Wash", href: "#" },
+                { name: "Face Wipes", href: "#" },
+                { name: "Makeup Remover", href: "#" },
+                { name: "Toner", href: "#" },
+              ],
+            },
+            {
+              name: "Eye Care",
+              href: "#",
+              subItems: [
+                { name: "Eye Cream", href: "#" },
+                { name: "Eye Serum", href: "#" },
+                { name: "Eye Lash Serum", href: "#" },
+                { name: "Eye Mask", href: "#" },
+              ],
+            },
+            {
+              name: "Lip Care",
+              href: "#",
+              subItems: [
+                { name: "Lip Balm", href: "#" },
+                { name: "Lip Mask", href: "#" },
+                { name: "Lip Scrub", href: "#" },
+              ],
+            },
+            {
+              name: "Moisturizer",
+              href: "#",
+              subItems: [
+                { name: "Day Cream", href: "#" },
+                { name: "Face Oil", href: "#" },
+                { name: "Face Mist", href: "#" },
+                { name: "Night Cream", href: "#" },
+                { name: "Neck Cream", href: "#" },
+              ],
+            },
+            {
+              name: "Sun Care",
+              href: "#",
+              subItems: [
+                { name: "After-Sun Care", href: "#" },
+                { name: "Body Sunscreen", href: "#" },
+                { name: "Face Sunscreen", href: "#" },
+              ],
+            },
+            {
+              name: "Treatment & Mask",
+              href: "#",
+              subItems: [
+                { name: "Acne & Blemish", href: "#" },
+                { name: "Face Serum", href: "#" },
+                { name: "Mask", href: "#" },
+                { name: "Peel", href: "#" },
+              ],
+            },
+          ],
+        },
+        {
+          id: "makeup",
+          name: "Makeup",
+          items: [
+            {
+              name: "Face",
+              href: "#",
+              subItems: [
+                { name: "Bb & Cc Cream", href: "#" },
+                { name: "Blush", href: "#" },
+                { name: "Contour & Bronzer", href: "#" },
+                { name: "Concealer & Corrector", href: "#" },
+                { name: "Face Sets & Palettes", href: "#" },
+                { name: "Foundation", href: "#" },
+                { name: "Highlighter", href: "#" },
+                { name: "Powder", href: "#" },
+                { name: "Setting Spray", href: "#" },
+                { name: "Tinted Moisturizer", href: "#" },
+              ],
+            },
+            {
+              name: "Eyes",
+              href: "#",
+              subItems: [
+                { name: "Eye Brow", href: "#" },
+                { name: "Eye Liner", href: "#" },
+                { name: "Eyelashes & Brow Serum", href: "#" },
+                { name: "Eye Shadow", href: "#" },
+                { name: "Eye Sets", href: "#" },
+                { name: "Mascara", href: "#" },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: "brands",
+      name: "Brands",
+      featured: [
+        {
+          name: "New Arrivals",
+          href: "#",
+          imageSrc:
+            "https://tailwindui.com/img/ecommerce-images/product-page-04-detail-product-shot-01.jpg",
+          imageAlt: "New arrivals on display.",
+        },
+        {
+          name: "Top Brands",
+          href: "#",
+          imageSrc:
+            "https://tailwindui.com/img/ecommerce-images/category-page-02-image-card-06.jpg",
+          imageAlt: "Top brands in display.",
+        },
+      ],
+      sections: [
+        {
+          id: "abc",
+          name: "A - C",
+          items: [
+            {
+              name: "A",
+              href: "#",
+              subItems: [
+                { name: "Aesop", href: "#" },
+                { name: "All Birds", href: "#" },
+                { name: "Arq", href: "#" },
+              ],
+            },
+            {
+              name: "B",
+              href: "#",
+              subItems: [
+                { name: "Baggu", href: "#" },
+                { name: "Berg & Betts", href: "#" },
+                { name: "Blume", href: "#" },
+                { name: "Briogeo", href: "#" },
+                { name: "By Humankind", href: "#" },
+              ],
+            },
+            {
+              name: "C",
+              href: "#",
+              subItems: [
+                { name: "Carmen", href: "#" },
+                { name: "Champion", href: "#" },
+                { name: "Common Goods", href: "#" },
+                { name: "Craighill", href: "#" },
+              ],
+            },
+          ],
+        },
+        {
+          id: "def",
+          name: "D - F",
+          items: [
+            {
+              name: "D",
+              href: "#",
+              subItems: [
+                { name: "Danner", href: "#" },
+                { name: "Darn Tough", href: "#" },
+                { name: "Dr Martens", href: "#" },
+                { name: "Driftime", href: "#" },
+              ],
+            },
+            {
+              name: "E",
+              href: "#",
+              subItems: [],
+            },
+            {
+              name: "F",
+              href: "#",
+              subItems: [],
+            },
+          ],
+        },
+      ],
+    },
+  ],
+  pages: [
+    { name: "Beauty Story", href: "#" },
+    { name: "Promo", href: "#" },
+  ],
+};
+
+const socials = [
+  {
+    name: "Whatsapp",
+    href: "#",
+    icon: (
+      <SiWhatsapp className="h-[18px] w-[18px] text-gray-100 hover:text-green-600" />
+    ),
+  },
+  {
+    name: "Instagram",
+    href: "#",
+    icon: (
+      <SiInstagram className="h-[18px] w-[18px] text-gray-100 hover:text-red-400" />
+    ),
+  },
+  {
+    name: "Facebook",
+    href: "#",
+    icon: (
+      <SiFacebook className="h-[18px] w-[18px] text-gray-100 hover:text-blue-500" />
+    ),
+  },
+  {
+    name: "Tiktok",
+    href: "#",
+    icon: (
+      <SiTiktok className="h-[18px] w-[18px] text-gray-100 hover:text-gray-800" />
+    ),
+  },
+];
+
+function classNames(...classes) {
+  return classes.filter(Boolean).join(" ");
+}
+
+const ProductByCategories = () => {
+  const { slug } = useParams();
+  const [open, setOpen] = useState(false);
+
+  const [arrproducts, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [nextPage, setNextPage] = useState(null);
+  const [prevPage, setPrevPage] = useState(null);
+  const [count, setCount] = useState(0);
+  const baseurl = import.meta.env.VITE_API_BASE_URL;
+
+  useEffect(() => {
+    getProducts(slug);
+  }, []);
+
+  const getProducts = async (slug) => {
+    await apiGet(slug ? `product/?subsubcategory__slug=${slug}` : `product/`, (data) => onGetProductsSuccess(data), (error) => onGetProductsFailed(error));
+  }
+
+  const onGetProductsSuccess = (data) => {
+    setProducts(data.results);
+    setNextPage(getParamValue("page", data.next));
+    setPrevPage(getParamValue("page", data.previous));
+    setCount(data.count);
+    setLoading(false);
+  }
+
+  const onGetProductsFailed = (error) => {
+    setError(error);
+    setLoading(false);
+  }
+
+
+  return (
+    <div className="bg-white">
+      {/* Mobile Navigation */}
+      <MobileMenu
+        open={open}
+        setOpen={setOpen}
+        classNames={classNames}
+        navigation={navigation}
+        socials={socials}
+      />
+
+      {/* Navbar */}
+      <Navbar
+        open={open}
+        setOpen={setOpen}
+        classNames={classNames}
+        navigation={navigation}
+        socials={socials}
+      />
+      <main>
+        <div className="bg-white flex flex-col pt-[130px] lg:pt-[86px] ">
+          <div className="px-4 text-center sm:px-6 lg:px-8 pt-20 ">
+            {/* <h1 className="text-4xl font-bold tracking-tight text-gray-900">New Arrival</h1> */}
+            <img
+              src={staticBanner}
+              alt="New Arrival"
+              className=" h-52 w-full object-cover object-center mt-4"
+            />
+
+            {/* <p className="mx-auto mt-4 max-w-xl text-base text-gray-500">
+              The secret to a tidy desk? Don't get rid of anything, just put it in really really nice looking containers.
+            </p> */}
+          </div>
+          <div className="mx-auto max-w-2xl px-4 sm:px-6 lg:max-w-7xl lg:px-8">
+            <div className="mt-8 grid grid-cols-1 gap-y-12 sm:grid-cols-2 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8 ">
+              {
+                //                   loading ? (
+                //     [...Array(10).keys()].map((i) => (
+                //       <ProductSkeleton />
+                //     ))
+                //   ) :
+
+                (arrproducts.map((product) => (
+                  <div key={product.id}>
+                    <Link to={`/products/${product.slug}`}>
+                      <div className="relative">
+                        <div className="relative h-72 w-full overflow-hidden rounded-lg">
+                          <img
+                            src={`${product.cover}`}
+                            alt={product.name}
+                            className="h-full w-full object-cover object-center"
+                            onError={(e) => (e.target.src = nbDefaultImage)}
+                          />
+                        </div>
+                        <div className="relative mt-4">
+                          <p className="text-sm font-medium text-gray-900 font-bold">
+                            {product.name}
+                          </p>
+                          <p className="mt-1 text-sm text-gray-500">Discount: {product.discount}</p>
+                          <h4 className="text-sm">Rp.{product.min_price} - Rp.{product.max_price} </h4>
+                        </div>
+                        <div className="absolute inset-x-0 top-0 flex h-72 items-end justify-end overflow-hidden rounded-lg p-4">
+                          <div
+                            aria-hidden="true"
+                            className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-black opacity-50"
+                          />
+                        </div>
+                      </div>
+                    </Link>
+                  </div>
+                )))}
             </div>
+
+            {/* <!-- component --> */}
+            <div className="flex items-center justify-center mt-8 mb-8">
+              <ul className="flex items-center -mx-[6px]">
+                <li className="px-[6px]">
+                  <a href="#" className="w-9 h-9 flex items-center justify-center rounded-md text-lg border border-[#EDEFF1]text-[#838995] text-base hover:text-xl" onClick={() => getProducts(prevPage)}>
+                    <span>
+                      <FaChevronLeft className="h-15 w-8" />
+                    </span>
+                  </a>
+                </li>
+                <li className="px-[6px]">
+                  <a href="#" className=" w-9 h-9 flex items-center text-lg justify-center rounded-md border  border-[#EDEFF1]text-[#838995] text-base hover:text-xl" onClick={() => getProducts(nextPage)}>
+                    <span>
+                      <FaChevronRight className="h-15 w-8" />
+                    </span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
         </div>
-    )
-}
+      </main>
 
-function IconOne() {
-    return (
-        <svg
-            width="48"
-            height="48"
-            viewBox="0 0 48 48"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-        >
-            <rect width="48" height="48" rx="8" fill="#FFEDD5" />
-            <path
-                d="M24 11L35.2583 17.5V30.5L24 37L12.7417 30.5V17.5L24 11Z"
-                stroke="#FB923C"
-                strokeWidth="2"
-            />
-            <path
-                fillRule="evenodd"
-                clipRule="evenodd"
-                d="M16.7417 19.8094V28.1906L24 32.3812L31.2584 28.1906V19.8094L24 15.6188L16.7417 19.8094Z"
-                stroke="#FDBA74"
-                strokeWidth="2"
-            />
-            <path
-                fillRule="evenodd"
-                clipRule="evenodd"
-                d="M20.7417 22.1196V25.882L24 27.7632L27.2584 25.882V22.1196L24 20.2384L20.7417 22.1196Z"
-                stroke="#FDBA74"
-                strokeWidth="2"
-            />
-        </svg>
-    )
-}
+      {/* Footer */}
+      <Footer />
+    </div>
+  );
+};
 
-function IconTwo() {
-    return (
-        <svg
-            width="48"
-            height="48"
-            viewBox="0 0 48 48"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-        >
-            <rect width="48" height="48" rx="8" fill="#FFEDD5" />
-            <path
-                d="M28.0413 20L23.9998 13L19.9585 20M32.0828 27.0001L36.1242 34H28.0415M19.9585 34H11.8755L15.9171 27"
-                stroke="#FB923C"
-                strokeWidth="2"
-            />
-            <path
-                fillRule="evenodd"
-                clipRule="evenodd"
-                d="M18.804 30H29.1963L24.0001 21L18.804 30Z"
-                stroke="#FDBA74"
-                strokeWidth="2"
-            />
-        </svg>
-    )
-}
-
-function IconThree() {
-    return (
-        <svg
-            width="48"
-            height="48"
-            viewBox="0 0 48 48"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-        >
-            <rect width="48" height="48" rx="8" fill="#FFEDD5" />
-            <rect x="13" y="32" width="2" height="4" fill="#FDBA74" />
-            <rect x="17" y="28" width="2" height="8" fill="#FDBA74" />
-            <rect x="21" y="24" width="2" height="12" fill="#FDBA74" />
-            <rect x="25" y="20" width="2" height="16" fill="#FDBA74" />
-            <rect x="29" y="16" width="2" height="20" fill="#FB923C" />
-            <rect x="33" y="12" width="2" height="24" fill="#FB923C" />
-        </svg>
-    )
-}
+export default ProductByCategories;

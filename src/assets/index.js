@@ -1,8 +1,9 @@
-import background from "./background.svg"
-import nanobeepa from "./nanobeepa.png"
-import nbwhite from "./nbwhite.png"
-import google from "./google.svg"
-import nbDefaultImage from "./nbDefaultImage.png"
+import background from './background.svg';
+import nanobeepa from './nanobeepa.png';
+import nbwhite from './nbwhite.png';
+import google from './google.svg';
+import nbDefaultImage from './nbDefaultImage.png'
+import staticBanner from './banner.jpg'
 import nodata from "./nodata.svg"
 
 // BANK LOGOS
@@ -39,6 +40,7 @@ export {
   nbwhite,
   google,
   nbDefaultImage,
+   staticBanner,
   nodata,
   bank1,
   bank2,

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { apiGet } from '../api/ApiService'
+import { useTranslation } from "react-i18next";
 
 // simple icons
 import {
@@ -319,6 +320,7 @@ const brands = [
 
 const Home = () => {
   const [open, setOpen] = useState(false)
+  const { t } = useTranslation();
   return (
     <div className="bg-white">
 
@@ -350,7 +352,7 @@ const Home = () => {
 
         {/* Stats */}
         <Stats />
-        
+
         {/* Investor section */}
         <InvestorSection />
 

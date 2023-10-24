@@ -13,6 +13,7 @@ import './ProfileDetail.css'
 import Modal from "@/components/Modal"
 import NewAddressModal from '@/pages/confirmOrder/component/addNewAddress'
 // import Modal from "components/Modal"
+import { useTranslation } from "react-i18next";
 
 const ProfileDetail = () => {
   const allUserData = useAuthStore((state) => state.allUserData);
@@ -30,6 +31,7 @@ const ProfileDetail = () => {
   const [startDate, setStartDate] = useState(new Date());
   const [open, setOpen] = useState(false)
   const [openModalNewAdress, setModalNewAddress] = useState(false)
+  const { t } = useTranslation();
 
   const handleOpenModalNewAddress = () => {
     setOpen(false);
@@ -149,7 +151,7 @@ const ProfileDetail = () => {
         </div>
         {/* first name */}
         <div className="grid grid-rows-2 lg:grid-rows-none lg:grid-cols-4 bg-gray-50 px-4 py-4 rounded-lg gap-1 lg:gap-6">
-          <dt className=" text-sm font-medium leading-6 text-gray-900 ">First Name</dt>
+          <dt className=" text-sm font-medium leading-6 text-gray-900 ">{t('profilePage_FirstName')}</dt>
           {
             isEdit ? <>
               <input
@@ -169,7 +171,7 @@ const ProfileDetail = () => {
 
         {/* last name */}
         <div className="grid grid-rows-2 lg:grid-rows-none lg:grid-cols-4 px-4 py-4 rounded-lg gap-1 lg:gap-6">
-          <dt className="text-sm font-medium leading-6 text-gray-900 ">Last Name</dt>
+          <dt className="text-sm font-medium leading-6 text-gray-900 "> {t('profilePage_LastName')}</dt>
           {
             isEdit ? <>
               <input
@@ -189,13 +191,13 @@ const ProfileDetail = () => {
 
         {/* email */}
         <div className="grid grid-rows-2 lg:grid-rows-none bg-gray-50 lg:grid-cols-4 px-4 py-4 rounded-lg gap-1 lg:gap-6">
-          <dt className="text-sm font-medium leading-6 text-gray-900">Email</dt>
+          <dt className="text-sm font-medium leading-6 text-gray-900">{t('profilePage_Email')}</dt>
           <dd className="lg:col-span-2 mt-1 pl-1 text-sm text-gray-700">{email}</dd>
         </div>
 
         {/* phone number */}
         <div className="grid grid-rows-2 lg:grid-rows-none  lg:grid-cols-4 px-4 py-4 rounded-lg gap-1 lg:gap-6">
-          <dt className="text-sm font-medium leading-6 text-gray-900">Phone Number</dt>
+          <dt className="text-sm font-medium leading-6 text-gray-900">{t('profilePage_PhoneNumber')}</dt>
           {
             isEdit ? <>
               <input
@@ -214,7 +216,7 @@ const ProfileDetail = () => {
         </div>
         {/* birth day */}
         <div className="grid grid-rows-2 lg:grid-rows-none  bg-gray-50 lg:grid-cols-4 px-4 py-4 rounded-lg gap-1 lg:gap-6">
-          <dt className="text-sm font-medium leading-6 text-gray-900">Birth Date</dt>
+          <dt className="text-sm font-medium leading-6 text-gray-900">{t('profilePage_BirthDate')}</dt>
           {
             isEdit ? <>
               <Datepicker
@@ -234,7 +236,7 @@ const ProfileDetail = () => {
         </div>
         {/* Gender */}
         <div className="grid grid-rows-2 lg:grid-rows-none lg:grid-cols-4 px-4 py-4 rounded-lg gap-1 lg:gap-6">
-          <dt className="text-sm font-medium leading-6 text-gray-900">Gender</dt>
+          <dt className="text-sm font-medium leading-6 text-gray-900">{t('profilePage_Gender')}</dt>
           {
             isEdit ? <>
               <div className="space-y-4 sm:flex sm:items-center sm:space-x-10 sm:space-y-0">
@@ -249,7 +251,7 @@ const ProfileDetail = () => {
                     className="h-3 w-3 border-gray-300 text-yellow-500 focus:ring-yellow-500"
                   />
                   <label htmlFor="male" className="ml-3 block text-sm font-medium leading-6 text-gray-900">
-                    Male
+                    {t('profilePage_Male')}
                   </label>
                 </div>
                 <div key="female" className="flex items-center">
@@ -263,7 +265,7 @@ const ProfileDetail = () => {
                     className="h-3 w-3 border-gray-300 text-yellow-500 focus:ring-yellow-500"
                   />
                   <label htmlFor="female" className="ml-3 block text-sm font-medium leading-6 text-gray-900">
-                    Female
+                    {t('profilePage_Female')}
                   </label>
                 </div>
               </div>
@@ -275,7 +277,7 @@ const ProfileDetail = () => {
         {/* adress */}
         <div className=" bg-gray-50 flex flex-col lg:grid lg:grid-rows-none lg:grid-cols-4 px-4 py-4 rounded-lg gap-1 lg:gap-6 ">
 
-          <dt className="text-sm font-medium leading-6 text-gray-900 mb-0">Address</dt>
+          <dt className="text-sm font-medium leading-6 text-gray-900 mb-0">{t('profilePage_Address')}</dt>
           <div className={`pl-2 lg:col-span-2 ${isEdit ? 'border-2 border-gray-50 bg-white p-1 rounded-lg transition-all duration-300 hover:ring hover:border-yellow-500 hover:ring-yellow-500/20' : ''}`}
             onClick={() => isEdit ? handleUpdateAdress() : null}
           >
@@ -290,7 +292,7 @@ const ProfileDetail = () => {
               type="button"
               onClick={() => updateProfile()}
               className="mt-4 bg-yellow-600 border border-transparent rounded-lg py-2 px-4 inline-flex justify-center text-sm font-medium text-white hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
-              Update
+              {t('profilePage_Update')}
             </button>
           </div> : <></>
         }

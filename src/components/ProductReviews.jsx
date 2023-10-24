@@ -1,4 +1,5 @@
 import { StarIcon } from '@heroicons/react/20/solid'
+import { useTranslation } from 'react-i18next'
 
 const reviews = {
   average: 4,
@@ -60,11 +61,12 @@ function classNames(...classes) {
 }
 
 export default function ProductReviews() {
+  const { t } = useTranslation()
   return (
     <div className="bg-white border-t">
       <div className="mx-auto max-w-2xl px-4 pt-10 pb-24 sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-12 lg:gap-x-8 lg:px-8 lg:py-32">
         <div className="lg:col-span-4">
-          <h2 className="text-2xl font-bold tracking-tight text-gray-900">Customer Reviews</h2>
+          <h2 className="text-2xl font-bold tracking-tight text-gray-900">{t('productDetail_CustomerReviews')}</h2>
 
           <div className="mt-3 flex items-center">
             <div>

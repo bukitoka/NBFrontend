@@ -16,6 +16,7 @@ import { nodata } from "@/assets"
 import { Combobox } from "@headlessui/react"
 import { useDebounce } from "use-debounce"
 import { apiGet } from "@/api/ApiService"
+import { useTranslation } from "react-i18next"
 
 const Search = () => {
   const [searchQuery, setSearchQuery] = useState("")
@@ -24,6 +25,7 @@ const Search = () => {
   const [showXMark, setShowXMark] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [isEmpty, setIsEmpty] = useState(false)
+  const { t, i18n } = useTranslation()
 
   const [debouncedSearchQuery] = useDebounce(searchQuery, 500)
 
@@ -170,7 +172,7 @@ const Search = () => {
               id="search"
               name="search"
               className="block w-full lg:w-[400px] rounded-full border-0 ring-1 ring-zinc-700 bg-white/10 py-2 pl-10 pr-3 text-gray-100 placeholder:text-gray-300 focus:ring-1 focus:ring-inset focus:ring-zinc-400 focus:bg-white/20 sm:text-sm sm:leading-6 hover:bg-white/20 hover:ring-1 hover:ring-inset hover:ring-zinc-500"
-              placeholder="Search anything"
+              placeholder={t("navbarSearch")}
               type="text"
             />
             <div
@@ -178,9 +180,8 @@ const Search = () => {
                 setSearchQuery("")
                 setShowXMark(false)
               }}
-              className={`cursor-pointer absolute inset-y-0 right-4 lg:right-0 flex items-center ${
-                showXMark ? "block" : "hidden"
-              }`}
+              className={`cursor-pointer absolute inset-y-0 right-4 lg:right-0 flex items-center ${showXMark ? "block" : "hidden"
+                }`}
             >
               <XMarkIcon
                 className="h-5 w-5 text-gray-300 hover:bg-zinc-600 rounded-full"
