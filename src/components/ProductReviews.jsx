@@ -1,5 +1,7 @@
 import { StarIcon } from '@heroicons/react/20/solid'
 import { useTranslation } from 'react-i18next'
+import { useState } from 'react'
+import { nbDefaultImage } from '@/assets'
 
 const reviews = {
   average: 4,
@@ -60,7 +62,21 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function ProductReviews() {
+export default function ProductReviews(ratingList) {
+  const { data } = ratingList
+  const [totalRating, setTotalRating] = useState([])
+
+  // function for set rating
+  const setRating = (rating) => {
+    let ratingArray = [];
+    for (let i = 0; i < rating; i++) {
+      ratingArray.push(i);
+    }
+
+    setTotalRating(ratingArray);
+  }
+
+
   const { t } = useTranslation()
   return (
     <div className="bg-white border-t">
@@ -146,10 +162,10 @@ export default function ProductReviews() {
 
           <div className="flow-root">
             <div className="-my-12 divide-y divide-gray-200">
-              {reviews.featured.map((review) => (
+              {data.map((review) => (
                 <div key={review.id} className="py-12">
                   <div className="flex items-center">
-                    <img src={review.avatarSrc} alt={`${review.author}.`} className="h-12 w-12 rounded-full" />
+                    <img src={review.image} alt={``} onError={(e) => (e.target.src = nbDefaultImage)} className="h-12 w-12 rounded-full" />
                     <div className="ml-4">
                       <h4 className="text-sm font-bold text-gray-900">{review.author}</h4>
                       <div className="mt-1 flex items-center">
@@ -170,14 +186,15 @@ export default function ProductReviews() {
 
                   <div
                     className="mt-4 space-y-6 text-base italic text-gray-600"
-                    dangerouslySetInnerHTML={{ __html: review.content }}
-                  />
+                  >
+                    <p>{review.review}</p>
+                  </div>
                 </div>
               ))}
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </div >
   )
 }

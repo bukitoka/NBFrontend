@@ -319,18 +319,17 @@ function classNames(...classes) {
 
 export default function ProductDetail() {
   const { slug } = useParams();
-  const [selectedColor, setSelectedColor] = useState(product.colors[0])
-  const [selectedSize, setSelectedSize] = useState(product.sizes[2])
   const [newProduct, setProduct] = useState({});
   const [stocks, setStock] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [productImages, setProductImages] = useState([]);
-  const [totalRating, setTotalRating] = useState(0);
+  const [totalRating, setTotalRating] = useState([]);
   const { t, i18n } = useTranslation();
-  const [price, setPrice] = useState(0);
+  const [selectedStock, setSelectedStock] = useState(null);
 
   const [isShowColor, setShowColor] = useState(false);
+  const [latestRating, setLatestRating] = useState([]);
 
 
 
@@ -360,37 +359,72 @@ export default function ProductDetail() {
     // console.log("Check update data")
     try {
       const productsData = await fetchProduct(slug);
+      console.log("product data", productsData)
       setProduct(productsData.product);
       setStock(productsData.stock);
-      setPrice(70000);
+      setFirstStock(productsData.stock);
       setProductImages(productsData.images);
-      setTotalRating(productsData.total_rating);
-      console.log("Check update data")
+      setRating(productsData.total_rating);
       doesShowColor(productsData.stock);
+      setLatestRating(productsData.latest_rating);
       setLoading(false);
-
     } catch (error) {
       console.log("error running", error)
       setError(error);
       setLoading(false);
     }
+  }
 
+  const setFirstStock = (stocks) => {
+    if (stocks == null) {
+      return;
+    }
+    setSelectedStock(stocks[0] ?? null);
   }
 
 
+  // function for set rating
+  const setRating = (rating) => {
+    let ratingArray = [];
+    for (let i = 0; i < rating; i++) {
+      ratingArray.push(i);
+    }
+
+    setTotalRating(ratingArray);
+  }
+
+
+  // function for handle size selection
+  const handleStockSelected = (stock) => {
+    setSelectedStock(stock);
+  }
 
   // function for adding to cart
   const addToCart = async (productId, stcockId) => {
-    console.log(productId)
-    console.log(stcockId)
     if (!isLoggedIn) {
       toast.error("Please login to add to cart");
     } else {
-
-      const response = await insertCartItem(productId, stcockId, 2);
-      console.log(response);
+      await handleAddToCart(productId, stcockId);
     }
-    // console.log(newProduct)
+  }
+
+  const handleAddToCart = async (productId, stcockId) => {
+    await apiPost('cart-item/', {
+      product: productId,
+      stock: stcockId,
+      quantity: 1
+    }, (response) => onSucceessAddToCart(response), (error) => onErrorAddToCart(error));
+
+  }
+
+  const onSucceessAddToCart = (response) => {
+    //  show toast
+    toast.success("Product added to cart");
+  }
+
+  const onErrorAddToCart = (error) => {
+    //  show toast
+    toast.error("Error adding to cart");
   }
 
   const addWishList = async (productId) => {
@@ -400,11 +434,13 @@ export default function ProductDetail() {
   }
 
   const onSucessAddWishList = (response) => {
-    console.log(response)
+    //  show toast
+    toast.success("Product added to wishlist");
   }
 
   const onErrorAddWishList = (error) => {
-    console.log(error)
+    //  show toast
+    toast.error("Error adding to wishlist");
   }
 
 
@@ -475,7 +511,7 @@ export default function ProductDetail() {
 
                 <div className="mt-3">
                   <h2 className="sr-only">Product information</h2>
-                  <p className="text-3xl tracking-tight text-gray-900">Rp. {priceFormatter(newProduct.min_price ?? 0)}</p>
+                  <p className="text-3xl tracking-tight text-gray-900">Rp. {priceFormatter(selectedStock?.price ?? 0)}</p>
                 </div>
 
                 {/* Reviews */}
@@ -483,18 +519,18 @@ export default function ProductDetail() {
                   <h3 className="sr-only">Reviews</h3>
                   <div className="flex items-center">
                     <div className="flex items-center">
-                      {/* {[0..totalRating].map((rating) => (
+                      {totalRating.map((rating) => (
                         <StarIcon
                           key={rating}
                           className={classNames(
-                            product.rating > rating ? 'text-yellow-500' : 'text-gray-300',
+                            'text-yellow-500',
                             'h-5 w-5 flex-shrink-0'
                           )}
                           aria-hidden="true"
                         />
-                      ))} */}
+                      ))}
                     </div>
-                    <p className="sr-only">{product.rating} out of 5 stars</p>
+                    <p className="sr-only">{totalRating.length} out of 5 stars</p>
                   </div>
                 </div>
 
@@ -504,7 +540,7 @@ export default function ProductDetail() {
                     isShowColor && (
                       <div>
                         <h3 className="text-sm text-gray-600">Color</h3>
-                        <RadioGroup value={selectedColor} onChange={setSelectedColor} className="mt-2">
+                        <RadioGroup className="mt-2">
                           <RadioGroup.Label className="sr-only">Choose a color</RadioGroup.Label>
                           <span className="flex items-center space-x-3">
                             {stocks.map((stock) => (
@@ -541,24 +577,16 @@ export default function ProductDetail() {
                   {/* Sizes */}
                   <div className="mt-8">
                     <h3 className="text-sm text-gray-600">Size</h3>
-                    <RadioGroup value={selectedSize} onChange={setSelectedSize} className="mt-2">
+                    <RadioGroup className="mt-2">
                       <RadioGroup.Label className="sr-only">Choose a size</RadioGroup.Label>
                       <div className="grid grid-cols-3 gap-3 sm:grid-cols-6">
                         {stocks.map((stock) => (
                           <RadioGroup.Option
                             key={stock.id}
                             value={stock.size}
-                            // onClick={ }
-                            className={({ active, checked }) =>
-                              classNames(
-                                true ? 'cursor-pointer focus:outline-none' : 'cursor-not-allowed opacity-25',
-                                active ? 'ring-2 ring-yellow-500 ring-offset-2' : '',
-                                checked
-                                  ? 'border-transparent bg-yellow-500 text-white hover:bg-yellow-500'
-                                  : 'border-gray-200 bg-white text-gray-900 hover:bg-gray-50',
-                                'flex items-center justify-center rounded-md border py-3 px-3 text-sm font-medium uppercase sm:flex-1'
-                              )
-                            }
+                            onClick={() => handleStockSelected(stock)}
+                            selected={selectedStock?.id == stock.id}
+                            className={`cursor-pointer focus:outline-none ${selectedStock?.id == stock.id ? 'ring-2 ring-yellow-500 ring-offset-2 border-transparent bg-yellow-500 text-white hover:bg-yellow-500' : 'border-gray-200 bg-white text-gray-900 hover:bg-gray-50'} flex items-center justify-center rounded-md border py-3 px-3 text-sm font-medium uppercase sm:flex-1 `}
                           >
                             <RadioGroup.Label as="span">{stock.size}</RadioGroup.Label>
                           </RadioGroup.Option>
@@ -570,7 +598,7 @@ export default function ProductDetail() {
                   <div className="mt-10 flex">
                     <button
                       type="button"
-                      onClick={() => addToCart(newProduct.id, stocks[0].id ?? null)}
+                      onClick={() => addToCart(newProduct.id, selectedStock?.id ?? null)}
                       className="flex max-w-xs flex-1 items-center justify-center rounded-md border border-transparent bg-zinc-800 px-8 py-3 text-base font-medium text-white hover:bg-yellow-500 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 focus:ring-offset-gray-50 sm:w-full"
                     >
                       {t('productDetail_Add_to_Cart')}
@@ -634,7 +662,7 @@ export default function ProductDetail() {
       </main>
 
       {/* Product reviews */}
-      <ProductReviews />
+      <ProductReviews data={latestRating} />
       {/* Footer */}
       <Footer />
     </div>
