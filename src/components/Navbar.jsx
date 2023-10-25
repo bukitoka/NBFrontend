@@ -95,7 +95,10 @@ const Navbar = ({ setOpen, classNames }) => {
 
   useEffect(() => {
     fetchCategories()
-    fetchCart()
+    if (isLoggedIn) {
+      fetchCart()
+    }
+
   }, [])
 
   const fetchCart = async () => {

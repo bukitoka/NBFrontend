@@ -199,6 +199,7 @@ const Search = () => {
                 {trendingSearch.trending_searches &&
                   trendingSearch.trending_searches.map((trend) => (
                     <div
+                      key={trend.query}
                       onClick={() => handleClickOnTrendingSearch(trend.query)}
                       className="cursor-pointer flex items-center px-4 py-2 mr-2 rounded-md bg-zinc-100 hover:bg-zinc-200 hover:text-gray-800"
                     >

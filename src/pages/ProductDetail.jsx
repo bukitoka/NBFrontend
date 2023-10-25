@@ -31,6 +31,7 @@ import Navbar from "../components/Navbar"
 import MobileMenu from "../components/MobileMenu"
 import Footer from '../components/Footer'
 import { fetchProduct } from '../api/ProductApi'
+import { background } from '../assets';
 
 const product = {
   name: 'Zip Tote Basket',
@@ -329,6 +330,8 @@ export default function ProductDetail() {
   const { t, i18n } = useTranslation();
   const [price, setPrice] = useState(0);
 
+  const [isShowColor, setShowColor] = useState(false);
+
 
 
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
@@ -337,22 +340,45 @@ export default function ProductDetail() {
     getProductdetail(slug);
   }, [])
 
+  const doesShowColor = (stocks) => {
+    console.log("stock in the color", stocks)
+    if (stocks == null) {
+      setShowColor(false);
+      return;
+    }
+
+    // foreach stocks and check if there is color set to true
+    stocks.forEach((stock) => {
+      if (stock.color_code != null) {
+        setShowColor(true);
+        return;
+      }
+    })
+  }
+
   const getProductdetail = async (slug) => {
+    // console.log("Check update data")
     try {
       const productsData = await fetchProduct(slug);
-      console.log(productsData)
       setProduct(productsData.product);
       setStock(productsData.stock);
-      setPrice(productsData.stock?.first()?.price ?? 0);
+      setPrice(70000);
       setProductImages(productsData.images);
       setTotalRating(productsData.total_rating);
+      console.log("Check update data")
+      doesShowColor(productsData.stock);
       setLoading(false);
+
     } catch (error) {
+      console.log("error running", error)
       setError(error);
       setLoading(false);
     }
 
   }
+
+
+
   // function for adding to cart
   const addToCart = async (productId, stcockId) => {
     console.log(productId)
@@ -449,7 +475,7 @@ export default function ProductDetail() {
 
                 <div className="mt-3">
                   <h2 className="sr-only">Product information</h2>
-                  <p className="text-3xl tracking-tight text-gray-900">RP. {priceFormatter(newProduct.min_price ?? 0)}</p>
+                  <p className="text-3xl tracking-tight text-gray-900">Rp. {priceFormatter(newProduct.min_price ?? 0)}</p>
                 </div>
 
                 {/* Reviews */}
@@ -457,7 +483,7 @@ export default function ProductDetail() {
                   <h3 className="sr-only">Reviews</h3>
                   <div className="flex items-center">
                     <div className="flex items-center">
-                      {[0..totalRating].map((rating) => (
+                      {/* {[0..totalRating].map((rating) => (
                         <StarIcon
                           key={rating}
                           className={classNames(
@@ -466,7 +492,7 @@ export default function ProductDetail() {
                           )}
                           aria-hidden="true"
                         />
-                      ))}
+                      ))} */}
                     </div>
                     <p className="sr-only">{product.rating} out of 5 stars</p>
                   </div>
@@ -474,50 +500,47 @@ export default function ProductDetail() {
 
                 <form className="mt-6">
                   {/* Colors */}
-                  <div>
-                    <h3 className="text-sm text-gray-600">Color</h3>
+                  {
+                    isShowColor && (
+                      <div>
+                        <h3 className="text-sm text-gray-600">Color</h3>
+                        <RadioGroup value={selectedColor} onChange={setSelectedColor} className="mt-2">
+                          <RadioGroup.Label className="sr-only">Choose a color</RadioGroup.Label>
+                          <span className="flex items-center space-x-3">
+                            {stocks.map((stock) => (
+                              stock.color_code &&
+                              (<RadioGroup.Option
+                                key={stock.id}
+                                value={stock.color_code}
+                                className={({ active, checked }) =>
+                                  classNames(
+                                    active && checked ? 'ring ring-offset-1' : '',
+                                    !active && checked ? 'ring-2' : '',
+                                    'relative -m-0.5 flex cursor-pointer items-center justify-center rounded-full p-0.5 focus:outline-none'
+                                  )
+                                }
+                              >
+                                <RadioGroup.Label as="span" className="sr-only">
+                                  {stock.id}
+                                </RadioGroup.Label>
+                                <span
+                                  aria-hidden="true"
+                                  style={{ backgroundColor: stock.color_code }}
+                                  className={classNames('h-8 w-8 rounded-full border border-black border-opacity-10'
+                                  )}
+                                />
+                              </RadioGroup.Option>
+                              )))}
+                          </span>
+                        </RadioGroup>
+                      </div>
+                    )
+                  }
 
-                    <RadioGroup value={selectedColor} onChange={setSelectedColor} className="mt-2">
-                      <RadioGroup.Label className="sr-only">Choose a color</RadioGroup.Label>
-                      <span className="flex items-center space-x-3">
-                        {product.colors.map((color) => (
-                          <RadioGroup.Option
-                            key={color.name}
-                            value={color}
-                            className={({ active, checked }) =>
-                              classNames(
-                                color.selectedColor,
-                                active && checked ? 'ring ring-offset-1' : '',
-                                !active && checked ? 'ring-2' : '',
-                                'relative -m-0.5 flex cursor-pointer items-center justify-center rounded-full p-0.5 focus:outline-none'
-                              )
-                            }
-                          >
-                            <RadioGroup.Label as="span" className="sr-only">
-                              {color.name}
-                            </RadioGroup.Label>
-                            <span
-                              aria-hidden="true"
-                              className={classNames(
-                                color.bgColor,
-                                'h-8 w-8 rounded-full border border-black border-opacity-10'
-                              )}
-                            />
-                          </RadioGroup.Option>
-                        ))}
-                      </span>
-                    </RadioGroup>
-                  </div>
 
                   {/* Sizes */}
                   <div className="mt-8">
-                    {/* <div className="flex items-center justify-between">
-                      <h2 className="text-sm font-medium text-gray-900">Size</h2>
-                      <a href="#" className="text-sm font-medium text-indigo-600 hover:text-indigo-500">
-                        See sizing chart
-                      </a>
-                    </div> */}
-
+                    <h3 className="text-sm text-gray-600">Size</h3>
                     <RadioGroup value={selectedSize} onChange={setSelectedSize} className="mt-2">
                       <RadioGroup.Label className="sr-only">Choose a size</RadioGroup.Label>
                       <div className="grid grid-cols-3 gap-3 sm:grid-cols-6">
