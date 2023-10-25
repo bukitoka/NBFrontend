@@ -3,8 +3,6 @@ import {
   MagnifyingGlassIcon,
   MicrophoneIcon,
   ArrowRightIcon,
-  ShoppingBagIcon,
-  ReceiptPercentIcon,
   HeartIcon,
   TagIcon,
   QuestionMarkCircleIcon,
@@ -12,11 +10,12 @@ import {
   XMarkIcon,
   FireIcon,
 } from "@heroicons/react/20/solid"
-import { nodata } from "@/assets"
+import { nodata, nbDefaultImage } from "@/assets"
 import { Combobox } from "@headlessui/react"
 import { useDebounce } from "use-debounce"
 import { apiGet } from "@/api/ApiService"
 import { useTranslation } from "react-i18next"
+import NanoClamp from "nanoclamp"
 
 const Search = () => {
   const [searchQuery, setSearchQuery] = useState("")
@@ -32,7 +31,7 @@ const Search = () => {
   useEffect(() => {
     // trending
     const fetchTrendingSearch = async () => {
-      const response = await apiGet(
+      await apiGet(
         `search/trending/`,
         (data) => onTrendingSuccess(data),
         (error) => onTrendingError(error)
@@ -40,7 +39,7 @@ const Search = () => {
     }
 
     const onTrendingSuccess = (response) => {
-      console.log(response)
+      // console.log(response)
       setTrendingSearch(response)
     }
 
@@ -55,7 +54,7 @@ const Search = () => {
       setIsLoading(true)
       setIsEmpty(false)
 
-      const response = await apiGet(
+      await apiGet(
         `search/?q=${debouncedSearchQuery}`,
         (data) => onSearchSuccess(data),
         (error) => onSearchError(error)
@@ -82,7 +81,7 @@ const Search = () => {
     }
 
     const onSearchError = (error) => {
-      // console.log(error)
+      console.log(error)
       setIsLoading(false)
     }
 
@@ -98,7 +97,7 @@ const Search = () => {
     if (debouncedSearchQuery.length > 0) {
       if (isLoading) {
         return (
-          <li key="searching" className="text-gray-400 text-sm px-4 py-2">
+          <li key="searching" className="text-gray-400 text-sm px-2 py-2">
             Searching...
           </li>
         )
@@ -106,7 +105,7 @@ const Search = () => {
 
       if (isEmpty) {
         return (
-          <li key="noresult" className="text-gray-400 text-sm px-4 py-2">
+          <li key="noresult" className="text-gray-400 text-sm px-2 py-2">
             No results found for "{debouncedSearchQuery}"
             <img src={nodata} className="w-52 mx-auto mt-2" />
           </li>
@@ -125,7 +124,7 @@ const Search = () => {
       ) {
         return (
           <li key="result-header">
-            <p className="text-gray-400 text-sm px-4 py-2">Search Results</p>
+            <p className="text-gray-400 text-sm px-2 py-2">Search Results</p>
           </li>
         )
       }
@@ -133,7 +132,7 @@ const Search = () => {
 
     return (
       <li key="start-typing">
-        <p className="text-gray-400 text-sm px-4 py-2">
+        <p className="text-gray-400 text-sm px-2 py-2">
           Start typing to search
         </p>
       </li>
@@ -168,7 +167,7 @@ const Search = () => {
             <Combobox.Input
               onClick={(event) => setSearchQuery(event.target.value)}
               onChange={(event) => setSearchQuery(event.target.value)}
-              onKeyUp={(event) => setShowXMark(true)}
+              onKeyUp={() => setShowXMark(true)}
               id="search"
               name="search"
               className="block w-full lg:w-[400px] rounded-full border-0 ring-1 ring-zinc-700 bg-white/10 py-2 pl-10 pr-3 text-gray-100 placeholder:text-gray-300 focus:ring-1 focus:ring-inset focus:ring-zinc-400 focus:bg-white/20 sm:text-sm sm:leading-6 hover:bg-white/20 hover:ring-1 hover:ring-inset hover:ring-zinc-500"
@@ -176,12 +175,13 @@ const Search = () => {
               type="text"
             />
             <div
-              onClick={(event) => {
+              onClick={() => {
                 setSearchQuery("")
                 setShowXMark(false)
               }}
-              className={`cursor-pointer absolute inset-y-0 right-4 lg:right-0 flex items-center ${showXMark ? "block" : "hidden"
-                }`}
+              className={`cursor-pointer absolute inset-y-0 right-4 lg:right-0 flex items-center ${
+                showXMark ? "block" : "hidden"
+              }`}
             >
               <XMarkIcon
                 className="h-5 w-5 text-gray-300 hover:bg-zinc-600 rounded-full"
@@ -192,18 +192,24 @@ const Search = () => {
           <Combobox.Options className="bg-white rounded-xl lg:-ml-24 p-4 absolute z-40 mt-2 w-full lg:w-[600px] border border-zinc-100 shadow-sm max-h-[600px] overflow-y-scroll">
             {/* trending search */}
             <li key="trending-header">
-              <p className="text-gray-400 text-sm px-4 mb-2">Trending search</p>
+              <p className="text-gray-400 text-sm px-2 mb-2">Trending search</p>
             </li>
-            <li key="trending" className="mb-4 px-4 py-2 text-sm text-gray-700">
+            <li key="trending" className="mb-4 px-2 py-2 text-sm text-gray-700">
               <div className="flex items-center overflow-x-scroll">
                 {trendingSearch.trending_searches &&
                   trendingSearch.trending_searches.map((trend) => (
                     <div
+                      key={trend.query}
                       onClick={() => handleClickOnTrendingSearch(trend.query)}
                       className="cursor-pointer flex items-center px-4 py-2 mr-2 rounded-md bg-zinc-100 hover:bg-zinc-200 hover:text-gray-800"
                     >
                       <FireIcon className="h-4 w-4 text-gray-400 mr-2" />
-                      {trend.query}
+                      <NanoClamp
+                        is="p"
+                        className="text-gray-700 font-medium hover:text-gray-900"
+                        lines={1}
+                        text={trend.query}
+                      />
                     </div>
                   ))}
               </div>
@@ -211,18 +217,33 @@ const Search = () => {
 
             {getSearchResults()}
 
+            {searchResults.coupons && searchResults.coupons.length > 0 && (
+              <li key="coupon-header">
+                <p className="text-gray-400 text-sm px-2 mt-4 mb-2">Coupons</p>
+              </li>
+            )}
+
             {searchResults.coupons &&
               searchResults.coupons.map((coupon) => (
                 <li key={coupon.id}>
                   <a
                     href={`/coupons/${coupon.id}`}
-                    className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 rounded-lg flex items-center"
+                    className="px-2 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 rounded-lg flex items-center"
                   >
-                    <ReceiptPercentIcon
-                      className="h-4 w-4 text-gray-400 mr-2"
-                      aria-hidden="true"
+                    <img
+                      src={
+                        coupon.cover != "/media/coupon_covers/default.jpg"
+                          ? import.meta.env.VITE_API_BASE_URL + coupon.cover
+                          : nbDefaultImage
+                      }
+                      className="h-8 w-8 object-cover mr-2 rounded-md"
                     />
-                    {coupon.name}
+                    <NanoClamp
+                      is="p"
+                      className="text-gray-700 font-medium hover:text-gray-900"
+                      lines={1}
+                      text={coupon.name}
+                    />
                     <ArrowRightIcon
                       className="h-5 w-5 text-gray-400 ml-auto"
                       aria-hidden="true"
@@ -230,19 +251,34 @@ const Search = () => {
                   </a>
                 </li>
               ))}
+
+            {searchResults.products && searchResults.products.length > 0 && (
+              <li key="product-header">
+                <p className="text-gray-400 text-sm px-2 mt-4 mb-2">Products</p>
+              </li>
+            )}
 
             {searchResults.products &&
               searchResults.products.map((product) => (
                 <li key={product.id}>
                   <a
-                    href={`/products/${product.id}`}
-                    className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 rounded-lg flex items-center"
+                    href={`/products/${product.slug}`}
+                    className="px-2 py-2 text-sm hover:bg-gray-100 rounded-lg flex items-center"
                   >
-                    <ShoppingBagIcon
-                      className="h-4 w-4 text-gray-400 mr-2"
-                      aria-hidden="true"
+                    <img
+                      src={
+                        product.cover != "/media/products/default.jpg"
+                          ? import.meta.env.VITE_API_BASE_URL + product.cover
+                          : nbDefaultImage
+                      }
+                      className="h-8 w-8 object-cover mr-2 rounded-md"
                     />
-                    {product.name}
+                    <NanoClamp
+                      is="p"
+                      className="text-gray-700 font-medium hover:text-gray-900"
+                      lines={1}
+                      text={product.name}
+                    />
                     <ArrowRightIcon
                       className="h-5 w-5 text-gray-400 ml-auto"
                       aria-hidden="true"
@@ -251,18 +287,33 @@ const Search = () => {
                 </li>
               ))}
 
+            {searchResults.brands && searchResults.brands.length > 0 && (
+              <li key="brand-header">
+                <p className="text-gray-400 text-sm px-2 mt-4 mb-2">Brands</p>
+              </li>
+            )}
+
             {searchResults.brands &&
               searchResults.brands.map((brand) => (
                 <li key={brand.id}>
                   <a
-                    href={`/brands/${brand.id}`}
-                    className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 rounded-lg flex items-center"
+                    href={`/brands/${brand.slug}`}
+                    className="px-2 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 rounded-lg flex items-center"
                   >
-                    <HeartIcon
-                      className="h-4 w-4 text-gray-400 mr-2"
-                      aria-hidden="true"
+                    <img
+                      src={
+                        brand.logo != "/media/brand_logos/default.jpg"
+                          ? import.meta.env.VITE_API_BASE_URL + brand.logo
+                          : nbDefaultImage
+                      }
+                      className="h-8 w-8 object-cover mr-2 rounded-md"
                     />
-                    {brand.name}
+                    <NanoClamp
+                      is="p"
+                      className="text-gray-700 font-medium hover:text-gray-900"
+                      lines={1}
+                      text={brand.name}
+                    />
                     <ArrowRightIcon
                       className="h-5 w-5 text-gray-400 ml-auto"
                       aria-hidden="true"
@@ -272,17 +323,31 @@ const Search = () => {
               ))}
 
             {searchResults.categories &&
+              searchResults.categories.length > 0 && (
+                <li key="category-header">
+                  <p className="text-gray-400 text-sm px-2 mt-4 mb-2">
+                    Categories
+                  </p>
+                </li>
+              )}
+
+            {searchResults.categories &&
               searchResults.categories.map((category) => (
                 <li key={category.id}>
                   <a
-                    href={`/categories/${category.id}`}
-                    className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 rounded-lg flex items-center"
+                    href={`/categories/${category.slug}`}
+                    className="px-2 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 rounded-lg flex items-center"
                   >
                     <TagIcon
                       className="h-4 w-4 text-gray-400 mr-2"
                       aria-hidden="true"
                     />
-                    {category.name}
+                    <NanoClamp
+                      is="p"
+                      className="text-gray-700 font-medium hover:text-gray-900"
+                      lines={1}
+                      text={category.name}
+                    />
                     <ArrowRightIcon
                       className="h-5 w-5 text-gray-400 ml-auto"
                       aria-hidden="true"
@@ -292,17 +357,31 @@ const Search = () => {
               ))}
 
             {searchResults.subcategories &&
+              searchResults.subcategories.length > 0 && (
+                <li key="subcategory-header">
+                  <p className="text-gray-400 text-sm px-2 mt-4 mb-2">
+                    Subcategories
+                  </p>
+                </li>
+              )}
+
+            {searchResults.subcategories &&
               searchResults.subcategories.map((subcategory) => (
                 <li key={subcategory.id}>
                   <a
-                    href={`/subcategories/${subcategory.id}`}
-                    className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 rounded-lg flex items-center"
+                    href={`/subcategories/${subcategory.slug}`}
+                    className="px-2 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 rounded-lg flex items-center"
                   >
                     <TagIcon
                       className="h-4 w-4 text-gray-400 mr-2"
                       aria-hidden="true"
                     />
-                    {subcategory.name}
+                    <NanoClamp
+                      is="p"
+                      className="text-gray-700 font-medium hover:text-gray-900"
+                      lines={1}
+                      text={subcategory.name}
+                    />
                     <ArrowRightIcon
                       className="h-5 w-5 text-gray-400 ml-auto"
                       aria-hidden="true"
@@ -312,17 +391,31 @@ const Search = () => {
               ))}
 
             {searchResults.subsubcategories &&
+              searchResults.subsubcategories.length > 0 && (
+                <li key="subsubcategory-header">
+                  <p className="text-gray-400 text-sm px-2 mt-4 mb-2">
+                    Subsubcategories
+                  </p>
+                </li>
+              )}
+
+            {searchResults.subsubcategories &&
               searchResults.subsubcategories.map((subsubcategory) => (
                 <li key={subsubcategory.id}>
                   <a
-                    href={`/subsubcategories/${subsubcategory.id}`}
-                    className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 rounded-lg flex items-center"
+                    href={`/subsubcategories/${subsubcategory.slug}`}
+                    className="px-2 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 rounded-lg flex items-center"
                   >
                     <TagIcon
                       className="h-4 w-4 text-gray-400 mr-2"
                       aria-hidden="true"
                     />
-                    {subsubcategory.name}
+                    <NanoClamp
+                      is="p"
+                      className="text-gray-700 font-medium hover:text-gray-900"
+                      lines={1}
+                      text={subsubcategory.name}
+                    />
                     <ArrowRightIcon
                       className="h-5 w-5 text-gray-400 ml-auto"
                       aria-hidden="true"
@@ -330,19 +423,30 @@ const Search = () => {
                   </a>
                 </li>
               ))}
+
+            {searchResults.faqs && searchResults.faqs.length > 0 && (
+              <li key="faq-header">
+                <p className="text-gray-400 text-sm px-2 mt-4 mb-2">FAQs</p>
+              </li>
+            )}
 
             {searchResults.faqs &&
               searchResults.faqs.map((faq) => (
                 <li key={faq.id}>
                   <a
                     href={`/faqs/${faq.id}`}
-                    className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 rounded-lg flex items-center"
+                    className="px-2 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 rounded-lg flex items-center"
                   >
                     <QuestionMarkCircleIcon
                       className="h-4 w-4 text-gray-400 mr-2"
                       aria-hidden="true"
                     />
-                    {faq.question}
+                    <NanoClamp
+                      is="p"
+                      className="text-gray-700 font-medium hover:text-gray-900"
+                      lines={1}
+                      text={faq.question}
+                    />
                     <ArrowRightIcon
                       className="h-5 w-5 text-gray-400 ml-auto"
                       aria-hidden="true"
@@ -351,18 +455,29 @@ const Search = () => {
                 </li>
               ))}
 
+            {searchResults.blogs && searchResults.blogs.length > 0 && (
+              <li key="blog-header">
+                <p className="text-gray-400 text-sm px-2 mt-4 mb-2">Blogs</p>
+              </li>
+            )}
+
             {searchResults.blogs &&
               searchResults.blogs.map((blog) => (
                 <li key={blog.id}>
                   <a
-                    href={`/blogs/${blog.id}`}
-                    className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 rounded-lg flex items-center"
+                    href={`/blogs/${blog.slug}`}
+                    className="px-2 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 rounded-lg flex items-center"
                   >
                     <BookmarkIcon
                       className="h-4 w-4 text-gray-400 mr-2"
                       aria-hidden="true"
                     />
-                    {blog.title}
+                    <NanoClamp
+                      is="p"
+                      className="text-gray-700 font-medium hover:text-gray-900"
+                      lines={1}
+                      text={blog.title}
+                    />
                     <ArrowRightIcon
                       className="h-5 w-5 text-gray-400 ml-auto"
                       aria-hidden="true"

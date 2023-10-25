@@ -323,13 +323,19 @@ const Navbar = ({ setOpen, classNames }) => {
                               : "border-b-transparent text-gray-200 hover:text-yellow-500",
                             "relative z-10 py-3 flex items-center border-b-2 focus:outline-0 text-sm font-medium transition-colors duration-200 ease-out"
                           )}
-                          onMouseEnter={() => handlePanel(categories.length + 1)}
-                          onMouseLeave={() => handlePanel(categories.length + 1)}
+                          onMouseEnter={() =>
+                            handlePanel(categories.length + 1)
+                          }
+                          onMouseLeave={() =>
+                            handlePanel(categories.length + 1)
+                          }
                         >
                           {`BRANDS`}{" "}
                           <ChevronDownIcon
                             className={classNames(
-                              isShowingArray[categories.length + 1] ? "rotate-180 transform" : "",
+                              isShowingArray[categories.length + 1]
+                                ? "rotate-180 transform"
+                                : "",
                               "ml-1 w-4 h-4"
                             )}
                           />
