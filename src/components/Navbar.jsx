@@ -6,7 +6,6 @@ import { apiGet } from "../api/ApiService"
 import {
   Bars3Icon,
   UserIcon,
-  LanguageIcon,
   ChevronDownIcon,
   HeartIcon,
 } from "@heroicons/react/24/outline"
@@ -25,36 +24,14 @@ import useAuthStore from "../store/authStore"
 
 const Navbar = ({ setOpen, classNames }) => {
   const [isShowingArray, setIsShowingArray] = useState([])
-  const [keyWord, setKeyWord] = useState("")
-  // alfabet array
-  const alfabet = [
-    "A",
-    "B",
-    "C",
-    "D",
-    "E",
-    "F",
-    "G",
-    "H",
-    "I",
-    "J",
-    "K",
-    "L",
-    "M",
-    "N",
-    "O",
-    "P",
-    "Q",
-    "R",
-    "S",
-    "T",
-    "U",
-    "V",
-    "W",
-    "X",
-    "Y",
-    "Z",
-  ]
+
+  // Brands Group Alphabet
+  const alphabet = []
+  for (let i = 97; i <= 122; i++) {
+    // ASCII codes for 'a' to 'z'
+    const letter = String.fromCharCode(i).toUpperCase()
+    alphabet.push(letter)
+  }
 
   const handlePanel = (index) => {
     setIsShowingArray((prevArray) => {
@@ -64,31 +41,7 @@ const Navbar = ({ setOpen, classNames }) => {
     })
   }
 
-  const search = async (keyword) => {
-    await apiGet(
-      `search/?q=${keyword}`,
-      (data) => onSuccessSearch(data),
-      (err) => onErrorSearch(err)
-    )
-  }
-
-  const onSuccessSearch = (data) => {
-    console.log("Success")
-    console.log(data)
-    setKeyWord("")
-  }
-
-  const onErrorSearch = (error) => {
-    console.log("Error")
-    console.log(error)
-    setKeyWord("")
-  }
-
-  const handleSearch = () => {
-    search(keyWord)
-  }
-
-  const { categories, loading, error, fetchCategories } = useCategoryStore()
+  const { categories, fetchCategories } = useCategoryStore()
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn)
 
   const [totalItems, setTotalItems] = useState(0)
@@ -99,11 +52,15 @@ const Navbar = ({ setOpen, classNames }) => {
   }, [])
 
   const fetchCart = async () => {
-    await apiGet(
-      `cart/`,
-      (data) => onSuccessLoadCart(data),
-      (err) => onErrorLoadCart(err)
-    )
+    if (isLoggedIn) {
+      await apiGet(
+        `cart/`,
+        (data) => onSuccessLoadCart(data),
+        (err) => onErrorLoadCart(err)
+      )
+    } else {
+      return
+    }
   }
 
   function onSuccessLoadCart(data) {
@@ -363,16 +320,18 @@ const Navbar = ({ setOpen, classNames }) => {
 
                           <div className="relative bg-white">
                             <div className="flex gap-4 mx-auto max-w-7xl px-8 py-16">
-                              {/* maaping alfabet as link */}
-                              {alfabet.map((item) => (
-                                <a
-                                  href={`/brand/${item}`}
-                                  className="hover:text-gray-800"
-                                  key={item}
-                                >
-                                  {item}
-                                </a>
-                              ))}
+                              {/* maaping alphabet as link */}
+                              <div className="overflow-x-scroll flex gap-x-4 rounded-md">
+                                {alphabet.map((item) => (
+                                  <a
+                                    href={`/brand/${item}`}
+                                    className="text-gray-500 hover:text-gray-900 font-bold py-2 px-4 bg-zinc-100 hover:bg-zinc-200 rounded-md"
+                                    key={item}
+                                  >
+                                    {item}
+                                  </a>
+                                ))}
+                              </div>
                             </div>
                           </div>
                         </Popover.Panel>

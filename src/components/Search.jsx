@@ -148,13 +148,6 @@ const Search = () => {
 
   return (
     <div className="flex relative items-center py-4 md:mx-auto md:max-w-2xl lg:mx-0 lg:max-w-sm xl:px-0">
-      <a
-        href="#"
-        className="hidden lg:block lg:mr-4 p-2 ring-1 ring-zinc-700 rounded-full bg-white/10 hover:bg-white/20 text-gray-300 hover:text-gray-100 hover:ring-1 hover:ring-inset hover:ring-zinc-500"
-      >
-        <span className="sr-only">Speech</span>
-        <MicrophoneIcon className="h-5 w-5" aria-hidden="true" />
-      </a>
       <label htmlFor="search" className="sr-only">
         Search
       </label>
@@ -198,7 +191,7 @@ const Search = () => {
               <p className="text-gray-400 text-sm px-2 mb-2">Trending search</p>
             </li>
             <li key="trending" className="mb-4 px-2 py-2 text-sm text-gray-700">
-              <div className="flex items-center overflow-x-scroll">
+              <div className="flex items-center overflow-x-scroll rounded-md w-full">
                 {trendingSearch.trending_searches &&
                   trendingSearch.trending_searches.map((trend) => (
                     <div
