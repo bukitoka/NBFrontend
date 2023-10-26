@@ -249,7 +249,7 @@ const Navbar = ({ setOpen, classNames }) => {
                                       <ul
                                         role="list"
                                         aria-labelledby={`${section.name}-heading`}
-                                        className="mt-6 space-y-6 sm:mt-4 sm:space-y-4"
+                                        className="mt-6 space-y-2 sm:mt-4 sm:space-y-1"
                                       >
                                         {section.subsubcategory.map((item) => (
                                           <li key={item.name} className="flex">
@@ -324,7 +324,7 @@ const Navbar = ({ setOpen, classNames }) => {
                           <div className="relative bg-white">
                             <div className="flex gap-4 mx-auto max-w-7xl px-8 py-16">
                               {/* maaping alphabet as link */}
-                              <div className="overflow-x-scroll flex gap-x-4 rounded-md">
+                              <div className="overflow-x-scroll flex gap-x-4 rounded-md hidden-scrollbar">
                                 {alphabet.map((item) => (
                                   <a
                                     href={`/brand/${item}`}

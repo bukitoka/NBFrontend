@@ -9,6 +9,7 @@ import 'react-calendar/dist/Calendar.css';
 import 'flowbite/dist/datepicker.js';
 import 'react-toastify/dist/ReactToastify.css';
 import '../i18n'
+import './assets/css/styles.css'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>

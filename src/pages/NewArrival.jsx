@@ -355,7 +355,12 @@ const NewArrival = () => {
                             {product.name}
                           </p>
                           <p className="mt-1 text-sm text-gray-500">Discount: {product.discount}</p>
-                          <h4 className="text-sm">Rp.{priceFormatter(product.min_price ?? 0)} - Rp.{priceFormatter(product.max_price ?? 0)} </h4>
+                          {
+                            product.min_price == product.max_price ? <h4 className=" text-sm">
+                              Rp.{priceFormatter(product.min_price)}
+                            </h4> :
+                              <h4 className="text-sm">Rp.{priceFormatter(product.min_price)} - Rp.{priceFormatter(product.max_price)} </h4>
+                          }
                         </div>
                         <div className="absolute inset-x-0 top-0 flex h-72 items-end justify-end overflow-hidden rounded-lg p-4">
                           <div

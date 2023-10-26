@@ -3,6 +3,7 @@ import { apiGet } from "@/api/ApiService";
 import { useParams } from 'react-router-dom';
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { priceFormatter } from "@/tools/reformat"
 
 // simple icons
 import {
@@ -364,7 +365,7 @@ const BrandDetail = () => {
                 {
                   brand != null ? <div className="mt-2 p-3 flex flex-col rounded-lg">
                     <div className="flex flex-row">
-                      <img className="h-28 w-28 rounded-lg" src={brand.cover} alt="error" onError={(e) => (e.target.src = nbDefaultImage)} />
+                      <img className="h-28 w-28 rounded-lg" src={brand.logo} alt="error" onError={(e) => (e.target.src = nbDefaultImage)} />
                       <div className="flex flex-col pl-3">
                         <h3 className="font-bold text-lg">{brand.name}</h3>
                         <p className="text-sm">{brand.origin}</p>
@@ -400,7 +401,13 @@ const BrandDetail = () => {
                                 {product.name}
                               </p>
                               <p className="mt-1 text-sm text-gray-500">Discount: {product.discount}</p>
-                              <h4 className="text-sm">Rp.{product.min_price} - Rp.{product.max_price} </h4>
+                              {
+                                product.min_price == product.max_price ? <h4 className=" text-sm">
+                                  Rp.{priceFormatter(product.min_price)}
+                                </h4> :
+                                  <h4 className="text-sm">Rp.{priceFormatter(product.min_price)} - Rp.{priceFormatter(product.max_price)} </h4>
+                              }
+
                             </div>
                             <div className="absolute inset-x-0 top-0 flex h-72 items-end justify-end overflow-hidden rounded-lg p-4">
                               <div
