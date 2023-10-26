@@ -26,6 +26,7 @@
         "nanoclamp": "^2.0.7",
         "query-string": "^8.1.0",
         "react": "^18.2.0",
+        "react-country-flag": "^3.1.0",
         "react-date-picker": "^10.5.1",
         "react-datepicker": "^4.18.0",
         "react-dom": "^18.2.0",
