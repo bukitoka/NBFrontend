@@ -66,9 +66,6 @@ const Search = () => {
 
       if (
         response.products.length === 0 &&
-        response.categories.length === 0 &&
-        response.subcategories.length === 0 &&
-        response.subsubcategories.length === 0 &&
         response.brands.length === 0 &&
         response.faqs.length === 0 &&
         response.blogs.length === 0 &&
@@ -114,17 +111,23 @@ const Search = () => {
 
       if (
         searchResults.products.length > 0 ||
-        searchResults.categories.length > 0 ||
-        searchResults.subcategories.length > 0 ||
-        searchResults.subsubcategories.length > 0 ||
         searchResults.brands.length > 0 ||
         searchResults.faqs.length > 0 ||
         searchResults.blogs.length > 0 ||
         searchResults.coupons.length > 0
       ) {
+        const totalResults =
+          searchResults.products.length +
+          searchResults.brands.length +
+          searchResults.faqs.length +
+          searchResults.blogs.length +
+          searchResults.coupons.length
         return (
-          <li key="result-header">
-            <p className="text-gray-400 text-sm px-2 py-2">Search Results</p>
+          <li key="result-header" className="flex">
+            <div className="text-gray-400 text-sm px-2 py-2">Search result</div>
+            <div className="text-gray-400 text-sm italic px-2 py-2 ml-auto">
+              {totalResults} results in {searchResults.time_taken}
+            </div>
           </li>
         )
       }
@@ -313,108 +316,6 @@ const Search = () => {
                       className="text-gray-700 font-medium hover:text-gray-900"
                       lines={1}
                       text={brand.name}
-                    />
-                    <ArrowRightIcon
-                      className="h-5 w-5 text-gray-400 ml-auto"
-                      aria-hidden="true"
-                    />
-                  </a>
-                </li>
-              ))}
-
-            {searchResults.categories &&
-              searchResults.categories.length > 0 && (
-                <li key="category-header">
-                  <p className="text-gray-400 text-sm px-2 mt-4 mb-2">
-                    Categories
-                  </p>
-                </li>
-              )}
-
-            {searchResults.categories &&
-              searchResults.categories.map((category) => (
-                <li key={category.id}>
-                  <a
-                    href={`/categories/${category.slug}`}
-                    className="px-2 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 rounded-lg flex items-center"
-                  >
-                    <TagIcon
-                      className="h-4 w-4 text-gray-400 mr-2"
-                      aria-hidden="true"
-                    />
-                    <NanoClamp
-                      is="p"
-                      className="text-gray-700 font-medium hover:text-gray-900"
-                      lines={1}
-                      text={category.name}
-                    />
-                    <ArrowRightIcon
-                      className="h-5 w-5 text-gray-400 ml-auto"
-                      aria-hidden="true"
-                    />
-                  </a>
-                </li>
-              ))}
-
-            {searchResults.subcategories &&
-              searchResults.subcategories.length > 0 && (
-                <li key="subcategory-header">
-                  <p className="text-gray-400 text-sm px-2 mt-4 mb-2">
-                    Subcategories
-                  </p>
-                </li>
-              )}
-
-            {searchResults.subcategories &&
-              searchResults.subcategories.map((subcategory) => (
-                <li key={subcategory.id}>
-                  <a
-                    href={`/subcategories/${subcategory.slug}`}
-                    className="px-2 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 rounded-lg flex items-center"
-                  >
-                    <TagIcon
-                      className="h-4 w-4 text-gray-400 mr-2"
-                      aria-hidden="true"
-                    />
-                    <NanoClamp
-                      is="p"
-                      className="text-gray-700 font-medium hover:text-gray-900"
-                      lines={1}
-                      text={subcategory.name}
-                    />
-                    <ArrowRightIcon
-                      className="h-5 w-5 text-gray-400 ml-auto"
-                      aria-hidden="true"
-                    />
-                  </a>
-                </li>
-              ))}
-
-            {searchResults.subsubcategories &&
-              searchResults.subsubcategories.length > 0 && (
-                <li key="subsubcategory-header">
-                  <p className="text-gray-400 text-sm px-2 mt-4 mb-2">
-                    Subsubcategories
-                  </p>
-                </li>
-              )}
-
-            {searchResults.subsubcategories &&
-              searchResults.subsubcategories.map((subsubcategory) => (
-                <li key={subsubcategory.id}>
-                  <a
-                    href={`/subsubcategories/${subsubcategory.slug}`}
-                    className="px-2 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 rounded-lg flex items-center"
-                  >
-                    <TagIcon
-                      className="h-4 w-4 text-gray-400 mr-2"
-                      aria-hidden="true"
-                    />
-                    <NanoClamp
-                      is="p"
-                      className="text-gray-700 font-medium hover:text-gray-900"
-                      lines={1}
-                      text={subsubcategory.name}
                     />
                     <ArrowRightIcon
                       className="h-5 w-5 text-gray-400 ml-auto"
