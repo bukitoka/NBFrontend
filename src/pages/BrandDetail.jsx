@@ -349,16 +349,16 @@ const BrandDetail = () => {
         socials={socials}
       />
       <main>
-        <div className="bg-white pt-[150px]">
-          <div className="h-32 lg:h-60 w-full py-2 px-2 mt-4">
+        <div className="bg-white pt-[160px] lg:pt-[150px]">
+          <div className="h-32 lg:h-60 w-full py-2 px-6 mt-4">
             <img
-              className="object-cover h-full w-full"
+              className="object-cover w-full h-full rounded-lg"
               src={`${brand != null ? brand.cover : nbDefaultImage}`}
               onError={(e) => (e.target.src = nbDefaultImage)}
             />
           </div>
 
-          <div className="grid gap-2 lg:flex mt-4 px-6 py-2 lg:gap-4">
+          <div className="grid gap-2 lg:flex mt-2 px-6 py-2 lg:gap-4 ">
             <div className="w-full lg:w-1/5 h-full">
               <div className="w-full h-full flex flex-col">
                 <h3 className=" pl-3 font-bold ">{t('brandDetail_AboutBrand')}</h3>
@@ -408,12 +408,6 @@ const BrandDetail = () => {
                                   <h4 className="text-sm">Rp.{priceFormatter(product.min_price)} - Rp.{priceFormatter(product.max_price)} </h4>
                               }
 
-                            </div>
-                            <div className="absolute inset-x-0 top-0 flex h-72 items-end justify-end overflow-hidden rounded-lg p-4">
-                              <div
-                                aria-hidden="true"
-                                className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-black opacity-50"
-                              />
                             </div>
                           </div>
                         </Link>
