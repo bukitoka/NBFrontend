@@ -2,6 +2,12 @@ import { StarIcon } from '@heroicons/react/20/solid'
 import { useTranslation } from 'react-i18next'
 import { useState } from 'react'
 import { nbDefaultImage } from '@/assets'
+import { Disclosure, RadioGroup, Tab } from '@headlessui/react'
+import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
+import StarRating from './StarRating'
+import { apiPostMultipart } from '@/api/ApiService'
+
+
 
 const reviews = {
   average: 4,
@@ -65,17 +71,47 @@ function classNames(...classes) {
 export default function ProductReviews(ratingList) {
   const { data } = ratingList
   const [totalRating, setTotalRating] = useState([])
+  const [rating, setStarRating] = useState(0);
+  const [image, setImage] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
+  const [video, setVideo] = useState(null);
+  const [videoPreview, setVideoPreview] = useState(null);
 
-  // function for set rating
-  const setRating = (rating) => {
-    let ratingArray = [];
-    for (let i = 0; i < rating; i++) {
-      ratingArray.push(i);
-    }
+  const handleStarClick = (newRating) => {
+    setStarRating(newRating);
+  };
 
-    setTotalRating(ratingArray);
+  const handleImageInputChange = async (event) => {
+    const file = event.target.files[0];
+    setImagePreview(URL.createObjectURL(file));
+    setImage(file);
+
+  };
+
+  const handleVideoInputChange = async (event) => {
+    const file = event.target.files[0];
+    setVideoPreview(URL.createObjectURL(file));
+    setVideo(file);
+    console.log(file)
   }
 
+  const createReview = async () => {
+    await apiPostMultipart('rating/', {
+      product: "dca61170-e923-4826-bbba-c5adafa069b0",
+      rating: rating,
+      review: 'review',
+      image: image,
+      video: video
+    }, (respone) => onSuccessCreateReview(respone), (error) => onErrorCreateReview(error))
+  }
+
+  const onSuccessCreateReview = (response) => {
+    console.log(response)
+  }
+
+  const onErrorCreateReview = (error) => {
+    console.log(error)
+  }
 
   const { t } = useTranslation()
   return (
@@ -148,12 +184,167 @@ export default function ProductReviews(ratingList) {
               If you’ve used this product, share your thoughts with other customers
             </p>
 
-            <a
-              href="#"
-              className="mt-6 inline-flex w-full items-center justify-center rounded-md border border-gray-300 bg-white px-8 py-2 text-sm font-medium text-gray-900 hover:bg-gray-50 sm:w-auto lg:w-full"
-            >
-              Write a review
-            </a>
+            <section aria-labelledby="details-heading" className=" mt-2">
+              <h2 id="details-heading" className="sr-only">
+                Additional details
+              </h2>
+              <div>
+                <Disclosure as="div">
+                  {({ open }) => (
+                    <>
+                      <Disclosure.Button className="group relative flex w-full items-center justify-between py-3 text-left">
+                        <span
+                          // className={classNames(open ? 'text-yellow-500' : 'text-gray-900', 'text-sm font-medium')}
+                          className="inline-flex w-full items-center justify-center rounded-md border border-gray-300 bg-white px-8 py-2 text-sm font-medium text-gray-900 hover:bg-gray-50 sm:w-auto lg:w-full"
+                        >
+                          Write a review
+
+                        </span>
+                      </Disclosure.Button>
+
+                      <Disclosure.Panel as="div" className="prose prose-sm pb-6">
+                        <form>
+                          <div className="space-y-12">
+                            <div className=" border-gray-900/10 pb-12">
+                              <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-6">
+                                <div className='col-span-full'>
+                                  <div className="flex items-center">
+                                    {[1, 2, 3, 4, 5].map((value) => (
+                                      <a href="#"
+                                        key={value}
+                                        onClick={() => handleStarClick(value)}>
+                                        <StarIcon
+                                          className={classNames(
+                                            rating >= value ? 'text-yellow-400' : 'text-gray-300',
+                                            'h-7 w-7 flex-shrink-0'
+                                          )}
+                                          aria-hidden="true"
+                                        />
+                                      </a>
+                                    ))}
+                                  </div>
+                                </div>
+
+                                <div className="col-span-full">
+                                  <label htmlFor="about" className="block text-sm font-medium leading-6 text-gray-900">
+                                    Review
+                                  </label>
+                                  <div className="mt-2">
+                                    <textarea
+                                      id="about"
+                                      name="about"
+                                      rows={3}
+                                      className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                      defaultValue={''}
+                                    />
+                                  </div>
+
+                                </div>
+
+                                <div className="col-span-full">
+                                  <label htmlFor="cover-photo" className="block text-sm font-medium leading-6 text-gray-900">
+                                    Photo
+                                  </label>
+                                  <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
+                                    <div className="text-center">
+
+                                      <div className="mt-4 flex text-sm leading-6 text-gray-600">
+                                        <label
+                                          htmlFor="file-upload"
+                                          className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
+                                        >
+                                          <span>Upload a file</span>
+                                          <input id="file-upload" name="file-upload" type="file" className="sr-only" onChange={handleImageInputChange} />
+                                        </label>
+                                        <p className="pl-1">or drag and drop</p>
+                                      </div>
+                                      <p className="text-xs leading-5 text-gray-600">PNG, JPG, GIF up to 10MB</p>
+                                    </div>
+                                  </div>
+                                </div>
+
+                                <div className="col-span-full">
+                                  <label htmlFor="cover-photo" className="block text-sm font-medium leading-6 text-gray-900">
+                                    review Image
+                                  </label>
+                                  <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
+                                    <div className="text-center">
+
+                                      <div className="mt-4 flex text-sm leading-6 text-gray-600">
+                                        <label
+                                          htmlFor="file-upload"
+                                          className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
+                                        >
+                                          <span>Upload a file</span>
+                                          <img src={imagePreview} alt="" />
+                                        </label>
+                                        <p className="pl-1">or drag and drop</p>
+                                      </div>
+                                      <p className="text-xs leading-5 text-gray-600">PNG, JPG, GIF up to 10MB</p>
+                                    </div>
+                                  </div>
+                                </div>
+
+                                <div className="col-span-full">
+                                  <label htmlFor="cover-photo" className="block text-sm font-medium leading-6 text-gray-900">
+                                    Pick Video
+                                  </label>
+                                  <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
+                                    <div className="text-center">
+
+                                      <div className="mt-4 flex text-sm leading-6 text-gray-600">
+                                        <label
+                                          htmlFor="video-upload"
+                                          className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
+                                        >
+                                          <span>Upload a file</span>
+                                          <input id="video-upload" name="video-upload" type="file" className="sr-only" onChange={handleVideoInputChange} />
+                                        </label>
+                                        <p className="pl-1">or drag and drop</p>
+                                      </div>
+                                      <p className="text-xs leading-5 text-gray-600">PNG, JPG, GIF up to 10MB</p>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="col-span-full">
+                                  <label htmlFor="cover-photo" className="block text-sm font-medium leading-6 text-gray-900">
+                                    review video
+                                  </label>
+                                  <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
+                                    <div className="text-center">
+
+                                      <div className="mt-4 flex text-sm leading-6 text-gray-600">
+                                        {/* preview video */}
+                                        <video src={videoPreview} controls />
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+
+
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="mt-6 flex items-center justify-end gap-x-6">
+                            <button type="button" className="text-sm font-semibold leading-6 text-gray-900">
+                              Cancel
+                            </button>
+                            <button
+                              type="button"
+                              onClick={createReview}
+                              className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                            >
+                              Save
+                            </button>
+                          </div>
+                        </form>
+                      </Disclosure.Panel>
+                    </>
+                  )}
+                </Disclosure>
+              </div>
+            </section>
           </div>
         </div>
 

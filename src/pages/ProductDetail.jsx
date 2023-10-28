@@ -423,6 +423,7 @@ export default function ProductDetail() {
   }
 
   const onErrorAddToCart = (error) => {
+    console.log("error", error)
     //  show toast
     toast.error("Error adding to cart");
   }
