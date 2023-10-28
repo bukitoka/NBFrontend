@@ -98,7 +98,7 @@ const Navbar = ({ setOpen, classNames }) => {
                 </a>
 
                 {/* Wide search field */}
-                <div className="hidden h-full lg:flex mr-20">
+                <div className="hidden h-full lg:flex ml-20 mr-20">
                   <Search />
                 </div>
 
@@ -255,7 +255,7 @@ const Navbar = ({ setOpen, classNames }) => {
                                           <li key={item.name} className="flex">
                                             <a
                                               href={`/category/${item.slug}`}
-                                              className="hover:text-gray-800"
+                                              className="hover:text-yellow-500"
                                             >
                                               {item.name}
                                             </a>
@@ -324,11 +324,11 @@ const Navbar = ({ setOpen, classNames }) => {
                           <div className="relative bg-white">
                             <div className="flex gap-4 mx-auto max-w-7xl px-8 py-16">
                               {/* maaping alphabet as link */}
-                              <div className="overflow-x-scroll flex gap-x-4 rounded-md hidden-scrollbar">
+                              <div className="overflow-x-scroll no-scrollbar flex gap-x-2 rounded-md">
                                 {alphabet.map((item) => (
                                   <a
                                     href={`/brand/${item}`}
-                                    className="text-gray-500 hover:text-gray-900 font-bold py-2 px-4 bg-zinc-100 hover:bg-zinc-200 rounded-md"
+                                    className="text-gray-500 hover:text-yellow-500 font-bold py-4 px-6 bg-zinc-100 hover:bg-zinc-200 rounded-md"
                                     key={item}
                                   >
                                     {item}

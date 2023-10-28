@@ -58,7 +58,6 @@ const navigation = {
     { name: "Blog", href: "/blog" },
     { name: "Jobs", href: "/jobs" },
     { name: "Investors", href: "/investor" },
-    { name: "Business Partners", href: "/business-partners" },
   ],
   legal: [
     { name: "Return Policy", href: "/claim" },
@@ -117,7 +116,7 @@ const navigation = {
 }
 
 const Footer = () => {
-  const { t } = useTranslation()    
+  const { t } = useTranslation()
   useEffect(() => {
     // get current year using day js
     const year = dayjs().format("YYYY")
@@ -142,9 +141,7 @@ const Footer = () => {
                 NanoBeepa
               </h1>
             </div>
-            <p className="leading-6 text-gray-300">
-              {t('footer_Description')}
-            </p>
+            <p className="leading-6 text-gray-300">{t("footer_Description")}</p>
             <div className="flex space-x-6">
               {navigation.social.map((item) => (
                 <a
@@ -238,7 +235,7 @@ const Footer = () => {
       <div className="mx-auto flex items-center max-w-7xl px-6 lg:px-8 py-8 text-sm leading-6 text-gray-300">
         <div className="pr-2 hidden lg:block">Payment Method:</div>
         <div className="pr-2 block lg:hidden">Payment:</div>
-        <div className="flex flex-1 gap-x-2 overflow-x-scroll rounded-sm">
+        <div className="flex flex-1 gap-x-2 overflow-x-scroll no-scrollbar rounded-sm">
           {[
             bank1,
             bank2,
