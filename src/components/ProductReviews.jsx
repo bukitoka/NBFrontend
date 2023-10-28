@@ -9,7 +9,7 @@ import { apiPostMultipart } from '@/api/ApiService'
 
 
 
-const reviews = {
+const reviewss = {
   average: 4,
   totalCount: 1624,
   counts: [
@@ -68,14 +68,16 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function ProductReviews(ratingList) {
-  const { data } = ratingList
+export default function ProductReviews(props) {
+  const { reviews } = props.data
   const [totalRating, setTotalRating] = useState([])
   const [rating, setStarRating] = useState(0);
   const [image, setImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [video, setVideo] = useState(null);
   const [videoPreview, setVideoPreview] = useState(null);
+
+  const [isPanelOpen, setIsPanelOpen] = useState(false);
 
   const handleStarClick = (newRating) => {
     setStarRating(newRating);
@@ -127,23 +129,23 @@ export default function ProductReviews(ratingList) {
                   <StarIcon
                     key={rating}
                     className={classNames(
-                      reviews.average > rating ? 'text-yellow-400' : 'text-gray-300',
+                      reviewss.average > rating ? 'text-yellow-400' : 'text-gray-300',
                       'h-5 w-5 flex-shrink-0'
                     )}
                     aria-hidden="true"
                   />
                 ))}
               </div>
-              <p className="sr-only">{reviews.average} out of 5 stars</p>
+              <p className="sr-only">{reviewss.average} out of 5 stars</p>
             </div>
-            <p className="ml-2 text-sm text-gray-900">Based on {reviews.totalCount} reviews</p>
+            <p className="ml-2 text-sm text-gray-900">Based on {reviewss.totalCount} reviews</p>
           </div>
 
           <div className="mt-6">
             <h3 className="sr-only">Review data</h3>
 
             <dl className="space-y-3">
-              {reviews.counts.map((count) => (
+              {reviewss.counts.map((count) => (
                 <div key={count.rating} className="flex items-center text-sm">
                   <dt className="flex flex-1 items-center">
                     <p className="w-3 font-medium text-gray-900">
@@ -164,14 +166,14 @@ export default function ProductReviews(ratingList) {
                         {count.count > 0 ? (
                           <div
                             className="absolute inset-y-0 rounded-full border border-yellow-400 bg-yellow-400"
-                            style={{ width: `calc(${count.count} / ${reviews.totalCount} * 100%)` }}
+                            style={{ width: `calc(${count.count} / ${reviewss.totalCount} * 100%)` }}
                           />
                         ) : null}
                       </div>
                     </div>
                   </dt>
                   <dd className="ml-3 w-10 text-right text-sm tabular-nums text-gray-900">
-                    {Math.round((count.count / reviews.totalCount) * 100)}%
+                    {Math.round((count.count / reviewss.totalCount) * 100)}%
                   </dd>
                 </div>
               ))}
@@ -194,7 +196,6 @@ export default function ProductReviews(ratingList) {
                     <>
                       <Disclosure.Button className="group relative flex w-full items-center justify-between py-3 text-left">
                         <span
-                          // className={classNames(open ? 'text-yellow-500' : 'text-gray-900', 'text-sm font-medium')}
                           className="inline-flex w-full items-center justify-center rounded-md border border-gray-300 bg-white px-8 py-2 text-sm font-medium text-gray-900 hover:bg-gray-50 sm:w-auto lg:w-full"
                         >
                           Write a review
@@ -208,9 +209,12 @@ export default function ProductReviews(ratingList) {
                             <div className=" border-gray-900/10 pb-12">
                               <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-6">
                                 <div className='col-span-full'>
+                                  <label className='block text-sm font-medium leading-6 text-gray-900'>
+                                    Rating
+                                  </label>
                                   <div className="flex items-center">
                                     {[1, 2, 3, 4, 5].map((value) => (
-                                      <a href="#"
+                                      <a
                                         key={value}
                                         onClick={() => handleStarClick(value)}>
                                         <StarIcon
@@ -234,7 +238,7 @@ export default function ProductReviews(ratingList) {
                                       id="about"
                                       name="about"
                                       rows={3}
-                                      className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                      className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-yellow-500 sm:text-sm sm:leading-6"
                                       defaultValue={''}
                                     />
                                   </div>
@@ -246,80 +250,68 @@ export default function ProductReviews(ratingList) {
                                     Photo
                                   </label>
                                   <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
-                                    <div className="text-center">
 
-                                      <div className="mt-4 flex text-sm leading-6 text-gray-600">
-                                        <label
-                                          htmlFor="file-upload"
-                                          className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
-                                        >
-                                          <span>Upload a file</span>
-                                          <input id="file-upload" name="file-upload" type="file" className="sr-only" onChange={handleImageInputChange} />
-                                        </label>
-                                        <p className="pl-1">or drag and drop</p>
-                                      </div>
-                                      <p className="text-xs leading-5 text-gray-600">PNG, JPG, GIF up to 10MB</p>
-                                    </div>
+                                    {
+                                      imagePreview ? <>
+                                        <div className='w-full h-full relative'>
+                                          <img src={imagePreview} alt="" className=' w-full h-full rounded-lg' />
+                                          <button className='absolute top-0 right-0' onClick={() => setImagePreview(null)}> Remove</button>
+                                        </div>
+                                      </> :
+                                        <>
+                                          <div className="text-center">
+                                            <div className="mt-4 flex text-sm leading-6 text-gray-600">
+                                              <label
+                                                htmlFor="file-upload"
+                                                className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
+                                              >
+                                                <span>Upload a file</span>
+                                                <input id="file-upload" name="file-upload" type="file" className="sr-only" onChange={handleImageInputChange} />
+                                              </label>
+                                              <p className="pl-1">or drag and drop</p>
+                                            </div>
+                                            <p className="text-xs leading-5 text-gray-600">PNG, JPG, GIF up to 10MB</p>
+                                          </div>
+                                        </>
+                                    }
                                   </div>
                                 </div>
 
-                                <div className="col-span-full">
-                                  <label htmlFor="cover-photo" className="block text-sm font-medium leading-6 text-gray-900">
-                                    review Image
-                                  </label>
-                                  <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
-                                    <div className="text-center">
 
-                                      <div className="mt-4 flex text-sm leading-6 text-gray-600">
-                                        <label
-                                          htmlFor="file-upload"
-                                          className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
-                                        >
-                                          <span>Upload a file</span>
-                                          <img src={imagePreview} alt="" />
-                                        </label>
-                                        <p className="pl-1">or drag and drop</p>
-                                      </div>
-                                      <p className="text-xs leading-5 text-gray-600">PNG, JPG, GIF up to 10MB</p>
-                                    </div>
-                                  </div>
-                                </div>
 
                                 <div className="col-span-full">
                                   <label htmlFor="cover-photo" className="block text-sm font-medium leading-6 text-gray-900">
                                     Pick Video
                                   </label>
                                   <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
-                                    <div className="text-center">
 
-                                      <div className="mt-4 flex text-sm leading-6 text-gray-600">
-                                        <label
-                                          htmlFor="video-upload"
-                                          className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
-                                        >
-                                          <span>Upload a file</span>
-                                          <input id="video-upload" name="video-upload" type="file" className="sr-only" onChange={handleVideoInputChange} />
-                                        </label>
-                                        <p className="pl-1">or drag and drop</p>
-                                      </div>
-                                      <p className="text-xs leading-5 text-gray-600">PNG, JPG, GIF up to 10MB</p>
-                                    </div>
+                                    {
+                                      videoPreview ? <>
+                                        <div className='w-full h-full relative'>
+                                          <video src={videoPreview} controls />
+                                          <button className='absolute top-0 right-0' onClick={() => setVideoPreview(null)}> Remove</button>
+                                        </div>
+                                      </> :
+                                        <>
+                                          <div className="text-center">
+                                            <div className="mt-4 flex text-sm leading-6 text-gray-600">
+                                              <label
+                                                htmlFor="video-upload"
+                                                className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
+                                              >
+                                                <span>Upload a file</span>
+                                                <input id="video-upload" name="video-upload" type="file" className="sr-only" onChange={handleVideoInputChange} />
+                                              </label>
+                                              <p className="pl-1">or drag and drop</p>
+                                            </div>
+                                            <p className="text-xs leading-5 text-gray-600">PNG, JPG, GIF up to 10MB</p>
+                                          </div>
+                                        </>
+                                    }
                                   </div>
                                 </div>
-                                <div className="col-span-full">
-                                  <label htmlFor="cover-photo" className="block text-sm font-medium leading-6 text-gray-900">
-                                    review video
-                                  </label>
-                                  <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
-                                    <div className="text-center">
 
-                                      <div className="mt-4 flex text-sm leading-6 text-gray-600">
-                                        {/* preview video */}
-                                        <video src={videoPreview} controls />
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
+
 
 
                               </div>
@@ -327,7 +319,9 @@ export default function ProductReviews(ratingList) {
                           </div>
 
                           <div className="mt-6 flex items-center justify-end gap-x-6">
-                            <button type="button" className="text-sm font-semibold leading-6 text-gray-900">
+                            <button type="button" className="text-sm font-semibold leading-6 text-gray-900"
+                              onClick={() => open(false)}
+                            >
                               Cancel
                             </button>
                             <button
@@ -353,7 +347,7 @@ export default function ProductReviews(ratingList) {
 
           <div className="flow-root">
             <div className="-my-12 divide-y divide-gray-200">
-              {data.map((review) => (
+              {reviews.map((review) => (
                 <div key={review.id} className="py-12">
                   <div className="flex items-center">
                     <img src={review.image} alt={``} onError={(e) => (e.target.src = nbDefaultImage)} className="h-12 w-12 rounded-full" />

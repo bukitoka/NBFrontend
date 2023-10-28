@@ -663,7 +663,7 @@ export default function ProductDetail() {
       </main>
 
       {/* Product reviews */}
-      <ProductReviews data={latestRating} />
+      <ProductReviews data={{ reviews: latestRating, productId: newProduct.id }} />
       {/* Footer */}
       <Footer />
     </div>
