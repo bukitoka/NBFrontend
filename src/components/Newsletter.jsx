@@ -1,13 +1,16 @@
-import { useState, useEffect } from "react"
 import { useForm } from "react-hook-form"
+import { useNavigate } from "react-router-dom"
 import { CalendarDaysIcon, HandRaisedIcon } from "@heroicons/react/24/outline"
+import toast from "react-hot-toast"
 
 import verifyRecaptcha from "@/tools/recaptcha"
 import { apiPost } from "@/api/ApiService"
+import Success from "./messages/Success"
+import Error from "./messages/Error"
 
 const Newsletter = () => {
-  const siteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY
   const { register, handleSubmit } = useForm()
+  const navigate = useNavigate()
 
   // Handle form submission
   const onSubmit = async (data) => {
@@ -38,30 +41,23 @@ const Newsletter = () => {
   }
 
   const onNewsletterSuccess = (data) => {
-    console.log("Newsletter updated successfully!")
+    const status = "Success!"
+    const message = "You have successfully subscribed to our newsletter."
+
+    toast.custom((t) => <Success t={t} status={status} message={message} />)
   }
 
   const onNewsletterError = (err) => {
-    console.log("Newsletter update failed!")
-  }
-
-  const appendRecaptcha = () => {
-    const script = document.createElement("script")
-    script.src = "https://www.google.com/recaptcha/api.js?render=" + siteKey
-    script.async = true
-    script.defer = true
-
-    // check if script is already loaded
-    if (document.body.contains(script)) {
-      return
+    if (err.response.status === 401) {
+      navigate("/signin")
     } else {
-      document.body.appendChild(script)
+      const status = "Whoops!"
+      const message =
+        "Something went wrong. Please try again or contact us if the problem persists."
+
+      toast.custom((t) => <Error t={t} status={status} message={message} />)
     }
   }
-
-  useEffect(() => {
-    appendRecaptcha()
-  }, [])
 
   return (
     <section
