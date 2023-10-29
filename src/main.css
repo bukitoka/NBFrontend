@@ -15,3 +15,8 @@
     /* Firefox */
   }
 }
+
+/* Hide reCaptcha Badge */
+.grecaptcha-badge {
+  visibility: hidden;
+}

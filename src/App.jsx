@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom"
+import { useEffect } from "react"
 
 // layouts
 import MainWrapper from "./layouts/MainWrapper"
@@ -23,6 +24,25 @@ import NewArrival from "./pages/NewArrival"
 import Category from "./pages/Category"
 
 const App = () => {
+  const siteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY
+  const appendRecaptcha = () => {
+    const script = document.createElement("script")
+    script.src = "https://www.google.com/recaptcha/api.js?render=" + siteKey
+    script.async = true
+    script.defer = true
+
+    // check if script is already loaded
+    if (document.body.contains(script)) {
+      return
+    } else {
+      document.body.appendChild(script)
+    }
+  }
+
+  useEffect(() => {
+    appendRecaptcha()
+  }, [])
+
   return (
     <BrowserRouter>
       <MainWrapper>

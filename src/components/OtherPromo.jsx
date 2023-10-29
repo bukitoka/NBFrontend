@@ -27,7 +27,7 @@ const OtherPromo = () => {
             <a
               href="#"
               className="mt-8 flex justify-center items-center w-full lg:w-auto rounded-full border 
-                            border-transparent backdrop-blur-[10px] bg-black/50 px-8 py-2 font-medium text-gray-100 
+                            border-gray-800 backdrop-blur-[10px] bg-black/50 px-8 py-2 font-medium text-gray-100 
                             hover:text-yellow-600 group"
             >
               Coming Soon

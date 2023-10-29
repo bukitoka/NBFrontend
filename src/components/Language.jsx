@@ -35,12 +35,12 @@ export default function LanguageOption() {
   return (
     <div className="hidden lg:flex lg:ml-6 text-gray-200 hover:text-yellow-500">
       <Menu as="div" className="relative inline-block text-left">
-        {({ open }) => (
-          <div>
-            <Menu.Button
-              onMouseEnter={({ target }) => (open ? "" : target.click())}
-              className="flex items-center w-full justify-center rounded-md px-4 py-2 text-sm font-medium text-gray-200 hover:text-yellow-500"
-            >
+        {({ open, close }) => (
+          <div
+            onMouseEnter={({ target }) => (open ? "" : target.click())}
+            onMouseLeave={() => (open ? close() : "")}
+          >
+            <Menu.Button className="flex items-center w-full justify-center rounded-md px-4 py-2 text-sm font-medium text-gray-200 hover:text-yellow-500 outline-none focus:outline-none">
               <ReactCountryFlag
                 countryCode={flag}
                 svg
