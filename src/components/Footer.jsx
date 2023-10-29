@@ -2,6 +2,7 @@ import { useEffect } from "react"
 import dayjs from "dayjs"
 import {
   nbwhite,
+  recaptchaLogo,
   bank1,
   bank2,
   bank3,
@@ -60,10 +61,17 @@ const navigation = {
     { name: "Investors", href: "/investor" },
   ],
   legal: [
-    { name: "Return Policy", href: "/claim" },
-    { name: "Privacy Policy", href: "/privacy" },
+    { name: "Privacy & Policy", href: "/privacy" },
     { name: "Terms & Conditions", href: "/terms" },
-    { name: "Credits", href: "/credits" },
+    {
+      name: "reCAPTCHA Privacy",
+      href: "https://policies.google.com/privacy",
+    },
+    {
+      name: "reCAPTCHA Terms",
+      href: "https://policies.google.com/terms",
+    },
+    { name: "Copyright Credits", href: "/credits" },
   ],
   customerCare: [
     {
@@ -147,12 +155,25 @@ const Footer = () => {
                 <a
                   key={item.name}
                   href={item.href}
-                  className="text-gray-500 hover:text-gray-400"
+                  className="text-gray-300 hover:text-yellow-500"
                 >
                   <span className="sr-only">{item.name}</span>
                   <item.icon className="h-5 w-5" aria-hidden="true" />
                 </a>
               ))}
+            </div>
+            <div className="flex flex-1">
+              <div className="p-3 bg-zinc-800 border border-zinc-700 rounded-md">
+                <div className="text-gray-300 text-sm flex items-center justify-center">
+                  <span className="sr-only">reCAPTCHA</span>
+                  <img
+                    className="h-5 w-5"
+                    src={recaptchaLogo}
+                    alt="reCAPTCHA"
+                  />
+                  <span className="ml-2">Protected by reCAPTCHA</span>
+                </div>
+              </div>
             </div>
           </div>
           <div className="mt-16 grid grid-cols-2 gap-8 xl:col-span-2 xl:mt-0">
@@ -166,7 +187,7 @@ const Footer = () => {
                     <li key={item.name}>
                       <a
                         href={item.href}
-                        className="text-sm leading-6 text-gray-300 hover:text-white"
+                        className="text-sm leading-6 text-gray-300 hover:text-yellow-500"
                       >
                         {item.name}
                       </a>
@@ -183,7 +204,7 @@ const Footer = () => {
                     <li key={item.name}>
                       <a
                         href={item.href}
-                        className="text-sm leading-6 text-gray-300 hover:text-white"
+                        className="text-sm leading-6 text-gray-300 hover:text-yellow-500"
                       >
                         {item.name}
                       </a>
@@ -202,7 +223,7 @@ const Footer = () => {
                     <li key={item.name}>
                       <a
                         href={item.href}
-                        className="text-sm leading-6 text-gray-300 hover:text-white"
+                        className="text-sm leading-6 text-gray-300 hover:text-yellow-500"
                       >
                         {item.name}
                       </a>
@@ -218,7 +239,7 @@ const Footer = () => {
                   {navigation.customerCare.map((item) => (
                     <li
                       key={item.name}
-                      className="flex flex-1 items-center text-gray-300 hover:text-white"
+                      className="flex flex-1 items-center text-gray-300 hover:text-yellow-500"
                     >
                       <item.icon className="h-5 w-5" aria-hidden="true" />
                       <a href={item.href} className="text-sm leading-6 ml-3">
