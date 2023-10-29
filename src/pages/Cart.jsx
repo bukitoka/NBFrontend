@@ -5,6 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import { fetchCartItems } from '../api/CartApi'
 import { apiPatch, apiPost, apiDelete } from '../api/ApiService';
 import { useTranslation } from 'react-i18next';
+import { nbDefaultImage } from '@/assets';
+import { priceFormatter } from "@/tools/reformat";
 
 // simple icons
 import {
@@ -496,8 +498,9 @@ export default function Cart() {
                           />
                           <img
                             src={`${baseurl}${cart.product_data.image}`}
-                            alt={altImage}
+                            alt=""
                             className="h-24 w-24 rounded-md object-cover object-center sm:h-48 sm:w-48"
+                            onError={(e) => (e.target.src = nbDefaultImage)}
                           />
                         </div>
                       </div>
@@ -515,7 +518,7 @@ export default function Cart() {
                             <div className="mt-1 flex text-sm">
                               <p className="text-gray-500">Size: {cart.product_data.size} gr  </p>
                             </div>
-                            <p className="mt-1 text-sm font-medium text-gray-900">Rp. {cart.product_data.price}</p>
+                            <p className="mt-1 text-sm font-medium text-gray-900">Rp. {priceFormatter(cart.product_data.price)}</p>
                           </div>
 
                           <div className="mt-4 flex w-full ">
@@ -552,7 +555,7 @@ export default function Cart() {
                 <dl className="mt-6 space-y-4">
                   <div className="flex items-center justify-between">
                     <dt className="text-sm text-gray-600">Subtotal</dt>
-                    <dd className="text-sm font-medium text-gray-900">RP. {subTotal}</dd>
+                    <dd className="text-sm font-medium text-gray-900">RP. {priceFormatter(subTotal)}</dd>
                   </div>
                   {/* <div className="flex items-center justify-between border-t border-gray-200 pt-4">
                     <dt className="flex items-center text-sm text-gray-600">
@@ -576,7 +579,7 @@ export default function Cart() {
                   </div> */}
                   <div className="flex items-center justify-between border-t border-gray-200 pt-4 ">
                     <dt className="text-base font-medium text-gray-900">Order total</dt>
-                    <dd className="text-base font-medium text-gray-900">RP. {totalPayment}</dd>
+                    <dd className="text-base font-medium text-gray-900">RP. {priceFormatter(totalPayment)}</dd>
                   </div>
                 </dl>
 
