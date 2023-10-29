@@ -5,6 +5,7 @@ import google from "./google.svg"
 import nbDefaultImage from "./noimage.svg"
 import staticBanner from "./banner.jpg"
 import nodata from "./nodata.svg"
+import recaptchaLogo from "./google_recaptcha.svg"
 
 // BANK LOGOS
 import bank1 from "./BANK/gopay.svg"
@@ -42,6 +43,7 @@ export {
   nbDefaultImage,
   staticBanner,
   nodata,
+  recaptchaLogo,
   bank1,
   bank2,
   bank3,
