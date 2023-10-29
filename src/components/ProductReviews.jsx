@@ -6,7 +6,7 @@ import { Disclosure, RadioGroup, Tab } from '@headlessui/react'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
 import StarRating from './StarRating'
 import { apiPostMultipart } from '@/api/ApiService'
-
+import { TrashIcon } from '@heroicons/react/20/solid'
 
 
 const reviewss = {
@@ -69,13 +69,15 @@ function classNames(...classes) {
 }
 
 export default function ProductReviews(props) {
-  const { reviews } = props.data
+  const { reviews, productId, totalRatingCount } = props.data
+  console.log("total rating", totalRatingCount)
   const [totalRating, setTotalRating] = useState([])
   const [rating, setStarRating] = useState(0);
   const [image, setImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [video, setVideo] = useState(null);
   const [videoPreview, setVideoPreview] = useState(null);
+  const [comment, setComment] = useState('');
 
   const [isPanelOpen, setIsPanelOpen] = useState(false);
 
@@ -99,9 +101,9 @@ export default function ProductReviews(props) {
 
   const createReview = async () => {
     await apiPostMultipart('rating/', {
-      product: "dca61170-e923-4826-bbba-c5adafa069b0",
+      product: productId,
       rating: rating,
-      review: 'review',
+      review: comment,
       image: image,
       video: video
     }, (respone) => onSuccessCreateReview(respone), (error) => onErrorCreateReview(error))
@@ -125,11 +127,11 @@ export default function ProductReviews(props) {
           <div className="mt-3 flex items-center">
             <div>
               <div className="flex items-center">
-                {[0, 1, 2, 3, 4].map((rating) => (
+                {[1, 2, 3, 4, 5].map((rating) => (
                   <StarIcon
                     key={rating}
                     className={classNames(
-                      reviewss.average > rating ? 'text-yellow-400' : 'text-gray-300',
+                      totalRatingCount >= rating ? 'text-yellow-400' : 'text-gray-300',
                       'h-5 w-5 flex-shrink-0'
                     )}
                     aria-hidden="true"
@@ -138,10 +140,10 @@ export default function ProductReviews(props) {
               </div>
               <p className="sr-only">{reviewss.average} out of 5 stars</p>
             </div>
-            <p className="ml-2 text-sm text-gray-900">Based on {reviewss.totalCount} reviews</p>
+            <p className="ml-2 text-sm text-gray-900">Based on {reviews.length ?? 0} reviews</p>
           </div>
 
-          <div className="mt-6">
+          {/* <div className="mt-6">
             <h3 className="sr-only">Review data</h3>
 
             <dl className="space-y-3">
@@ -178,7 +180,7 @@ export default function ProductReviews(props) {
                 </div>
               ))}
             </dl>
-          </div>
+          </div> */}
 
           <div className="mt-10">
             <h3 className="text-lg font-medium text-gray-900">Share your thoughts</h3>
@@ -205,8 +207,8 @@ export default function ProductReviews(props) {
 
                       <Disclosure.Panel as="div" className="prose prose-sm pb-6">
                         <form>
-                          <div className="space-y-12">
-                            <div className=" border-gray-900/10 pb-12">
+                          <div className="space-y-5">
+                            <div className=" border-gray-900/10 pb-1">
                               <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-6">
                                 <div className='col-span-full'>
                                   <label className='block text-sm font-medium leading-6 text-gray-900'>
@@ -237,7 +239,10 @@ export default function ProductReviews(props) {
                                     <textarea
                                       id="about"
                                       name="about"
+                                      value={comment}
+                                      required
                                       rows={3}
+                                      onChange={(e) => setComment(e.target.value)}
                                       className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-yellow-500 sm:text-sm sm:leading-6"
                                       defaultValue={''}
                                     />
@@ -249,13 +254,15 @@ export default function ProductReviews(props) {
                                   <label htmlFor="cover-photo" className="block text-sm font-medium leading-6 text-gray-900">
                                     Photo
                                   </label>
-                                  <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
+                                  <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-6">
 
                                     {
                                       imagePreview ? <>
-                                        <div className='w-full h-full relative'>
+                                        <div className='w-full h-full flex flex-col'>
+                                          <div className='w-ful mb-1'>
+                                            <button className='float-right' onClick={() => setImagePreview(null)}> <TrashIcon className="h-7 w-7 text-zinc-800 hover:text-yellow-500" aria-hidden="true" /> </button>
+                                          </div>
                                           <img src={imagePreview} alt="" className=' w-full h-full rounded-lg' />
-                                          <button className='absolute top-0 right-0' onClick={() => setImagePreview(null)}> Remove</button>
                                         </div>
                                       </> :
                                         <>
@@ -270,7 +277,7 @@ export default function ProductReviews(props) {
                                               </label>
                                               <p className="pl-1">or drag and drop</p>
                                             </div>
-                                            <p className="text-xs leading-5 text-gray-600">PNG, JPG, GIF up to 10MB</p>
+                                            <p className="text-xs leading-5 text-gray-600">PNG, JPG, GIF up to 5MB</p>
                                           </div>
                                         </>
                                     }
@@ -283,13 +290,15 @@ export default function ProductReviews(props) {
                                   <label htmlFor="cover-photo" className="block text-sm font-medium leading-6 text-gray-900">
                                     Pick Video
                                   </label>
-                                  <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
+                                  <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-6">
 
                                     {
                                       videoPreview ? <>
-                                        <div className='w-full h-full relative'>
-                                          <video src={videoPreview} controls />
-                                          <button className='absolute top-0 right-0' onClick={() => setVideoPreview(null)}> Remove</button>
+                                        <div className='w-full h-full flex flex-col'>
+                                          <div className='w-ful mb-1'>
+                                            <button className='float-right' onClick={() => setVideoPreview(null)}> <TrashIcon className="h-7 w-7 text-zinc-800 hover:text-yellow-500" aria-hidden="true" /> </button>
+                                          </div>
+                                          <video src={videoPreview} controls className=' rounded-lg' />
                                         </div>
                                       </> :
                                         <>
@@ -304,16 +313,12 @@ export default function ProductReviews(props) {
                                               </label>
                                               <p className="pl-1">or drag and drop</p>
                                             </div>
-                                            <p className="text-xs leading-5 text-gray-600">PNG, JPG, GIF up to 10MB</p>
+                                            <p className="text-xs leading-5 text-gray-600">Mp4 up to 10MB</p>
                                           </div>
                                         </>
                                     }
                                   </div>
                                 </div>
-
-
-
-
                               </div>
                             </div>
                           </div>
@@ -327,9 +332,9 @@ export default function ProductReviews(props) {
                             <button
                               type="button"
                               onClick={createReview}
-                              className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                              className="rounded-md bg-zinc-800 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-yellow-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-500"
                             >
-                              Save
+                              Submit
                             </button>
                           </div>
                         </form>

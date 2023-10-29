@@ -32,6 +32,7 @@ import MobileMenu from "../components/MobileMenu"
 import Footer from '../components/Footer'
 import { fetchProduct } from '../api/ProductApi'
 import { background } from '../assets';
+import { set } from 'react-hook-form';
 
 const product = {
   name: 'Zip Tote Basket',
@@ -325,6 +326,7 @@ export default function ProductDetail() {
   const [error, setError] = useState(null);
   const [productImages, setProductImages] = useState([]);
   const [totalRating, setTotalRating] = useState([]);
+  const [totalRatingCount, setTotalRatingCount] = useState(0);
   const { t, i18n } = useTranslation();
   const [selectedStock, setSelectedStock] = useState(null);
 
@@ -367,6 +369,7 @@ export default function ProductDetail() {
       setRating(productsData.total_rating);
       doesShowColor(productsData.stock);
       setLatestRating(productsData.latest_rating);
+      setTotalRatingCount(productsData.total_rating);
       setLoading(false);
     } catch (error) {
       console.log("error running", error)
@@ -663,7 +666,7 @@ export default function ProductDetail() {
       </main>
 
       {/* Product reviews */}
-      <ProductReviews data={{ reviews: latestRating, productId: newProduct.id }} />
+      <ProductReviews data={{ reviews: latestRating, productId: newProduct.id, totalRatingCount: totalRatingCount }} />
       {/* Footer */}
       <Footer />
     </div>
