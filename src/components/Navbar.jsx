@@ -17,6 +17,7 @@ import { nbwhite } from "../assets"
 import TopBanner from "../components/TopBanner"
 import Search from "@/components/Search"
 import LanguageOption from "./Language"
+import Feedback from "./Feedback"
 
 // store
 import useCategoryStore from "../store/categoryStore"
@@ -125,14 +126,16 @@ const Navbar = ({ setOpen, classNames }) => {
                 <div className="flex flex-1 items-center justify-end">
                   <div className="flex items-center lg:ml-8">
                     {/* Help */}
-                    <a
+                    {/* <a
                       href="#"
                       className="hidden p-2 lg:flex text-gray-200 hover:text-yellow-500"
                     >
                       <span className="sr-only">Feedback</span>
                       <HeartIcon className="h-5 w-5" aria-hidden="true" />
                       <span className="text-sm font-medium ml-2">Feedback</span>
-                    </a>
+                    </a> */}
+
+                    <Feedback />
 
                     {/* Language */}
                     <LanguageOption />

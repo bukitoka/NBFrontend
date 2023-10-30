@@ -9,13 +9,6 @@ import NewAddressModal from './confirmOrder/component/addNewAddress'
 import ConfirmOrder from '../components/ConfirmOrder'
 import { nbDefaultImage } from '@/assets'
 import { priceFormatter } from "@/tools/reformat";
-import {
-  Bars3Icon,
-  MagnifyingGlassIcon,
-  QuestionMarkCircleIcon,
-  ShoppingBagIcon,
-  XMarkIcon,
-} from '@heroicons/react/24/outline'
 import { CheckCircleIcon, ChevronDownIcon, TrashIcon } from '@heroicons/react/20/solid'
 // simple icons
 import {
@@ -29,6 +22,7 @@ import {
 import Navbar from "../components/Navbar"
 import MobileMenu from "../components/MobileMenu"
 import Footer from '../components/Footer'
+import { set } from 'react-hook-form'
 
 const navigation = {
   categories: [
@@ -295,6 +289,9 @@ export default function Example() {
   const [allData, setAllData] = useState(null)
   const [totalPayment, setTotalPayment] = useState(0)
   const baseurl = import.meta.env.VITE_API_BASE_URL;
+  const [coupon, setCoupon] = useState("")
+  const [coupon2, setCoupon2] = useState("")
+  const [discount, setDiscount] = useState(null)
 
 
   useEffect(() => {
@@ -333,7 +330,6 @@ export default function Example() {
   }
 
   function onShippingSuccess(data) {
-    console.log("shipping data", data);
     // return when is default is true
     const shippingList = data.results.filter((shipping) => shipping.is_default === true);
     setShippingList(shippingList);
@@ -387,6 +383,8 @@ export default function Example() {
 
     await apiPost(`order/`, {
       shipping_type: shipping_type,
+      coupon: coupon ?? "",
+      coupon2: coupon2 ?? "",
     }, (res) => onSuccessCreateOrder(res), (res) => onErrorCreateOrder(res))
 
   }
@@ -444,9 +442,35 @@ export default function Example() {
   }
 
   const calculateTotalPrice = (price) => {
-    const totalPrice = (allData?.total_price ?? 0) + price;
-    console.log("totakk", totalPrice);
+    let totalPrice = (allData?.total_price ?? 0) + price;
+    if (discount) {
+      totalPrice = totalPrice - discount.total_discount;
+    }
     setTotalPayment(totalPrice)
+  }
+
+  const handleCouponChange = async (code, type) => {
+    console.log("on change running")
+    if (code.length == 16) {
+      await apiGet(`coupon-checking/?coupon=${type == "coupon1" ? code : coupon}&coupon2=${type == "coupon2" ? code : coupon2}`, (data) => onSuccessCoupon(data), (error) => onErrorCoupon(error))
+    }
+  }
+
+  function onSuccessCoupon(data) {
+    setDiscount(data)
+    let totalPrice = (allData?.total_price ?? 0) + selectedDeliveryMethod?.total_tariff ?? 0;
+    if (data) {
+      totalPrice = totalPrice - data.total_discount;
+    }
+    setTotalPayment(totalPrice)
+  }
+
+  function onErrorCoupon(error) {
+    setDiscount(null)
+    let totalPrice = (allData?.total_price ?? 0) + selectedDeliveryMethod?.total_tariff ?? 0;
+    setTotalPayment(totalPrice)
+    setCoupon("")
+    setCoupon2("")
   }
 
   return (
@@ -602,14 +626,42 @@ export default function Example() {
                         </li>
                       ))}
                     </ul>
-                    <dl className="space-y-6 border-t border-gray-200 px-4 py-6 sm:px-6">
+                    <dl className="space-y-3 border-t border-gray-200 px-4 py-6 sm:px-6">
                       <div className="flex items-center justify-between">
-                        <dt className="text-sm">Coupon 1</dt>
-                        <dd className="text-sm font-medium text-gray-900">Test </dd>
+                        <dt className="text-sm">Coupon </dt>
+                        <input
+                          id="coupon1"
+                          name="coupon1"
+                          type="text"
+                          required
+                          className="lg:col-span-2 text-sm p-1 border-2 border-zinc-100 rounded-md  bg-white pl-2  transition-all duration-300 focus:ring focus:border-yellow-500 focus:ring-yellow-500/20"
+                          placeholder="coupon"
+                          value={coupon}
+                          onChange={(e) => {
+                            setCoupon(e.target.value)
+                            handleCouponChange(e.target.value, 'coupon1')
+                          }}
+                        />
+
                       </div>
                       <div className="flex items-center justify-between">
                         <dt className="text-sm">Coupon 2</dt>
-                        <dd className="text-sm font-medium text-gray-900">Test 2</dd>
+                        <input
+                          id="coupon2"
+                          name="coupon2"
+                          type="text"
+
+                          required
+                          className="lg:col-span-2 text-sm p-1 border-2 border-zinc-100 rounded-md  bg-white pl-2  transition-all duration-300 focus:ring focus:border-yellow-500 focus:ring-yellow-500/20"
+                          placeholder="Coupon 2"
+                          value={coupon2}
+                          onChange={(e) => {
+                            setCoupon2(e.target.value)
+                            handleCouponChange(e.target.value, 'coupon2')
+                          }
+                          }
+                        />
+
                       </div>
                     </dl>
 
@@ -618,6 +670,13 @@ export default function Example() {
                         <dt className="text-sm">Subtotal</dt>
                         <dd className="text-sm font-medium text-gray-900">Rp.{priceFormatter(allData?.total_price)}</dd>
                       </div>
+                      {
+                        discount && (
+                          <div className="flex items-center justify-between">
+                            <dt className="text-sm">Discount</dt>
+                            <dd className="text-sm font-medium text-gray-900">- Rp.{priceFormatter(discount?.total_discount)}</dd>
+                          </div>
+                        )}
                       <div className="flex items-center justify-between">
                         <dt className="text-sm">Shipping</dt>
                         <dd className="text-sm font-medium text-gray-900">Rp.{priceFormatter(selectedDeliveryMethod?.total_tariff ?? 0)}</dd>
