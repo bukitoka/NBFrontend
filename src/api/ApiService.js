@@ -17,7 +17,7 @@ export const apiGet = async (path, onSuccess, onError) => {
     return;
   } catch (error) {
     onError(error);
-    throw error;
+    return
   }
 }
 
@@ -60,7 +60,7 @@ export const apiPut = async (path, data, onSuccess, onError) => {
     return;
   } catch (error) {
     onError(error);
-    throw error;
+   return
   }
 }
 
@@ -83,7 +83,7 @@ export const apiDelete = async (path, data, onSuccess, onError) => {
     return;
   } catch (error) {
     onError(error);
-    throw error;
+    return
   }
 }
 
@@ -108,7 +108,7 @@ export const apiPatch = async (path, data, onSuccess, onError) => {
     return;
   } catch (error) {
     onError(error);
-    throw error;
+    return
   }
 }
 
@@ -132,7 +132,7 @@ export const apiPatchRoute = async (path, data, onSuccess, onError) => {
       return;
     } catch (error) {
       onError(error);
-      throw error;
+     return
     }
 }
 
@@ -155,7 +155,7 @@ export const apiGetRoute = async (path, onSuccess, onError) => {
     return;
   } catch (error) {
     onError(error);
-    throw error;
+   return
   }
 }
 
@@ -174,6 +174,25 @@ export const apiPatchMultipart = async (path, data, onSuccess, onError) => {
       return;
     } catch (error) {
       onError(error);
-      throw error;
+      return
     }
+}
+
+
+/**
+ * Api service for post multipart
+ */
+export const apiPostMultipart = async (path, data, onSuccess, onError) => {
+  try {
+    const response = await apiMultipart.post(`${API_MIDDLE_URL}${path}`, data);
+    if (response.status === 200 || response.status === 201) {
+      onSuccess(response.data);
+      return;
+    }
+    onError(response.data);
+    return;
+  } catch (error) {
+    onError(error);
+    return
+  }
 }

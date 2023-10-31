@@ -3,6 +3,7 @@ import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import { Link, useParams } from "react-router-dom";
 import { nbDefaultImage, staticBanner } from "@/assets";
 import { apiGet } from "@/api/ApiService";
+import { priceFormatter } from "@/tools/reformat";
 
 // simple icons
 import {
@@ -343,11 +344,6 @@ const ProductByCategories = () => {
           <div className="mx-auto max-w-2xl px-4 sm:px-6 lg:max-w-7xl lg:px-8">
             <div className="mt-8 grid grid-cols-1 gap-y-12 sm:grid-cols-2 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8 ">
               {
-                //                   loading ? (
-                //     [...Array(10).keys()].map((i) => (
-                //       <ProductSkeleton />
-                //     ))
-                //   ) :
 
                 (arrproducts.map((product) => (
                   <div key={product.id}>
@@ -366,13 +362,12 @@ const ProductByCategories = () => {
                             {product.name}
                           </p>
                           <p className="mt-1 text-sm text-gray-500">Discount: {product.discount}</p>
-                          <h4 className="text-sm">Rp.{product.min_price} - Rp.{product.max_price} </h4>
-                        </div>
-                        <div className="absolute inset-x-0 top-0 flex h-72 items-end justify-end overflow-hidden rounded-lg p-4">
-                          <div
-                            aria-hidden="true"
-                            className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-black opacity-50"
-                          />
+                          {
+                            product.min_price == product.max_price ? <h4 className=" text-sm">
+                              Rp.{priceFormatter(product.min_price)}
+                            </h4> :
+                              <h4 className="text-sm">Rp.{priceFormatter(product.min_price)} - Rp.{priceFormatter(product.max_price)} </h4>
+                          }
                         </div>
                       </div>
                     </Link>

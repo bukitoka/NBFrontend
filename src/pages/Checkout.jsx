@@ -7,13 +7,8 @@ import { apiGet, apiPost } from '../api/ApiService'
 import Modal from '../components/Modal'
 import NewAddressModal from './confirmOrder/component/addNewAddress'
 import ConfirmOrder from '../components/ConfirmOrder'
-import {
-  Bars3Icon,
-  MagnifyingGlassIcon,
-  QuestionMarkCircleIcon,
-  ShoppingBagIcon,
-  XMarkIcon,
-} from '@heroicons/react/24/outline'
+import { nbDefaultImage } from '@/assets'
+import { priceFormatter } from "@/tools/reformat";
 import { CheckCircleIcon, ChevronDownIcon, TrashIcon } from '@heroicons/react/20/solid'
 // simple icons
 import {
@@ -27,6 +22,7 @@ import {
 import Navbar from "../components/Navbar"
 import MobileMenu from "../components/MobileMenu"
 import Footer from '../components/Footer'
+import { set } from 'react-hook-form'
 
 const navigation = {
   categories: [
@@ -282,7 +278,7 @@ function classNames(...classes) {
 export default function Example() {
   const [open, setOpen] = useState(false)
   const [openModalNewAdress, setModalNewAddress] = useState(false)
-  const [selectedDeliveryMethod, setSelectedDeliveryMethod] = useState('')
+  const [selectedDeliveryMethod, setSelectedDeliveryMethod] = useState(null)
   const [selectedCartItems, setCartItems] = useState([])
   const location = useLocation()
   const listId = location.state?.listid || [];
@@ -290,7 +286,12 @@ export default function Example() {
   const [selectectShipping, setSelectedShping] = useState(null);
   const [openConfirmOrder, setOpenConfirmOrder] = useState(false);
   const [tariffList, setTariffList] = useState([])
+  const [allData, setAllData] = useState(null)
+  const [totalPayment, setTotalPayment] = useState(0)
   const baseurl = import.meta.env.VITE_API_BASE_URL;
+  const [coupon, setCoupon] = useState("")
+  const [coupon2, setCoupon2] = useState("")
+  const [discount, setDiscount] = useState(null)
 
 
   useEffect(() => {
@@ -317,10 +318,10 @@ export default function Example() {
   }
 
   function onSuccessGetData(data) {
+    console.log("all data", data);
+    setAllData(data);
     setCartItems(data.cart_items);
-    console.log('selected Data');
-    console.log(data);
-    // setCartItems(data);
+    setTotalPayment(data.total_price);
   }
 
 
@@ -377,14 +378,15 @@ export default function Example() {
     // console.log(shippingList[0].id);
     // setOpenConfirmOrder(true);
     // console.log(selectedDeliveryMethod);
-    const shipping_type = selectedDeliveryMethod;
+
+    const shipping_type = selectedDeliveryMethod?.shipping_type;
 
     await apiPost(`order/`, {
       shipping_type: shipping_type,
-
+      coupon: coupon ?? "",
+      coupon2: coupon2 ?? "",
     }, (res) => onSuccessCreateOrder(res), (res) => onErrorCreateOrder(res))
 
-    // requestToken('f384b386-eb44-4cac-a981-38c750c0451d')
   }
 
   const requestToken = async (order_id) => {
@@ -394,7 +396,6 @@ export default function Example() {
   }
 
   function onSuccessRequestToken(data) {
-    console.log(data.data.token);
     const token = data.data.token;
 
     window.snap.pay(token, {
@@ -431,9 +432,46 @@ export default function Example() {
     console.log('error', error);
   }
 
-
   // open and close mobile menu
   const [openMobile, setOpenMobile] = useState(false)
+
+
+  const handleDeleveryMethod = (method) => {
+    setSelectedDeliveryMethod(method)
+    calculateTotalPrice(method.total_tariff)
+  }
+
+  const calculateTotalPrice = (price) => {
+    let totalPrice = (allData?.total_price ?? 0) + price;
+    if (discount) {
+      totalPrice = totalPrice - discount.total_discount;
+    }
+    setTotalPayment(totalPrice)
+  }
+
+  const handleCouponChange = async (code, type) => {
+    console.log("on change running")
+    if (code.length == 16) {
+      await apiGet(`coupon-checking/?coupon=${type == "coupon1" ? code : coupon}&coupon2=${type == "coupon2" ? code : coupon2}`, (data) => onSuccessCoupon(data), (error) => onErrorCoupon(error))
+    }
+  }
+
+  function onSuccessCoupon(data) {
+    setDiscount(data)
+    let totalPrice = (allData?.total_price ?? 0) + selectedDeliveryMethod?.total_tariff ?? 0;
+    if (data) {
+      totalPrice = totalPrice - data.total_discount;
+    }
+    setTotalPayment(totalPrice)
+  }
+
+  function onErrorCoupon(error) {
+    setDiscount(null)
+    let totalPrice = (allData?.total_price ?? 0) + selectedDeliveryMethod?.total_tariff ?? 0;
+    setTotalPayment(totalPrice)
+    setCoupon("")
+    setCoupon2("")
+  }
 
   return (
     <div>
@@ -500,13 +538,14 @@ export default function Example() {
                   </div>
 
                   <div className="mt-10 border-t border-gray-200 pt-10">
-                    <RadioGroup value={selectedDeliveryMethod} onChange={setSelectedDeliveryMethod}>
+                    <RadioGroup >
                       <RadioGroup.Label className="text-lg font-medium text-gray-900">Delivery method</RadioGroup.Label>
 
                       <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
                         {tariffList.map((tariff, index) => (
                           <RadioGroup.Option
                             key={index}
+                            onClick={() => handleDeleveryMethod(tariff)}
                             value={tariff.shipping_type}
                             className={({ checked, active }) =>
                               classNames(
@@ -521,7 +560,7 @@ export default function Example() {
                                 <span className="flex flex-1">
                                   <span className="flex flex-col">
                                     <RadioGroup.Label as="span" className="block text-sm font-medium text-gray-900">
-                                      {tariff.shipping_type}
+                                      {tariff.shipping_type_name}
                                     </RadioGroup.Label>
                                     <RadioGroup.Description
                                       as="span"
@@ -530,7 +569,7 @@ export default function Example() {
                                       {tariff.shipping_type}
                                     </RadioGroup.Description>
                                     <RadioGroup.Description as="span" className="mt-6 text-sm font-medium text-gray-900">
-                                      {tariff.total_traif}
+                                      Rp. {priceFormatter(tariff.total_tariff)}
                                     </RadioGroup.Description>
                                   </span>
                                 </span>
@@ -562,10 +601,9 @@ export default function Example() {
                     <h3 className="sr-only">Items in your cart</h3>
                     <ul role="list" className="divide-y divide-gray-200">
                       {selectedCartItems.map((cartItem) => (
-                        console.log(cartItem),
                         <li key={cartItem.id} className="flex px-4 py-6 sm:px-6">
                           <div className="flex-shrink-0">
-                            <img src={`${baseurl}${cartItem.product_data.image}`} alt={`${baseurl}${cartItem.product_data.image}`} className="w-20 rounded-md" />
+                            <img src={`${cartItem.product_data.image}`} alt="" className="w-20 rounded-md" onError={(e) => (e.target.src = nbDefaultImage)} />
                           </div>
 
                           <div className="ml-6 flex flex-1 flex-col">
@@ -582,28 +620,70 @@ export default function Example() {
                             </div>
 
                             <div className="flex flex-1 items-end justify-between pt-2">
-                              <p className="mt-1 text-sm font-medium text-gray-900">Rp.{cartItem.total_price}</p>
+                              <p className="mt-1 text-sm font-medium text-gray-900">Rp.{priceFormatter(cartItem.total_price)}</p>
                             </div>
                           </div>
                         </li>
                       ))}
                     </ul>
+                    <dl className="space-y-3 border-t border-gray-200 px-4 py-6 sm:px-6">
+                      <div className="flex items-center justify-between">
+                        <dt className="text-sm">Coupon </dt>
+                        <input
+                          id="coupon1"
+                          name="coupon1"
+                          type="text"
+                          required
+                          className="lg:col-span-2 text-sm p-1 border-2 border-zinc-100 rounded-md  bg-white pl-2  transition-all duration-300 focus:ring focus:border-yellow-500 focus:ring-yellow-500/20"
+                          placeholder="coupon"
+                          value={coupon}
+                          onChange={(e) => {
+                            setCoupon(e.target.value)
+                            handleCouponChange(e.target.value, 'coupon1')
+                          }}
+                        />
+
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <dt className="text-sm">Coupon 2</dt>
+                        <input
+                          id="coupon2"
+                          name="coupon2"
+                          type="text"
+
+                          required
+                          className="lg:col-span-2 text-sm p-1 border-2 border-zinc-100 rounded-md  bg-white pl-2  transition-all duration-300 focus:ring focus:border-yellow-500 focus:ring-yellow-500/20"
+                          placeholder="Coupon 2"
+                          value={coupon2}
+                          onChange={(e) => {
+                            setCoupon2(e.target.value)
+                            handleCouponChange(e.target.value, 'coupon2')
+                          }
+                          }
+                        />
+
+                      </div>
+                    </dl>
+
                     <dl className="space-y-6 border-t border-gray-200 px-4 py-6 sm:px-6">
                       <div className="flex items-center justify-between">
                         <dt className="text-sm">Subtotal</dt>
-                        <dd className="text-sm font-medium text-gray-900">$64.00</dd>
+                        <dd className="text-sm font-medium text-gray-900">Rp.{priceFormatter(allData?.total_price)}</dd>
                       </div>
+                      {
+                        discount && (
+                          <div className="flex items-center justify-between">
+                            <dt className="text-sm">Discount</dt>
+                            <dd className="text-sm font-medium text-gray-900">- Rp.{priceFormatter(discount?.total_discount)}</dd>
+                          </div>
+                        )}
                       <div className="flex items-center justify-between">
                         <dt className="text-sm">Shipping</dt>
-                        <dd className="text-sm font-medium text-gray-900">$5.00</dd>
+                        <dd className="text-sm font-medium text-gray-900">Rp.{priceFormatter(selectedDeliveryMethod?.total_tariff ?? 0)}</dd>
                       </div>
-                      {/* <div className="flex items-center justify-between">
-                        <dt className="text-sm">Taxes</dt>
-                        <dd className="text-sm font-medium text-gray-900">$5.52</dd>
-                      </div> */}
                       <div className="flex items-center justify-between border-t border-gray-200 pt-6">
                         <dt className="text-base font-medium">Total</dt>
-                        <dd className="text-base font-medium text-gray-900">$75.52</dd>
+                        <dd className="text-base font-medium text-gray-900">Rp. {priceFormatter(totalPayment)}</dd>
                       </div>
                     </dl>
 
@@ -611,11 +691,11 @@ export default function Example() {
                       <button
                         onClick={() => createOrder()}
                         type="button"
-                        disabled={selectedDeliveryMethod === '' ? true : false}
+                        disabled={selectedDeliveryMethod === null ? true : false}
                         // className={`w-full rounded-md border border-transparent bg-zinc-800 px-4 py-3 text-base font-medium text-white shadow-sm hover:bg-yellow-500 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 focus:ring-offset-gray-50`}
                         className={
                           classNames(
-                            selectedDeliveryMethod === '' ? 'bg-gray-300 cursor-not-allowed' : 'bg-zinc-800 hover:bg-yellow-500',
+                            selectedDeliveryMethod === null ? 'bg-gray-300 cursor-not-allowed' : 'bg-zinc-800 hover:bg-yellow-500',
                             'w-full rounded-md border border-transparent px-4 py-3 text-base font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 focus:ring-offset-gray-50'
                           )
                         }

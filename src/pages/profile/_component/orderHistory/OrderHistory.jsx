@@ -6,6 +6,8 @@ import { apiGet } from '@/api/ApiService'
 import { useEffect, useState } from 'react'
 import { FiShoppingBag } from 'react-icons/fi'
 import dayjs from 'dayjs';
+import { nbDefaultImage } from '@/assets'
+import { priceFormatter } from "@/tools/reformat"
 
 
 const baseurl = import.meta.env.VITE_API_BASE_URL;
@@ -24,7 +26,7 @@ export default function OrderHistory() {
   }
 
   function onGetOrdersSuccess(response) {
-    console.log(response)
+    console.log("order hostory", response)
     setOrders(response.results)
   }
 
@@ -59,7 +61,7 @@ export default function OrderHistory() {
                       </div>
                       <div className="hidden sm:block">
                         <dt className="font-medium text-gray-900">Shipping Amount</dt>
-                        <dd className="mt-1 text-gray-500" > Rp. {order.shipping_amount}</dd>
+                        <dd className="mt-1 text-gray-500" > Rp. {priceFormatter(order.shipping_amount)}</dd>
                       </div>
                       {/* <div>
                         <dt className="font-medium text-gray-900">Total amount</dt>
@@ -67,7 +69,7 @@ export default function OrderHistory() {
                       </div> */}
                       <div>
                         <dt className="font-medium text-gray-900">Total amount</dt>
-                        <dd className="mt-1 font-medium text-gray-900">Rp. {order.total_amount}</dd>
+                        <dd className="mt-1 font-medium text-gray-900">Rp. {priceFormatter(order.total_amount)}</dd>
                       </div>
                     </dl>
 
@@ -152,16 +154,18 @@ export default function OrderHistory() {
                               src={`${baseurl}/media/${product.stock_image}`}
                               alt={altImage}
                               className="h-full w-full object-cover object-center"
+                              onError={(e) => { e.target.onerror = null; e.target.src = nbDefaultImage }}
+
                             />
                           </div>
                           <div className="ml-6 flex-1 text-sm">
                             <div className="font-medium text-gray-900 sm:flex sm:justify-between">
                               <h5>{product.product_name}</h5>
-                              <p className="mt-2 sm:mt-0">Rp. {product.total_price}</p>
+                              <p className="mt-2 sm:mt-0">Rp. {priceFormatter(product.total_price)}</p>
                             </div>
                             <h5>{ }</h5>
                             <p className="hidden text-gray-500 sm:mt-2 sm:block">total items : {product.quantity} pcs </p>
-                            <p className="hidden text-gray-500 sm:mt-2 sm:block">price/item : Rp. {product.stock_price}</p>
+                            <p className="hidden text-gray-500 sm:mt-2 sm:block">price/item : Rp. {priceFormatter(product.stock_price)}</p>
                             <p className="hidden text-gray-500 sm:mt-2 sm:block">size : {product.stock_size}</p>
                           </div>
                         </div>
