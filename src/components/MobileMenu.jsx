@@ -1,14 +1,71 @@
-import { Fragment, useState } from 'react'
-import { Dialog, Tab, Transition } from '@headlessui/react'
+import { Fragment, useState } from "react"
+import { Dialog, Tab, Transition } from "@headlessui/react"
 import useAuthStore from "@/store/authStore"
 import {
   XMarkIcon,
-} from '@heroicons/react/24/outline'
+  ChevronRightIcon,
+  ArrowRightIcon,
+} from "@heroicons/react/24/solid"
+import useCategoryStore from "@/store/categoryStore"
+import SubMenuPanel from "@/components/mobileSidebar/subMenuPanel"
 
-const MobileMenu = ({ open, setOpen, classNames, navigation, socials }) => {
+const MobileMenu = ({ open, setOpen }) => {
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn)
+  const { categories, fetchCategories } = useCategoryStore()
+
+  // Define state to keep track of which subcategories and subsubcategories are open
+  const [openSubcategories, setOpenSubcategories] = useState({})
+  const [openSubsubcategories, setOpenSubsubcategories] = useState({})
+
+  // Function to toggle the visibility of subcategories
+  const toggleSubcategory = (subcategoryId) => {
+    setOpenSubcategories((prevState) => ({
+      ...prevState,
+      [subcategoryId]: !prevState[subcategoryId],
+    }))
+  }
+
+  // Function to toggle the visibility of subsubcategories
+  const toggleSubsubcategory = (subsubcategoryId) => {
+    setOpenSubsubcategories((prevState) => ({
+      ...prevState,
+      [subsubcategoryId]: !prevState[subsubcategoryId],
+    }))
+  }
+
+  function classNames(...classes) {
+    return classes.filter(Boolean).join(" ")
+  }
+
+  // Brands Group Alphabet
+  const alphabet = []
+  for (let i = 97; i <= 122; i++) {
+    // ASCII codes for 'a' to 'z'
+    const letter = String.fromCharCode(i).toUpperCase()
+    alphabet.push(letter)
+  }
+
+  const staticLinks = [
+    {
+      name: "New Arrivals",
+      href: "/new-arrival/",
+    },
+    {
+      name: "Beauty Stories",
+      href: "/beauty-stories/",
+    },
+    {
+      name: "Sale & Promo",
+      href: "/sale-and-promo/",
+    },
+    {
+      name: "Feedback",
+      href: "/feedback/",
+    },
+  ]
+
   return (
-    < Transition.Root show={open} as={Fragment}>
+    <Transition.Root show={open} as={Fragment}>
       <Dialog as="div" className="relative z-40 lg:hidden" onClose={setOpen}>
         <Transition.Child
           as={Fragment}
@@ -19,10 +76,10 @@ const MobileMenu = ({ open, setOpen, classNames, navigation, socials }) => {
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <div className="fixed inset-0 bg-black bg-opacity-25" />
+          <div className="fixed inset-0 backdrop-blur-[14px] bg-black/90" />
         </Transition.Child>
 
-        <div className="fixed inset-0 z-40 flex">
+        <div className="fixed inset-0 z-40 flex overflow-y-hidden">
           <Transition.Child
             as={Fragment}
             enter="transition ease-in-out duration-300 transform"
@@ -32,11 +89,11 @@ const MobileMenu = ({ open, setOpen, classNames, navigation, socials }) => {
             leaveFrom="translate-x-0"
             leaveTo="-translate-x-full"
           >
-            <Dialog.Panel className="relative flex w-full max-w-xs flex-col overflow-y-auto bg-white pb-12 shadow-xl">
-              <div className="flex px-4 pb-2 pt-5">
+            <Dialog.Panel className="relative flex w-full max-w-xs flex-col bg-white">
+              <div className="flex px-4 pb-2 pt-3">
                 <button
                   type="button"
-                  className="-m-2 inline-flex items-center justify-center rounded-md p-2 text-gray-400"
+                  className="-ml-2 inline-flex items-center justify-center rounded-lg p-2 text-zinc-600 hover:text-zinc-900 bg-zinc-100 hover:bg-zinc-200"
                   onClick={() => setOpen(false)}
                 >
                   <span className="sr-only">Close menu</span>
@@ -48,104 +105,178 @@ const MobileMenu = ({ open, setOpen, classNames, navigation, socials }) => {
               <Tab.Group as="div" className="mt-2">
                 <div className="border-b border-gray-200">
                   <Tab.List className="-mb-px flex space-x-8 px-4">
-                    {navigation.categories.map((category) => (
-                      <Tab
-                        key={category.name}
-                        className={({ selected }) =>
-                          classNames(
-                            selected ? 'border-yellow-600 text-yellow-600' : 'border-transparent text-gray-900',
-                            'flex-1 whitespace-nowrap border-b-2 px-1 py-4 text-base font-medium'
-                          )
-                        }
-                      >
-                        {category.name}
-                      </Tab>
-                    ))}
+                    <Tab
+                      key="Shop by Category"
+                      className={({ selected }) =>
+                        classNames(
+                          selected
+                            ? "border-yellow-600 text-yellow-600"
+                            : "border-transparent text-gray-900",
+                          "flex-1 whitespace-nowrap border-b-2 px-1 py-4 text-base font-medium"
+                        )
+                      }
+                    >
+                      Shop by Category
+                    </Tab>
+                    <Tab
+                      key="Shop by Brand"
+                      className={({ selected }) =>
+                        classNames(
+                          selected
+                            ? "border-yellow-600 text-yellow-600"
+                            : "border-transparent text-gray-900",
+                          "flex-1 whitespace-nowrap border-b-2 px-1 py-4 text-base font-medium"
+                        )
+                      }
+                    >
+                      Shop by Brand
+                    </Tab>
                   </Tab.List>
                 </div>
                 <Tab.Panels as={Fragment}>
-                  {navigation.categories.map((category) => (
-                    <Tab.Panel key={category.name} className="space-y-10 px-4 pb-8 pt-10">
-                      <div className="grid grid-cols-2 gap-x-4">
-                        {category.featured.map((item) => (
-                          <div key={item.name} className="group relative text-sm">
-                            <div className="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg bg-gray-100 group-hover:opacity-75">
-                              <img src={item.imageSrc} alt={item.imageAlt} className="object-cover object-center" />
-                            </div>
-                            <a href={item.href} className="mt-6 block font-medium text-gray-900">
-                              <span className="absolute inset-0 z-10" aria-hidden="true" />
-                              {item.name}
+                  <Tab.Panel key="Shop by Category" className="px-4 py-2">
+                    <div className="space-y-1 max-h-96 overflow-y-auto pb-20">
+                      {categories.map((category) => (
+                        <div key={category.id}>
+                          {/* Category */}
+                          <div className="flow-root">
+                            <a
+                              onClick={() => toggleSubcategory(category.id)}
+                              className="-ml-2 hover:ml-0 px-3 py-2 block font-medium rounded-lg hover:bg-zinc-100 text-gray-700 hover:text-gray-900 cursor-pointer"
+                            >
+                              {category.name}
+                              <ChevronRightIcon
+                                className="float-right h-5 w-5 text-gray-400"
+                                aria-hidden="true"
+                              />
                             </a>
-                            <p aria-hidden="true" className="mt-1">
-                              Shop now
-                            </p>
+
+                            {/* Render the SubmenuPanel when a category or subcategory is selected */}
+                            {openSubcategories[category.id] && (
+                              <SubMenuPanel
+                                open={openSubcategories[category.id]}
+                                onClose={() => toggleSubcategory(category.id)}
+                                title={category.name}
+                              >
+                                {category.subcategory.map((subcategory) => (
+                                  <div key={subcategory.id}>
+                                    {/* Subcategory */}
+                                    <div className="flow-root">
+                                      <a
+                                        onClick={() =>
+                                          toggleSubsubcategory(subcategory.id)
+                                        }
+                                        className="-ml-2 hover:ml-0 px-3 py-2 block font-medium rounded-lg hover:bg-zinc-100 text-gray-700 hover:text-gray-900 cursor-pointer"
+                                      >
+                                        {subcategory.name}
+                                        <ChevronRightIcon
+                                          className="float-right h-5 w-5 text-gray-400"
+                                          aria-hidden="true"
+                                        />
+                                      </a>
+                                      {/* Render the SubmenuPanel when a subcategory or subsubcategory is clicked */}
+                                      {openSubsubcategories[subcategory.id] && (
+                                        <SubMenuPanel
+                                          open={
+                                            openSubsubcategories[subcategory.id]
+                                          }
+                                          onClose={() =>
+                                            toggleSubsubcategory(subcategory.id)
+                                          }
+                                          title={subcategory.name}
+                                        >
+                                          {subcategory.subsubcategory.map(
+                                            (subsubcategory) => (
+                                              <div
+                                                key={subsubcategory.id}
+                                                className="flow-root"
+                                              >
+                                                <a
+                                                  href={
+                                                    "/category/" +
+                                                    subsubcategory.slug +
+                                                    "/"
+                                                  }
+                                                  className="-ml-2 hover:ml-0 px-3 py-2 block font-medium rounded-lg hover:bg-zinc-100 text-gray-700 hover:text-gray-900 cursor-pointer"
+                                                >
+                                                  {subsubcategory.name}
+                                                  <ArrowRightIcon
+                                                    className="float-right h-5 w-5 text-gray-400"
+                                                    aria-hidden="true"
+                                                  />
+                                                </a>
+                                              </div>
+                                            )
+                                          )}
+                                        </SubMenuPanel>
+                                      )}
+                                    </div>
+                                  </div>
+                                ))}
+                              </SubMenuPanel>
+                            )}
                           </div>
-                        ))}
-                      </div>
-                      {category.sections.map((section) => (
-                        <div key={section.name}>
-                          <p id={`${category.id}-${section.id}-heading-mobile`} className="font-medium text-gray-900">
-                            {section.name}
-                          </p>
-                          <ul
-                            role="list"
-                            aria-labelledby={`${category.id}-${section.id}-heading-mobile`}
-                            className="mt-6 flex flex-col space-y-6"
-                          >
-                            {section.items.map((item) => (
-                              <li key={item.name} className="flow-root">
-                                <a href={item.href} className="-m-2 block p-2 text-gray-500">
-                                  {item.name}
-                                </a>
-                              </li>
-                            ))}
-                          </ul>
                         </div>
                       ))}
-                    </Tab.Panel>
-                  ))}
+                    </div>
+                  </Tab.Panel>
+                  <Tab.Panel key="Shop by Brand" className="px-4 py-2">
+                    <div className="space-y-1 max-h-96 overflow-y-auto pb-20">
+                      {alphabet.map((letter) => (
+                        <div key={letter}>
+                          {/* Brands Group Alphabet */}
+                          <div className="flow-root">
+                            <a
+                              href={"/brand/" + letter + "/"}
+                              className="-ml-2 hover:ml-0 px-3 py-2 block font-medium rounded-lg hover:bg-zinc-100 text-gray-700 hover:text-gray-900 cursor-pointer"
+                            >
+                              {letter}
+                            </a>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </Tab.Panel>
                 </Tab.Panels>
               </Tab.Group>
 
-              <div className="space-y-6 border-t border-gray-200 px-4 py-6">
-                {navigation.pages.map((page) => (
-                  <div key={page.name} className="flow-root">
-                    <a href={page.href} className="-m-2 block p-2 font-medium text-gray-900">
-                      {page.name}
-                    </a>
+              <div className="bottom-0 w-full bg-white fixed">
+                <div className="border-t border-slate-200 px-4 py-2">
+                  <div className="flow-root">
+                    {staticLinks.map((link) => (
+                      <a
+                        key={link.name}
+                        href={link.href}
+                        className="-ml-2 hover:ml-0 px-3 py-2 block font-medium rounded-lg hover:bg-zinc-100 text-gray-700 hover:text-gray-900 cursor-pointer"
+                      >
+                        {link.name}
+                      </a>
+                    ))}
                   </div>
-                ))}
-              </div>
+                </div>
 
-              <div className="space-y-6 border-t border-gray-200 px-4 py-6">
-                <div className="flow-root">
-                  <a href={isLoggedIn ? "/account/" : "/signin/"} className="-m-2 block p-2 font-medium text-gray-900">
-                    {isLoggedIn ? "Account" : "Sign In"}
+                {/* languages & account */}
+                <div className="px-4 py-2 border-t border-t-slate-200">
+                  <a
+                    href="#"
+                    className="-ml-2 hover:ml-0 px-3 py-2 block font-medium rounded-lg hover:bg-zinc-100 text-gray-700 hover:text-gray-900 cursor-pointer"
+                  >
+                    English
+                  </a>
+
+                  <a
+                    href={isLoggedIn ? "/account/" : "/signin/"}
+                    className="-ml-2 hover:ml-0 px-3 py-2 block font-medium rounded-lg hover:bg-zinc-100 text-gray-700 hover:text-gray-900 cursor-pointer"
+                  >
+                    {isLoggedIn ? "My Account" : "Sign In"}
                   </a>
                 </div>
-                {/* <div className="flow-root">
-                  <a href="#" className="-m-2 block p-2 font-medium text-gray-900">
-                    Create account
-                  </a>
-                </div> */}
               </div>
-
-              {/* <div className="border-t border-gray-200 px-4 py-6">
-                <a href="#" className="-m-2 flex items-center p-2">
-                  <img
-                    src="https://tailwindui.com/img/flags/flag-canada.svg"
-                    alt=""
-                    className="block h-auto w-5 flex-shrink-0"
-                  />
-                  <span className="ml-3 block text-base font-medium text-gray-900">CAD</span>
-                  <span className="sr-only">, change currency</span>
-                </a>
-              </div> */}
             </Dialog.Panel>
           </Transition.Child>
         </div>
       </Dialog>
-    </Transition.Root >
+    </Transition.Root>
   )
 }
 
