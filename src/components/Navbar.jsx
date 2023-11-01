@@ -1,29 +1,31 @@
 import { Fragment, useState, useEffect } from "react"
 import { Popover, Transition } from "@headlessui/react"
-import { apiGet } from "../api/ApiService"
+import { apiGet } from "@/api/ApiService"
 
 // hero icons
 import {
   Bars3Icon,
   UserIcon,
   ChevronDownIcon,
-  HeartIcon,
 } from "@heroicons/react/24/outline"
 import { ShoppingBagIcon } from "@heroicons/react/24/solid"
+
 // images
-import { nbwhite } from "../assets"
+import { nbwhite } from "@/assets"
 
 // components
-import TopBanner from "../components/TopBanner"
+import MobileMenu from "@/components/MobileMenu"
+import TopBanner from "@/components/TopBanner"
 import Search from "@/components/Search"
 import LanguageOption from "./Language"
 import Feedback from "./Feedback"
 
 // store
-import useCategoryStore from "../store/categoryStore"
-import useAuthStore from "../store/authStore"
+import useCategoryStore from "@/store/categoryStore"
+import useAuthStore from "@/store/authStore"
 
-const Navbar = ({ setOpen, classNames }) => {
+const Navbar = () => {
+  const [open, setOpen] = useState(false)
   const [isShowingArray, setIsShowingArray] = useState([])
 
   // Brands Group Alphabet
@@ -47,12 +49,15 @@ const Navbar = ({ setOpen, classNames }) => {
 
   const [totalItems, setTotalItems] = useState(0)
 
+  function classNames(...classes) {
+    return classes.filter(Boolean).join(" ")
+  }
+
   useEffect(() => {
     fetchCategories()
     if (isLoggedIn) {
       fetchCart()
     }
-
   }, [])
 
   const fetchCart = async () => {
@@ -77,6 +82,10 @@ const Navbar = ({ setOpen, classNames }) => {
 
   return (
     <div className="bg-transparent">
+      {/* Mobile Navigation */}
+      <MobileMenu open={open} setOpen={setOpen} classNames={classNames} />
+
+      {/* Desktop Navigation */}
       <header className="w-full z-40 top-0 fixed">
         {/* Top Banner */}
         <TopBanner />
@@ -125,16 +134,7 @@ const Navbar = ({ setOpen, classNames }) => {
 
                 <div className="flex flex-1 items-center justify-end">
                   <div className="flex items-center lg:ml-8">
-                    {/* Help */}
-                    {/* <a
-                      href="#"
-                      className="hidden p-2 lg:flex text-gray-200 hover:text-yellow-500"
-                    >
-                      <span className="sr-only">Feedback</span>
-                      <HeartIcon className="h-5 w-5" aria-hidden="true" />
-                      <span className="text-sm font-medium ml-2">Feedback</span>
-                    </a> */}
-
+                    {/* Feedback */}
                     <Feedback />
 
                     {/* Language */}
