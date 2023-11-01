@@ -123,7 +123,7 @@ const Navbar = () => {
                     <Bars3Icon className="h-6 w-6" aria-hidden="true" />
                   </button>
 
-                  <a href="#" className="ml-6 flex">
+                  <a href="/" className="ml-6 flex">
                     <span className="sr-only">NanoBeepa</span>
                     <img src={nbwhite} alt="NanoBeepa" className="h-8 w-auto" />
                     <h1 className="text-xl font-semibold bg-clip-text text-transparent bg-gradient-to-t from-yellow-500 to-yellow-50 pt-2 ml-3">
