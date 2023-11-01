@@ -5,7 +5,7 @@ import ReactCountryFlag from "react-country-flag"
 
 export default function LanguageOption() {
   const { t, i18n } = useTranslation()
-  const [flag, setFlag] = useState("en")
+  const [flag, setFlag] = useState("GB")
 
   const handleMenuItemClick = (selectedLanguage) => {
     localStorage.setItem("language", selectedLanguage)
