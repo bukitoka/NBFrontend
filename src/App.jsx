@@ -22,6 +22,7 @@ import ResetPassword from "./pages/ResetPassword"
 import BrandDetail from "./pages/BrandDetail"
 import NewArrival from "./pages/NewArrival"
 import Category from "./pages/Category"
+import OrderHistoryDetail from "./pages/OrderHistoryDetail"
 
 const App = () => {
   const siteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY
@@ -63,6 +64,7 @@ const App = () => {
           <Route path="/products/:slug" element={<Detail />} />
           <Route path="/google" element={<Google />} />
           <Route path="/verify-email" element={<VerifyEmail />} />
+          <Route path="/order-history" element={<OrderHistoryDetail />} />
           <Route
             path="/cart"
             element={

@@ -2,7 +2,7 @@ import { Fragment } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 import { EllipsisVerticalIcon } from '@heroicons/react/24/outline'
 import { CheckCircleIcon, ShoppingBagIcon, CircleStackIcon } from '@heroicons/react/20/solid'
-import { apiGet } from '@/api/ApiService'
+import { apiGet, apiPost } from '@/api/ApiService'
 import { useEffect, useState } from 'react'
 import { FiShoppingBag } from 'react-icons/fi'
 import dayjs from 'dayjs';
@@ -34,9 +34,52 @@ export default function OrderHistory() {
     console.log(error)
   }
 
+  const handlePayOrder = async (order_id) => {
+    await requestToken(order_id)
+  }
+
   useEffect(() => {
     getOrders()
+
+    // append midtrans script
+    const script = document.createElement('script');
+    script.src = 'https://app.sandbox.midtrans.com/snap/snap.js';
+    script.async = true;
+    script.setAttribute('data-client-key', import.meta.env.VITE_MIDTRANS_CLIENT_KEY);
+    document.body.appendChild(script);
   }, [])
+
+  const requestToken = async (order_id) => {
+    await apiPost(`payment/`, {
+      order_id: order_id
+    }, (data) => onSuccessRequestToken(data), (err) => onErrorRequestToken(err))
+  }
+
+  function onSuccessRequestToken(data) {
+    const token = data.data.token;
+
+    window.snap.pay(token, {
+      onSuccess: function (result) {
+        console.log('success');
+        console.log(result);
+      },
+      onPending: function (result) {
+        console.log('pending');
+        console.log(result);
+      },
+      onError: function (result) {
+        console.log('error');
+        console.log(result);
+      },
+      onClose: function () {
+        console.log('customer closed the popup without finishing the payment');
+      }
+    });
+  }
+
+  function onErrorRequestToken(error) {
+    console.log(error);
+  }
 
   return (
     <div className="bg-white">
@@ -93,7 +136,7 @@ export default function OrderHistory() {
                             <div className="mt-6 flex items-center space-x-4 divide-x divide-gray-200 border-t border-gray-200 pt-4 text-sm font-medium sm:ml-4 sm:mt-0 sm:border-none sm:pt-0">
                               <div className="flex flex-1 justify-center">
                                 <a
-                                  href={"#"}
+                                  href={"/order-history"}
                                   className="whitespace-nowrap text-indigo-600 hover:text-indigo-500"
                                 >
                                   View details
@@ -102,9 +145,11 @@ export default function OrderHistory() {
                               {
                                 order.status == 'pending' && (
                                   <div className="flex flex-1 justify-center pl-4">
-                                    <a href="#" className="whitespace-nowrap text-indigo-600 hover:text-indigo-500">
+                                    <button type="button"
+                                      onClick={() => handlePayOrder(order.id)}
+                                      className="whitespace-nowrap text-indigo-600 hover:text-indigo-500">
                                       Pay
-                                    </a>
+                                    </button>
                                   </div>
                                 )
                               }
