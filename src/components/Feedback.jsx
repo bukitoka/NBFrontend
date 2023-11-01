@@ -63,7 +63,7 @@ export default function Feedback() {
               leaveTo="opacity-0 translate-y-1"
             >
               <Popover.Panel className="absolute left-1/2 z-10 mt-3 w-screen max-w-sm -translate-x-1/2 transform px-4 sm:px-0">
-                <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black/5 bg-yellow-600">
+                <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black/5 ">
                   <div className="flex bg-white py-8 justify-center">
                     <form>
                       <div className="space-y-6 ">
