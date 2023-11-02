@@ -25,6 +25,11 @@ import BrandDetail from "@/pages/BrandDetail"
 import NewArrival from "@/pages/NewArrival"
 import Category from "@/pages/Category"
 
+// payment
+import Finish from "@/pages/payment/Finish"
+import Unfinish from "@/pages/payment/Unfinish"
+import Error from "@/pages/payment/Error"
+
 const App = () => {
   const siteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY
   const appendRecaptcha = () => {
@@ -98,6 +103,30 @@ const App = () => {
           <Route
             path="/reset-password/:uid/:token"
             element={<ResetPasswordConfirm />}
+          />
+          <Route
+            path="/payment/finish"
+            element={
+              <PrivateRoute>
+                <Finish />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/payment/unfinish"
+            element={
+              <PrivateRoute>
+                <Unfinish />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/payment/error"
+            element={
+              <PrivateRoute>
+                <Error />
+              </PrivateRoute>
+            }
           />
         </Routes>
       </MainWrapper>
