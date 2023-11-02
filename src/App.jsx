@@ -31,14 +31,29 @@ import Unfinish from "@/pages/payment/Unfinish"
 import Error from "@/pages/payment/Error"
 
 const App = () => {
-  const siteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY
   const appendRecaptcha = () => {
+    const siteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY
     const script = document.createElement("script")
     script.src = "https://www.google.com/recaptcha/api.js?render=" + siteKey
     script.async = true
     script.defer = true
 
-    // check if script is already loaded
+    if (document.body.contains(script)) {
+      return
+    } else {
+      document.body.appendChild(script)
+    }
+  }
+
+  const appendMidtrans = () => {
+    const script = document.createElement("script")
+    script.src = "https://app.sandbox.midtrans.com/snap/snap.js"
+    script.async = true
+    script.setAttribute(
+      "data-client-key",
+      import.meta.env.VITE_MIDTRANS_CLIENT_KEY
+    )
+
     if (document.body.contains(script)) {
       return
     } else {
@@ -48,6 +63,7 @@ const App = () => {
 
   useEffect(() => {
     appendRecaptcha()
+    appendMidtrans()
   }, [])
 
   return (
