@@ -1,78 +1,67 @@
-import React, { useState, useEffect } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import React, { useState, useEffect } from "react"
+import { ToastContainer, toast } from "react-toastify"
+import "react-toastify/dist/ReactToastify.css"
 
-import { login } from '../tools/auth';
-import { useNavigate } from 'react-router-dom';
-import useAuthStore from '../store/authStore';
+import { login } from "../tools/auth"
+import { useNavigate } from "react-router-dom"
+import useAuthStore from "../store/authStore"
 
 import { nanobeepa, google } from "../assets"
 
-import {
-  EyeIcon,
-  EyeSlashIcon,
-} from '@heroicons/react/24/outline'
+import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline"
 
 const Signin = () => {
-
-  const navigate = useNavigate();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [rememberMe, setRememberMe] = useState(false);
-  const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
+  const navigate = useNavigate()
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [rememberMe, setRememberMe] = useState(false)
+  const isLoggedIn = useAuthStore((state) => state.isLoggedIn)
 
   useEffect(() => {
     // getCartId();
     if (isLoggedIn) {
-      navigate('/');
+      navigate("/")
     }
-  }, []);
+  }, [])
 
   const resetForm = () => {
-    setEmail('');
-    setPassword('');
-    setRememberMe(false);
-  };
+    setEmail("")
+    setPassword("")
+    setRememberMe(false)
+  }
 
   const handleLogin = async (e) => {
-    e.preventDefault();
-    const { error } = await login(email, password, rememberMe);
+    e.preventDefault()
+    const { error } = await login(email, password, rememberMe)
     if (error) {
-      toast.error(error);
+      toast.error(error)
     } else {
-      navigate('/');
-      resetForm();
-
+      navigate("/")
+      resetForm()
     }
-  };
+  }
 
-
-
-
-
-  const [showPassword, setShowPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(false)
 
   const handleTogglePassword = () => {
-    setShowPassword(!showPassword);
+    setShowPassword(!showPassword)
   }
 
   const handleGoogleSignIn = async () => {
     try {
-      const googleurl = import.meta.env.VITE_GOOGLE_AUTH_URL;
-      const response = window.open(googleurl, "_self");
+      const googleurl = import.meta.env.VITE_GOOGLE_AUTH_URL
+      const response = window.open(googleurl, "_self")
 
-      return response;
-
+      return response
     } catch (err) {
-      console.log(err);
-      toast.error(err);
+      console.log(err)
+      toast.error(err)
     }
-  };
+  }
 
   return (
     <div className="bg-white h-screen block lg:grid lg:grid-cols-2">
       <div className="w-full px-8 md:px-32 lg:px-24 pt-16">
-
         <ToastContainer
           toastClassName="rounded-lg"
           bodyClassName="text-sm font-semibold"
@@ -83,7 +72,9 @@ const Signin = () => {
           <div className="mb-3">
             <a href="/" className="flex justify-center">
               <img className="h-8 w-auto" src={nanobeepa} alt="nanobeepa.com" />
-              <h2 className='text-2xl font-bold leading-9 tracking-tight bg-clip-text text-transparent bg-gradient-to-t from-yellow-600 to-yellow-200 ml-3'>NanoBeepa</h2>
+              <h2 className="text-2xl font-bold leading-9 tracking-tight bg-clip-text text-transparent bg-gradient-to-t from-yellow-600 to-yellow-200 ml-3">
+                NanoBeepa
+              </h2>
             </a>
             <h2 className="mb-6 mt-3 text-2xl text-center font-bold leading-9 tracking-tight text-zinc-800">
               Sign in to your account
@@ -91,7 +82,10 @@ const Signin = () => {
           </div>
           <form className="space-y-6" method="POST" onSubmit={handleLogin}>
             <div>
-              <label htmlFor="email" className="block text-sm font-medium leading-6 text-zinc-900">
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium leading-6 text-zinc-900"
+              >
                 Email address
               </label>
               <div className="mt-2">
@@ -110,11 +104,14 @@ const Signin = () => {
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium leading-6 text-zinc-900">
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium leading-6 text-zinc-900"
+              >
                 Password
               </label>
               <div className="mt-2">
-                <div className='relative'>
+                <div className="relative">
                   <input
                     id="password"
                     name="password"
@@ -129,8 +126,13 @@ const Signin = () => {
                   <button
                     type="button"
                     onClick={handleTogglePassword}
-                    className="absolute inset-y-0 right-0 pr-3 flex items-center">
-                    {showPassword ? <EyeIcon className="h-5 w-5" aria-hidden="true" /> : <EyeSlashIcon className="h-5 w-5" aria-hidden="true" />}
+                    className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                  >
+                    {showPassword ? (
+                      <EyeIcon className="h-5 w-5" aria-hidden="true" />
+                    ) : (
+                      <EyeSlashIcon className="h-5 w-5" aria-hidden="true" />
+                    )}
                   </button>
                 </div>
               </div>
@@ -146,13 +148,19 @@ const Signin = () => {
                   checked={rememberMe}
                   onChange={(e) => setRememberMe(e.target.checked)}
                 />
-                <label htmlFor="remember-me" className="ml-3 block text-sm leading-6 text-gray-900">
+                <label
+                  htmlFor="remember-me"
+                  className="ml-3 block text-sm leading-6 text-gray-900"
+                >
                   Remember me
                 </label>
               </div>
 
               <div className="text-sm leading-6">
-                <a href="#" className="font-semibold text-yellow-600 hover:text-yellow-800">
+                <a
+                  href="/reset-password"
+                  className="font-semibold text-yellow-600 hover:text-yellow-800"
+                >
                   Forgot password?
                 </a>
               </div>
@@ -170,7 +178,10 @@ const Signin = () => {
 
           <div>
             <div className="relative mt-10">
-              <div className="absolute inset-0 flex items-center" aria-hidden="true">
+              <div
+                className="absolute inset-0 flex items-center"
+                aria-hidden="true"
+              >
                 <div className="w-full border-t border-gray-200" />
               </div>
               <div className="relative flex justify-center text-sm font-medium leading-6">
@@ -196,8 +207,11 @@ const Signin = () => {
             </div>
             <div className="mt-6">
               <p className="text-center text-sm text-gray-500">
-                Not a member?{' '}
-                <a href="/signup" className="font-semibold leading-6 text-yellow-600 hover:text-yellow-800">
+                Not a member?{" "}
+                <a
+                  href="/signup"
+                  className="font-semibold leading-6 text-yellow-600 hover:text-yellow-800"
+                >
                   Sign up here
                 </a>
               </p>
@@ -214,10 +228,13 @@ const Signin = () => {
         <div className="absolute bottom-0 mb-20 mx-20 backdrop-blur-[14px] bg-black/40 p-8 rounded-xl">
           <div className="flex flex-col items-center text-center">
             <h4 className="text-2xl font-bold tracking-tight text-zinc-200">
-              <span className="block sm:inline">Hi, Welcome back beautiful!</span>
+              <span className="block sm:inline">
+                Hi, Welcome back beautiful!
+              </span>
             </h4>
             <p className="mt-3 text-xl text-zinc-200 italic">
-              Beauty and Glamour Await - Sign in to explore our handpicked cosmetic treasures.
+              Beauty and Glamour Await - Sign in to explore our handpicked
+              cosmetic treasures.
             </p>
           </div>
         </div>
