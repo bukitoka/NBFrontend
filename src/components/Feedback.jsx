@@ -1,26 +1,39 @@
-import { Popover, Transition, Tab } from '@headlessui/react'
-import { Fragment, useState } from 'react'
-import { apiPost } from '@/api/ApiService'
+import { Popover, Transition, Tab } from "@headlessui/react"
+import { Fragment, useState } from "react"
+import { apiPost } from "@/api/ApiService"
+import verifyRecaptcha from "@/tools/recaptcha"
 import Success from "./messages/Success"
 import Error from "./messages/Error"
 import toast from "react-hot-toast"
 
 // import icon
-import {
-  HeartIcon,
-} from "@heroicons/react/24/outline"
-
+import { HeartIcon } from "@heroicons/react/24/outline"
 
 export default function Feedback() {
-  const [selected, setSelected] = useState('feature')
-  const [title, setTitle] = useState('')
-  const [details, setDetails] = useState('')
+  const [selected, setSelected] = useState("feature")
+  const [title, setTitle] = useState("")
+  const [details, setDetails] = useState("")
 
   const handleFeedback = async () => {
-    await apiPost(`${selected == 'feature' ? 'feature-request' : 'product-request'}/`, {
-      title: title,
-      detail: details,
-    }, (response) => onSuccessfulFeedback(response), (error) => onFailedFeedback(error))
+    const token = await verifyRecaptcha()
+      .then((token) => token)
+      .catch((err) => console.log(err))
+
+    if (!token) {
+      console.log("No reCAPTCHA token!")
+      return
+    }
+
+    await apiPost(
+      `${selected == "feature" ? "feature-request" : "product-request"}/`,
+      {
+        recaptcha: token,
+        title: title,
+        detail: details,
+      },
+      (response) => onSuccessfulFeedback(response),
+      (error) => onFailedFeedback(error)
+    )
   }
 
   const onSuccessfulFeedback = (data) => {
@@ -32,24 +45,23 @@ export default function Feedback() {
 
   const onFailedFeedback = (error) => {
     const status = "Whoops!"
-    const message = "Something went wrong. Please try again or contact us if the problem persists."
+    const message =
+      "Something went wrong. Please try again or contact us if the problem persists."
     toast.custom((t) => <Error t={t} status={status} message={message} />)
     resetForm()
   }
 
   const resetForm = () => {
-    setTitle('')
-    setDetails('')
+    setTitle("")
+    setDetails("")
   }
 
   return (
     <div className="hidden p-2 lg:flex text-gray-200 hover:text-yellow-500 ">
-      <Popover className="relative" >
+      <Popover className="relative">
         {({ open, close }) => (
           <>
-            <Popover.Button
-              className="flex focus:outline-none"
-            >
+            <Popover.Button className="flex focus:outline-none">
               <HeartIcon className="h-5 w-5" aria-hidden="true" />
               <span className="text-sm font-medium ml-2">Feedback</span>
             </Popover.Button>
@@ -71,15 +83,25 @@ export default function Feedback() {
                           <Tab.Group>
                             <Tab.List className="flex space-x-1 rounded-xl bg-zinc-200 p-1">
                               <Tab
-                                key={'feature'}
-                                onClick={() => setSelected('feature')}
-                                className={`w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-yellow-500  ring-white/60 ring-offset-1 ring-offset-yellow-500 focus:outline-none focus:ring-1 ${selected === 'feature' ? 'bg-white shadow' : ' text-zinc-800 hover:bg-zinc-400 hover:text-white'}`}>
+                                key={"feature"}
+                                onClick={() => setSelected("feature")}
+                                className={`w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-yellow-500  ring-white/60 ring-offset-1 ring-offset-yellow-500 focus:outline-none focus:ring-1 ${
+                                  selected === "feature"
+                                    ? "bg-white shadow"
+                                    : " text-zinc-800 hover:bg-zinc-400 hover:text-white"
+                                }`}
+                              >
                                 Feature
                               </Tab>
                               <Tab
-                                key={'product'}
-                                onClick={() => setSelected('product')}
-                                className={`w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-yellow-500  ring-white/60 ring-offset-2 ring-offset-yellow-500 focus:outline-none focus:ring-2 ${selected === 'product' ? 'bg-white shadow' : ' text-zinc-800 hover:bg-zinc-400 hover:text-white'}`}>
+                                key={"product"}
+                                onClick={() => setSelected("product")}
+                                className={`w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-yellow-500  ring-white/60 ring-offset-2 ring-offset-yellow-500 focus:outline-none focus:ring-2 ${
+                                  selected === "product"
+                                    ? "bg-white shadow"
+                                    : " text-zinc-800 hover:bg-zinc-400 hover:text-white"
+                                }`}
+                              >
                                 product
                               </Tab>
                             </Tab.List>
@@ -87,7 +109,10 @@ export default function Feedback() {
 
                           <div className="mt-4 grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-6">
                             <div className="sm:col-span-4">
-                              <label htmlFor="title" className="block text-sm font-medium leading-6 text-gray-900">
+                              <label
+                                htmlFor="title"
+                                className="block text-sm font-medium leading-6 text-gray-900"
+                              >
                                 Title
                               </label>
                               <div className="mt-2">
@@ -109,7 +134,10 @@ export default function Feedback() {
                             </div>
 
                             <div className="col-span-full">
-                              <label htmlFor="about" className="block text-sm font-medium leading-6 text-gray-900">
+                              <label
+                                htmlFor="about"
+                                className="block text-sm font-medium leading-6 text-gray-900"
+                              >
                                 Details
                               </label>
                               <div className="mt-2">
@@ -121,10 +149,8 @@ export default function Feedback() {
                                   value={details}
                                   onChange={(e) => setDetails(e.target.value)}
                                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-yellow-500 sm:text-sm sm:leading-6"
-                                  defaultValue={''}
                                 />
                               </div>
-
                             </div>
                           </div>
                         </div>
@@ -143,7 +169,6 @@ export default function Feedback() {
                         </button>
                       </div>
                     </form>
-
                   </div>
                 </div>
               </Popover.Panel>
@@ -154,4 +179,3 @@ export default function Feedback() {
     </div>
   )
 }
-
