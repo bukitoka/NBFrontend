@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react'
 import { Disclosure, RadioGroup, Tab } from '@headlessui/react'
 import { StarIcon } from '@heroicons/react/20/solid'
-import { HeartIcon, MinusIcon, PlusIcon } from '@heroicons/react/24/outline'
+import { HeartIcon } from '@heroicons/react/24/outline'
 import { useParams } from 'react-router-dom';
 import useAuthStore from '../store/authStore';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { insertCartItem } from "../api/CartApi";
+
 import { apiPost } from '../api/ApiService';
 import ProductReviews from '../components/ProductReviews';
 import { nbDefaultImage } from '@/assets';
@@ -17,300 +17,12 @@ import { priceFormatter } from '@/tools/reformat'
 const baseurl = import.meta.env.VITE_API_BASE_URL;
 
 
-
-// simple icons
-import {
-  SiWhatsapp,
-  SiInstagram,
-  SiFacebook,
-  SiTiktok,
-} from '@icons-pack/react-simple-icons'
-
 // components
 import Navbar from "../components/Navbar"
-import MobileMenu from "../components/MobileMenu"
 import Footer from '../components/Footer'
 import { fetchProduct } from '../api/ProductApi'
-import { background } from '../assets';
-import { set } from 'react-hook-form';
-
-const product = {
-  name: 'Zip Tote Basket',
-  price: '$140',
-  rating: 4,
-  images: [
-    {
-      id: 1,
-      name: 'Angled view',
-      src: 'https://tailwindui.com/img/ecommerce-images/product-page-03-product-01.jpg',
-      alt: 'Angled front view with bag zipped and handles upright.',
-    },
-    // More images...
-  ],
-  colors: [
-    { name: 'Washed Black', bgColor: 'bg-gray-700', selectedColor: 'ring-gray-700' },
-    { name: 'White', bgColor: 'bg-white', selectedColor: 'ring-gray-400' },
-    { name: 'Washed Gray', bgColor: 'bg-gray-500', selectedColor: 'ring-gray-500' },
-  ],
-  sizes: [
-    { name: '400 ml', inStock: true },
-    { name: '800 ml', inStock: true },
-  ],
-  description: `
-    <p>The Zip Tote Basket is the perfect midpoint between shopping tote and comfy backpack. With convertible straps, you can hand carry, should sling, or backpack this convenient and spacious bag. The zip top and durable canvas construction keeps your goods protected for all-day use.</p>
-  `,
-  details: [
-    {
-      name: 'Features',
-      items: [
-        'Multiple strap configurations',
-        'Spacious interior with top zip',
-        'Leather handle and tabs',
-        'Interior dividers',
-        'Stainless strap loops',
-        'Double stitched construction',
-        'Water-resistant',
-      ],
-    },
-    // More sections...
-  ],
-}
 
 
-const navigation = {
-  categories: [
-    {
-      id: 'categories',
-      name: 'Shop by category',
-      featured: [
-        {
-          name: 'New Arrivals',
-          href: '#',
-          imageSrc: 'https://tailwindui.com/img/ecommerce-images/mega-menu-category-01.jpg',
-          imageAlt: 'New arrivals on display.',
-        },
-        {
-          name: 'Top Sales',
-          href: '#',
-          imageSrc: 'https://tailwindui.com/img/ecommerce-images/mega-menu-category-02.jpg',
-          imageAlt: 'Top sale items on display.',
-        },
-      ],
-      sections: [
-        {
-          id: 'skin_care',
-          name: 'Skin Care',
-          items: [
-            {
-              name: 'Cleanser',
-              href: '#',
-              subItems: [
-                { name: 'Cleanser', href: '#' },
-                { name: 'Exfoliator', href: '#' },
-                { name: 'Face Wash', href: '#' },
-                { name: 'Face Wipes', href: '#' },
-                { name: 'Makeup Remover', href: '#' },
-                { name: 'Toner', href: '#' },
-              ],
-            },
-            {
-              name: 'Eye Care',
-              href: '#',
-              subItems: [
-                { name: 'Eye Cream', href: '#' },
-                { name: 'Eye Serum', href: '#' },
-                { name: 'Eye Lash Serum', href: '#' },
-                { name: 'Eye Mask', href: '#' },
-              ],
-            },
-            {
-              name: 'Lip Care',
-              href: '#',
-              subItems: [
-                { name: 'Lip Balm', href: '#' },
-                { name: 'Lip Mask', href: '#' },
-                { name: 'Lip Scrub', href: '#' },
-              ],
-            },
-            {
-              name: 'Moisturizer',
-              href: '#',
-              subItems: [
-                { name: 'Day Cream', href: '#' },
-                { name: 'Face Oil', href: '#' },
-                { name: 'Face Mist', href: '#' },
-                { name: 'Night Cream', href: '#' },
-                { name: 'Neck Cream', href: '#' },
-              ],
-            },
-            {
-              name: 'Sun Care',
-              href: '#',
-              subItems: [
-                { name: 'After-Sun Care', href: '#' },
-                { name: 'Body Sunscreen', href: '#' },
-                { name: 'Face Sunscreen', href: '#' },
-              ],
-            },
-            {
-              name: 'Treatment & Mask',
-              href: '#',
-              subItems: [
-                { name: 'Acne & Blemish', href: '#' },
-                { name: 'Face Serum', href: '#' },
-                { name: 'Mask', href: '#' },
-                { name: 'Peel', href: '#' },
-              ],
-            },
-          ],
-        },
-        {
-          id: 'makeup',
-          name: 'Makeup',
-          items: [
-            {
-              name: 'Face',
-              href: '#',
-              subItems: [
-                { name: 'Bb & Cc Cream', href: '#' },
-                { name: 'Blush', href: '#' },
-                { name: 'Contour & Bronzer', href: '#' },
-                { name: 'Concealer & Corrector', href: '#' },
-                { name: 'Face Sets & Palettes', href: '#' },
-                { name: 'Foundation', href: '#' },
-                { name: 'Highlighter', href: '#' },
-                { name: 'Powder', href: '#' },
-                { name: 'Setting Spray', href: '#' },
-                { name: 'Tinted Moisturizer', href: '#' },
-              ],
-            },
-            {
-              name: 'Eyes',
-              href: '#',
-              subItems: [
-                { name: 'Eye Brow', href: '#' },
-                { name: 'Eye Liner', href: '#' },
-                { name: 'Eyelashes & Brow Serum', href: '#' },
-                { name: 'Eye Shadow', href: '#' },
-                { name: 'Eye Sets', href: '#' },
-                { name: 'Mascara', href: '#' },
-              ],
-            },
-          ],
-        },
-      ],
-    },
-    {
-      id: 'brands',
-      name: 'Brands',
-      featured: [
-        {
-          name: 'New Arrivals',
-          href: '#',
-          imageSrc: 'https://tailwindui.com/img/ecommerce-images/product-page-04-detail-product-shot-01.jpg',
-          imageAlt: 'New arrivals on display.',
-        },
-        {
-          name: 'Top Brands',
-          href: '#',
-          imageSrc: 'https://tailwindui.com/img/ecommerce-images/category-page-02-image-card-06.jpg',
-          imageAlt: 'Top brands in display.',
-        },
-      ],
-      sections: [
-        {
-          id: 'abc',
-          name: 'A - C',
-          items: [
-            {
-              name: 'A',
-              href: '#',
-              subItems: [
-                { name: 'Aesop', href: '#' },
-                { name: 'All Birds', href: '#' },
-                { name: 'Arq', href: '#' },
-              ]
-            },
-            {
-              name: 'B',
-              href: '#',
-              subItems: [
-                { name: 'Baggu', href: '#' },
-                { name: 'Berg & Betts', href: '#' },
-                { name: 'Blume', href: '#' },
-                { name: 'Briogeo', href: '#' },
-                { name: 'By Humankind', href: '#' },
-              ]
-            },
-            {
-              name: 'C',
-              href: '#',
-              subItems: [
-                { name: 'Carmen', href: '#' },
-                { name: 'Champion', href: '#' },
-                { name: 'Common Goods', href: '#' },
-                { name: 'Craighill', href: '#' },
-              ]
-            }
-          ],
-        },
-        {
-          id: 'def',
-          name: 'D - F',
-          items: [
-            {
-              name: 'D',
-              href: '#',
-              subItems: [
-                { name: 'Danner', href: '#' },
-                { name: 'Darn Tough', href: '#' },
-                { name: 'Dr Martens', href: '#' },
-                { name: 'Driftime', href: '#' },
-              ]
-            },
-            {
-              name: 'E',
-              href: '#',
-              subItems: []
-            },
-            {
-              name: 'F',
-              href: '#',
-              subItems: []
-            },
-          ],
-        },
-      ],
-    },
-  ],
-  pages: [
-    { name: 'Beauty Story', href: '#' },
-    { name: 'Promo', href: '#' },
-  ],
-}
-
-const socials = [
-  {
-    name: 'Whatsapp',
-    href: '#',
-    icon: <SiWhatsapp className='h-[18px] w-[18px] text-gray-100 hover:text-green-600' />,
-  },
-  {
-    name: 'Instagram',
-    href: '#',
-    icon: <SiInstagram className='h-[18px] w-[18px] text-gray-100 hover:text-red-400' />,
-  },
-  {
-    name: 'Facebook',
-    href: '#',
-    icon: <SiFacebook className='h-[18px] w-[18px] text-gray-100 hover:text-blue-500' />,
-  },
-  {
-    name: 'Tiktok',
-    href: '#',
-    icon: <SiTiktok className='h-[18px] w-[18px] text-gray-100 hover:text-gray-800' />,
-  },
-]
 
 
 
@@ -342,7 +54,6 @@ export default function ProductDetail() {
   }, [])
 
   const doesShowColor = (stocks) => {
-    console.log("stock in the color", stocks)
     if (stocks == null) {
       setShowColor(false);
       return;
@@ -361,7 +72,6 @@ export default function ProductDetail() {
     // console.log("Check update data")
     try {
       const productsData = await fetchProduct(slug);
-      console.log("product data", productsData)
       setProduct(productsData.product);
       setStock(productsData.stock);
       setFirstStock(productsData.stock);
@@ -372,7 +82,6 @@ export default function ProductDetail() {
       setTotalRatingCount(productsData.total_rating);
       setLoading(false);
     } catch (error) {
-      console.log("error running", error)
       setError(error);
       setLoading(false);
     }
@@ -452,11 +161,8 @@ export default function ProductDetail() {
   const [open, setOpen] = useState(false)
   return (
     <div>
-      {/* Mobile Navigation */}
-      <MobileMenu open={open} setOpen={setOpen} classNames={classNames} navigation={navigation} socials={socials} />
-
       {/* Navbar */}
-      <Navbar open={open} setOpen={setOpen} classNames={classNames} navigation={navigation} socials={socials} />
+      <Navbar />
       <main>
         <div className="bg-white  pt-[130px] lg:pt-[86px] ">
           <ToastContainer

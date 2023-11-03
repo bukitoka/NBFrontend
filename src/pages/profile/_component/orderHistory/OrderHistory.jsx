@@ -1,7 +1,5 @@
-import { Fragment } from 'react'
-import { Menu, Transition } from '@headlessui/react'
-import { EllipsisVerticalIcon } from '@heroicons/react/24/outline'
-import { CheckCircleIcon, ShoppingBagIcon, CircleStackIcon } from '@heroicons/react/20/solid'
+
+import {  ShoppingBagIcon, CircleStackIcon } from '@heroicons/react/20/solid'
 import { apiGet, apiPost } from '@/api/ApiService'
 import { useEffect, useState } from 'react'
 import { FiShoppingBag } from 'react-icons/fi'
@@ -136,7 +134,7 @@ export default function OrderHistory() {
                             <div className="mt-6 flex items-center space-x-4 divide-x divide-gray-200 border-t border-gray-200 pt-4 text-sm font-medium sm:ml-4 sm:mt-0 sm:border-none sm:pt-0">
                               <div className="flex flex-1 justify-center">
                                 <a
-                                  href={"/order-history"}
+                                  href={"/order-history/" + order.id}
                                   className="whitespace-nowrap text-indigo-600 hover:text-indigo-500"
                                 >
                                   View details

@@ -95,7 +95,14 @@ const App = () => {
           <Route path="/products/:slug" element={<Detail />} />
           <Route path="/google" element={<Google />} />
           <Route path="/verify-email" element={<VerifyEmail />} />
-          <Route path="/order-history" element={<OrderHistoryDetail />} />
+
+
+          <Route path="/order-history/:id" element={
+            <PrivateRoute>
+              <OrderHistoryDetail />
+            </PrivateRoute>
+          } />
+
           <Route
             path="/cart"
             element={

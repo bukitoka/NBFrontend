@@ -1,5 +1,3 @@
-import { logout } from '../../tools/auth'
-import useAuthStore from "../../store/authStore";
 import { useState, useEffect, useRef } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import {
@@ -9,12 +7,6 @@ import {
   ReceiptPercentIcon,
 } from '@heroicons/react/24/solid'
 
-import {
-  SiWhatsapp,
-  SiInstagram,
-  SiFacebook,
-  SiTiktok,
-} from "@icons-pack/react-simple-icons";
 import { PiPencilSimple } from 'react-icons/pi'
 import { ScrollMenu, VisibilityContext, constants } from "react-horizontal-scrolling-menu";
 import "react-horizontal-scrolling-menu/dist/styles.css";
@@ -28,260 +20,13 @@ import Coupon from './_component/coupon/Coupon';
 import Setting from './_component/setting/Setting'
 
 import { Card } from "./_component/menuItem/card";
-// import api from '@/tools/api';
 
 import { apiPatchMultipart, apiGetRoute } from '@/api/ApiService';
 
 import Navbar from "@/components/Navbar";
-import MobileMenu from "../../components/MobileMenu";
 import { useTranslation } from 'react-i18next';
+import { nbDefaultImage } from '@/assets'
 
-const navigation = {
-  categories: [
-    {
-      id: "categories",
-      name: "Shop by category",
-      featured: [
-        {
-          name: "New Arrivals",
-          href: "#",
-          imageSrc:
-            "https://tailwindui.com/img/ecommerce-images/mega-menu-category-01.jpg",
-          imageAlt: "New arrivals on display.",
-        },
-        {
-          name: "Top Sales",
-          href: "#",
-          imageSrc:
-            "https://tailwindui.com/img/ecommerce-images/mega-menu-category-02.jpg",
-          imageAlt: "Top sale items on display.",
-        },
-      ],
-      sections: [
-        {
-          id: "skin_care",
-          name: "Skin Care",
-          items: [
-            {
-              name: "Cleanser",
-              href: "#",
-              subItems: [
-                { name: "Cleanser", href: "#" },
-                { name: "Exfoliator", href: "#" },
-                { name: "Face Wash", href: "#" },
-                { name: "Face Wipes", href: "#" },
-                { name: "Makeup Remover", href: "#" },
-                { name: "Toner", href: "#" },
-              ],
-            },
-            {
-              name: "Eye Care",
-              href: "#",
-              subItems: [
-                { name: "Eye Cream", href: "#" },
-                { name: "Eye Serum", href: "#" },
-                { name: "Eye Lash Serum", href: "#" },
-                { name: "Eye Mask", href: "#" },
-              ],
-            },
-            {
-              name: "Lip Care",
-              href: "#",
-              subItems: [
-                { name: "Lip Balm", href: "#" },
-                { name: "Lip Mask", href: "#" },
-                { name: "Lip Scrub", href: "#" },
-              ],
-            },
-            {
-              name: "Moisturizer",
-              href: "#",
-              subItems: [
-                { name: "Day Cream", href: "#" },
-                { name: "Face Oil", href: "#" },
-                { name: "Face Mist", href: "#" },
-                { name: "Night Cream", href: "#" },
-                { name: "Neck Cream", href: "#" },
-              ],
-            },
-            {
-              name: "Sun Care",
-              href: "#",
-              subItems: [
-                { name: "After-Sun Care", href: "#" },
-                { name: "Body Sunscreen", href: "#" },
-                { name: "Face Sunscreen", href: "#" },
-              ],
-            },
-            {
-              name: "Treatment & Mask",
-              href: "#",
-              subItems: [
-                { name: "Acne & Blemish", href: "#" },
-                { name: "Face Serum", href: "#" },
-                { name: "Mask", href: "#" },
-                { name: "Peel", href: "#" },
-              ],
-            },
-          ],
-        },
-        {
-          id: "makeup",
-          name: "Makeup",
-          items: [
-            {
-              name: "Face",
-              href: "#",
-              subItems: [
-                { name: "Bb & Cc Cream", href: "#" },
-                { name: "Blush", href: "#" },
-                { name: "Contour & Bronzer", href: "#" },
-                { name: "Concealer & Corrector", href: "#" },
-                { name: "Face Sets & Palettes", href: "#" },
-                { name: "Foundation", href: "#" },
-                { name: "Highlighter", href: "#" },
-                { name: "Powder", href: "#" },
-                { name: "Setting Spray", href: "#" },
-                { name: "Tinted Moisturizer", href: "#" },
-              ],
-            },
-            {
-              name: "Eyes",
-              href: "#",
-              subItems: [
-                { name: "Eye Brow", href: "#" },
-                { name: "Eye Liner", href: "#" },
-                { name: "Eyelashes & Brow Serum", href: "#" },
-                { name: "Eye Shadow", href: "#" },
-                { name: "Eye Sets", href: "#" },
-                { name: "Mascara", href: "#" },
-              ],
-            },
-          ],
-        },
-      ],
-    },
-    {
-      id: "brands",
-      name: "Brands",
-      featured: [
-        {
-          name: "New Arrivals",
-          href: "#",
-          imageSrc:
-            "https://tailwindui.com/img/ecommerce-images/product-page-04-detail-product-shot-01.jpg",
-          imageAlt: "New arrivals on display.",
-        },
-        {
-          name: "Top Brands",
-          href: "#",
-          imageSrc:
-            "https://tailwindui.com/img/ecommerce-images/category-page-02-image-card-06.jpg",
-          imageAlt: "Top brands in display.",
-        },
-      ],
-      sections: [
-        {
-          id: "abc",
-          name: "A - C",
-          items: [
-            {
-              name: "A",
-              href: "#",
-              subItems: [
-                { name: "Aesop", href: "#" },
-                { name: "All Birds", href: "#" },
-                { name: "Arq", href: "#" },
-              ],
-            },
-            {
-              name: "B",
-              href: "#",
-              subItems: [
-                { name: "Baggu", href: "#" },
-                { name: "Berg & Betts", href: "#" },
-                { name: "Blume", href: "#" },
-                { name: "Briogeo", href: "#" },
-                { name: "By Humankind", href: "#" },
-              ],
-            },
-            {
-              name: "C",
-              href: "#",
-              subItems: [
-                { name: "Carmen", href: "#" },
-                { name: "Champion", href: "#" },
-                { name: "Common Goods", href: "#" },
-                { name: "Craighill", href: "#" },
-              ],
-            },
-          ],
-        },
-        {
-          id: "def",
-          name: "D - F",
-          items: [
-            {
-              name: "D",
-              href: "#",
-              subItems: [
-                { name: "Danner", href: "#" },
-                { name: "Darn Tough", href: "#" },
-                { name: "Dr Martens", href: "#" },
-                { name: "Driftime", href: "#" },
-              ],
-            },
-            {
-              name: "E",
-              href: "#",
-              subItems: [],
-            },
-            {
-              name: "F",
-              href: "#",
-              subItems: [],
-            },
-          ],
-        },
-      ],
-    },
-  ],
-  pages: [
-    { name: "Beauty Story", href: "#" },
-    { name: "Promo", href: "#" },
-  ],
-};
-
-const socials = [
-  {
-    name: "Whatsapp",
-    href: "#",
-    icon: (
-      <SiWhatsapp className="h-[18px] w-[18px] text-gray-100 hover:text-green-600" />
-    ),
-  },
-  {
-    name: "Instagram",
-    href: "#",
-    icon: (
-      <SiInstagram className="h-[18px] w-[18px] text-gray-100 hover:text-red-400" />
-    ),
-  },
-  {
-    name: "Facebook",
-    href: "#",
-    icon: (
-      <SiFacebook className="h-[18px] w-[18px] text-gray-100 hover:text-blue-500" />
-    ),
-  },
-  {
-    name: "Tiktok",
-    href: "#",
-    icon: (
-      <SiTiktok className="h-[18px] w-[18px] text-gray-100 hover:text-gray-800" />
-    ),
-  },
-];
 
 // new array with contain id, title,
 const menuItems = [
@@ -403,22 +148,9 @@ const Profile = () => {
         bodyClassName="text-sm font-semibold"
         position="top-center"
       />
-      <MobileMenu
-        open={open}
-        setOpen={setOpen}
-        classNames={classNames}
-        navigation={navigation}
-        socials={socials}
-      />
 
       {/* Navbar */}
-      <Navbar
-        open={open}
-        setOpen={setOpen}
-        classNames={classNames}
-        navigation={navigation}
-        socials={socials}
-      />
+      <Navbar />
       <div className='pt-[150px] lg:pt-[136px]'>
         <div className=" w-full   bg-zinc-100 p-6">
           <div className="grid gap-6 lg:flex">
@@ -436,7 +168,7 @@ const Profile = () => {
                       className='hidden'
                       onChange={handleFileInputChange}
                     />
-                    <img className="h-40 w-40 rounded-full" src={userDetails.avatar} alt="" srcSet="" />
+                    <img className="h-40 w-40 rounded-full" src={userDetails.avatar} alt="" srcSet="" onError={(e) => (e.target.src = nbDefaultImage)} />
                   </div>
                 </div>
                 <div className="mt-8">
