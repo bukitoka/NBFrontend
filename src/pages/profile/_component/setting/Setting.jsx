@@ -4,6 +4,7 @@ import {
 } from '@heroicons/react/24/solid'
 
 import { TbSettingsDollar, TbLogout } from 'react-icons/tb'
+import { PiPasswordFill } from 'react-icons/pi'
 import { logout } from '@/tools/auth'
 
 const Setting = () => {
@@ -26,6 +27,13 @@ const Setting = () => {
             <GlobeAltIcon className={` max-h-4`} />
             <div className="min-w-0  flex items-center justify-center">
               <p className=" ms-1 text-center text-sm font-semibold ">Language</p>
+            </div>
+          </li>
+          <li className="flex gap-x-4 py-5 hover:bg-zinc-100 rounded-lg px-4 hover:text-yellow-500">
+            <PiPasswordFill className={` max-h-4`} />
+            <div className="min-w-0  flex items-center justify-center">
+              <a href="/change-password" className=' ms-1 text-center text-sm font-semibold'> Change Password</a>
+              {/* <p className=" ms-1 text-center text-sm font-semibold "></p> */}
             </div>
           </li>
           {/* <li className="flex gap-x-4 py-5 hover:bg-zinc-100 rounded-lg px-4 hover:text-yellow-500">

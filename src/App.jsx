@@ -24,6 +24,7 @@ import ChangePassword from "@/pages/ChangePassword"
 import BrandDetail from "@/pages/BrandDetail"
 import NewArrival from "@/pages/NewArrival"
 import Category from "@/pages/Category"
+import OrderHistoryDetail from "@/pages/OrderHistoryDetail"
 
 // payment
 import Finish from "@/pages/payment/Finish"
@@ -94,6 +95,14 @@ const App = () => {
           <Route path="/products/:slug" element={<Detail />} />
           <Route path="/google" element={<Google />} />
           <Route path="/verify-email" element={<VerifyEmail />} />
+
+
+          <Route path="/order-history/:id" element={
+            <PrivateRoute>
+              <OrderHistoryDetail />
+            </PrivateRoute>
+          } />
+
           <Route
             path="/cart"
             element={
