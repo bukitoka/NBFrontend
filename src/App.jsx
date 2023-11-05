@@ -31,6 +31,9 @@ import Finish from "@/pages/payment/Finish"
 import Unfinish from "@/pages/payment/Unfinish"
 import Error from "@/pages/payment/Error"
 
+// store
+import useAuthStore from "@/store/authStore"
+
 const App = () => {
   const appendRecaptcha = () => {
     const siteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY
@@ -46,8 +49,42 @@ const App = () => {
     }
   }
 
+  const appendIntercom = () => {
+    const script = document.createElement("script")
+    const appId = import.meta.env.VITE_INTERCOM_APP_ID
+    script.textContent =
+      "(function(){var w=window;var ic=w.Intercom;if(typeof ic==='function'){ic('reattach_activator');ic('update',w.intercomSettings);}else{var d=document;var i=function(){i.c(arguments);};i.q=[];i.c=function(args){i.q.push(args);};w.Intercom=i;var l=function(){var s=d.createElement('script');s.type='text/javascript';s.async=true;s.src='https://widget.intercom.io/widget/" +
+      appId +
+      "';var x=d.getElementsByTagName('script')[0];x.parentNode.insertBefore(s,x);};if(document.readyState==='complete'){l();}else if(w.attachEvent){w.attachEvent('onload',l);}else{w.addEventListener('load',l,false);}}})();"
+    script.async = true
+    script.defer = true
+
+    if (document.body.contains(script)) {
+      return
+    }
+    document.body.appendChild(script)
+  }
+
+  const { isLogin, allUserData } = useAuthStore()
+  const handleIntercomUser = () => {
+    if (isLogin) {
+      window.Intercom("update", {
+        app_id: import.meta.env.VITE_INTERCOM_APP_ID,
+        name: allUserData?.first_name + " " + allUserData?.last_name,
+        email: allUserData?.email,
+        user_id: allUserData?.id,
+      })
+    } else {
+      window.Intercom("boot", {
+        app_id: import.meta.env.VITE_INTERCOM_APP_ID,
+      })
+    }
+  }
+
   useEffect(() => {
     appendRecaptcha()
+    appendIntercom()
+    handleIntercomUser()
   }, [])
 
   return (
