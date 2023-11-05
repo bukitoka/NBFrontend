@@ -296,16 +296,6 @@ export default function Example() {
   const [coupon2, setCoupon2] = useState("")
   const [discount, setDiscount] = useState(null)
 
-  useEffect(() => {
-    // getCartItems((data) => onSuccess(data), (error) => onError(error))
-    getShippingData(
-      (data) => onShippingSuccess(data),
-      (error) => onShippingError(error)
-    )
-    chekTariff()
-    getSelectedCartItems()
-  }, [])
-
   const getShippingData = async (onSucces, onError) => {
     await apiGet("shipping/", onSucces, onError)
   }
@@ -430,8 +420,6 @@ export default function Example() {
   function onSuccessRequestToken(data) {
     const token = data.data.token
 
-    appendMidtrans()
-
     window.snap.pay(token, {
       onSuccess: function (result) {
         console.log("success")
@@ -513,6 +501,19 @@ export default function Example() {
     setCoupon("")
     setCoupon2("")
   }
+
+  useEffect(() => {
+    // getCartItems((data) => onSuccess(data), (error) => onError(error))
+    getShippingData(
+      (data) => onShippingSuccess(data),
+      (error) => onShippingError(error)
+    )
+    chekTariff()
+    getSelectedCartItems()
+
+    // midtrans
+    appendMidtrans()
+  }, [])
 
   return (
     <div>
