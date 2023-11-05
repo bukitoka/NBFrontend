@@ -8,7 +8,6 @@ import { FaChevronLeft, FaChevronRight } from "react-icons/fa"
 
 // components
 import Navbar from "../components/Navbar"
-import MobileMenu from "../components/MobileMenu"
 import Footer from "../components/Footer"
 import { getParamValue } from "../tools/urlParams"
 
@@ -25,10 +24,12 @@ const ProductByCategories = () => {
   const [error, setError] = useState(null)
   const [nextPage, setNextPage] = useState(null)
   const [prevPage, setPrevPage] = useState(null)
+  const [subsubcategory, setSubSubCategory] = useState(null)
   const [count, setCount] = useState(0)
   const baseurl = import.meta.env.VITE_API_BASE_URL
 
   useEffect(() => {
+    getSubSubCategory(slug)
     getProducts(slug)
   }, [])
 
@@ -41,6 +42,7 @@ const ProductByCategories = () => {
   }
 
   const onGetProductsSuccess = (data) => {
+    console.log(data)
     setProducts(data.results)
     setNextPage(getParamValue("page", data.next))
     setPrevPage(getParamValue("page", data.previous))
@@ -53,6 +55,23 @@ const ProductByCategories = () => {
     setLoading(false)
   }
 
+  const getSubSubCategory = async (slug) => {
+    await apiGet(
+      `subsubcategory/${slug}/`,
+      (data) => onGetSubSubCategorySuccess(data),
+      (error) => onGetSubSubCategoryFailed(error)
+    )
+  }
+
+  const onGetSubSubCategorySuccess = (data) => {
+    console.log(data)
+    setSubSubCategory(data)
+  }
+
+  const onGetSubSubCategoryFailed = (error) => {
+    console.log(error)
+  }
+
   return (
     <div className="bg-white">
       {/* Navbar */}
@@ -62,9 +81,10 @@ const ProductByCategories = () => {
           <div className="px-4 text-center sm:px-6 lg:px-8 pt-20 ">
             {/* <h1 className="text-4xl font-bold tracking-tight text-gray-900">New Arrival</h1> */}
             <img
-              src={staticBanner}
+              src={subsubcategory?.cover}
               alt="New Arrival"
               className=" h-52 w-full object-cover object-center mt-4"
+              onError={(e) => (e.target.src = nbDefaultImage)}
             />
 
             {/* <p className="mx-auto mt-4 max-w-xl text-base text-gray-500">
