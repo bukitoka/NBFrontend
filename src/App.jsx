@@ -46,25 +46,8 @@ const App = () => {
     }
   }
 
-  const appendMidtrans = () => {
-    const script = document.createElement("script")
-    script.src = "https://app.sandbox.midtrans.com/snap/snap.js"
-    script.async = true
-    script.setAttribute(
-      "data-client-key",
-      import.meta.env.VITE_MIDTRANS_CLIENT_KEY
-    )
-
-    if (document.body.contains(script)) {
-      return
-    } else {
-      document.body.appendChild(script)
-    }
-  }
-
   useEffect(() => {
     appendRecaptcha()
-    appendMidtrans()
   }, [])
 
   return (
@@ -96,12 +79,14 @@ const App = () => {
           <Route path="/google" element={<Google />} />
           <Route path="/verify-email" element={<VerifyEmail />} />
 
-
-          <Route path="/order-history/:id" element={
-            <PrivateRoute>
-              <OrderHistoryDetail />
-            </PrivateRoute>
-          } />
+          <Route
+            path="/order-history/:id"
+            element={
+              <PrivateRoute>
+                <OrderHistoryDetail />
+              </PrivateRoute>
+            }
+          />
 
           <Route
             path="/cart"
