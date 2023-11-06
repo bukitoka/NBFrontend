@@ -6,6 +6,8 @@ import nbDefaultImage from "./noimage.svg"
 import staticBanner from "./banner.jpg"
 import nodata from "./nodata.svg"
 import recaptchaLogo from "./google_recaptcha.svg"
+import tabCoverSample from "./tableCover.jpg"
+import smartPhoneSample from "./smartPhone.png"
 
 // BANK LOGOS
 import bank1 from "./BANK/gopay.svg"
@@ -36,6 +38,8 @@ import bank25 from "./BANK/uob.svg"
 import bank26 from "./BANK/visa.svg"
 
 export {
+  tabCoverSample,
+  smartPhoneSample,
   background,
   nanobeepa,
   nbwhite,
