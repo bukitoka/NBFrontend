@@ -22,6 +22,7 @@ import Feedback from "./Feedback"
 
 // store
 import useCategoryStore from "@/store/categoryStore"
+import useCartStore from "@/store/cartStore"
 import useAuthStore from "@/store/authStore"
 
 const Navbar = () => {
@@ -45,6 +46,7 @@ const Navbar = () => {
   }
 
   const { categories, fetchCategories } = useCategoryStore()
+  const { carts, fetchCarts } = useCartStore()
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn)
 
   const [totalItems, setTotalItems] = useState(0)
@@ -56,6 +58,7 @@ const Navbar = () => {
   useEffect(() => {
     fetchCategories()
     if (isLoggedIn) {
+      fetchCarts()
       fetchCart()
     }
   }, [])

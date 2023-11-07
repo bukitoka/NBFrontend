@@ -4,8 +4,6 @@ import { StarIcon } from '@heroicons/react/20/solid'
 import { HeartIcon } from '@heroicons/react/24/outline'
 import { useParams } from 'react-router-dom';
 import useAuthStore from '../store/authStore';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
 import { apiPost } from '../api/ApiService';
 import ProductReviews from '../components/ProductReviews';
@@ -16,15 +14,15 @@ import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
 import { priceFormatter } from '@/tools/reformat'
 const baseurl = import.meta.env.VITE_API_BASE_URL;
 
+import Success from "@/components/messages/Success"
+import Error from "@/components/messages/Error"
+import toast from "react-hot-toast"
+import useCartStore from "@/store/cartStore"
 
 // components
 import Navbar from "../components/Navbar"
 import Footer from '../components/Footer'
 import { fetchProduct } from '../api/ProductApi'
-
-
-
-
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -44,6 +42,7 @@ export default function ProductDetail() {
 
   const [isShowColor, setShowColor] = useState(false);
   const [latestRating, setLatestRating] = useState([]);
+  const { fetchCarts } = useCartStore()
 
 
 
@@ -114,7 +113,9 @@ export default function ProductDetail() {
   // function for adding to cart
   const addToCart = async (productId, stcockId) => {
     if (!isLoggedIn) {
-      toast.error("Please login to add to cart");
+      const status = "Whoops!"
+      const message = "Please login to add to cart"
+      toast.custom((t) => <Error t={t} status={status} message={message} />)
     } else {
       await handleAddToCart(productId, stcockId);
     }
@@ -131,13 +132,16 @@ export default function ProductDetail() {
 
   const onSucceessAddToCart = (response) => {
     //  show toast
-    toast.success("Product added to cart");
+    const status = "Success!"
+    const message = "Product added to cart"
+    toast.custom((t) => <Success t={t} status={status} message={message} />)
+    fetchCarts();
   }
 
   const onErrorAddToCart = (error) => {
-    console.log("error", error)
-    //  show toast
-    toast.error("Error adding to cart");
+    const status = "Error!"
+    const message = "Error adding to cart"
+    toast.custom((t) => <Error t={t} status={status} message={message} />)
   }
 
   const addWishList = async (productId) => {
@@ -148,12 +152,16 @@ export default function ProductDetail() {
 
   const onSucessAddWishList = (response) => {
     //  show toast
-    toast.success("Product added to wishlist");
+    const status = "Success!"
+    const message = "Product added to wishlist"
+    toast.custom((t) => <Success t={t} status={status} message={message} />)
   }
 
   const onErrorAddWishList = (error) => {
     //  show toast
-    toast.error("Error adding to wishlist");
+    const status = "Error!"
+    const message = "Error adding to wishlist"
+    toast.custom((t) => <Error t={t} status={status} message={message} />)
   }
 
 
@@ -165,11 +173,6 @@ export default function ProductDetail() {
       <Navbar />
       <main>
         <div className="bg-white  pt-[130px] lg:pt-[86px] ">
-          <ToastContainer
-            toastClassName="rounded-lg"
-            bodyClassName="text-sm font-semibold"
-            position="top-center"
-          />
           <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
             <div className="lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-8">
               {/* Image gallery */}
