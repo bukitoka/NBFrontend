@@ -41,6 +41,8 @@ export default function ProductDetail() {
   const [selectedStock, setSelectedStock] = useState(null);
 
   const [isShowColor, setShowColor] = useState(false);
+  const [isShowSize, setShowSize] = useState(true);
+  const [isShowSecondColor, setShowSecondColor] = useState(false)
   const [latestRating, setLatestRating] = useState([]);
   const { fetchCarts } = useCartStore()
 
@@ -67,6 +69,27 @@ export default function ProductDetail() {
     })
   }
 
+  const doesShowSize = (stocks) => {
+    if (stocks == null) {
+      setShowSecondColor(false)
+      setShowSize(false);
+      return;
+    }
+
+    // foreach stocks and check if there is color set to true
+    stocks.forEach((stock) => {
+      if (stock.color != null) {
+        setShowSecondColor(true)
+        setShowSize(false);
+        return;
+      } else {
+        setShowSize(true)
+        setShowSecondColor(false)
+        return;
+      }
+    })
+  }
+
   const getProductdetail = async (slug) => {
     // console.log("Check update data")
     try {
@@ -77,6 +100,7 @@ export default function ProductDetail() {
       setProductImages(productsData.images);
       setRating(productsData.total_rating);
       doesShowColor(productsData.stock);
+      doesShowSize(productsData.stock)
       setLatestRating(productsData.latest_rating);
       setTotalRatingCount(productsData.total_rating);
       setLoading(false);
@@ -287,26 +311,56 @@ export default function ProductDetail() {
                   }
 
 
+                  {
+                    isShowSecondColor && (
+                      <div className="mt-8">
+                        <h3 className="text-sm text-gray-600">Color</h3>
+                        <RadioGroup className="mt-2">
+                          <RadioGroup.Label className="sr-only">Choose a size</RadioGroup.Label>
+                          <div className="grid grid-cols-3 gap-3 sm:grid-cols-5">
+                            {stocks.map((stock) => (
+                              <RadioGroup.Option
+                                key={stock.id}
+                                value={stock.color}
+                                onClick={() => handleStockSelected(stock)}
+                                selected={selectedStock?.id == stock.id}
+                                className={`cursor-pointer focus:outline-none ${selectedStock?.id == stock.id ? 'ring-2 ring-yellow-500 ring-offset-2 border-transparent bg-yellow-500 text-white hover:bg-yellow-500' : 'border-gray-200 bg-white text-gray-900 hover:bg-gray-50'} flex items-center justify-center rounded-md border py-3 px-3 text-sm font-medium uppercase sm:flex-1 `}
+                              >
+                                <RadioGroup.Label as="span">{stock.color}</RadioGroup.Label>
+                              </RadioGroup.Option>
+                            ))}
+
+                          </div>
+                        </RadioGroup>
+                      </div>)
+                  }
+
+
                   {/* Sizes */}
-                  <div className="mt-8">
-                    <h3 className="text-sm text-gray-600">Size</h3>
-                    <RadioGroup className="mt-2">
-                      <RadioGroup.Label className="sr-only">Choose a size</RadioGroup.Label>
-                      <div className="grid grid-cols-3 gap-3 sm:grid-cols-6">
-                        {stocks.map((stock) => (
-                          <RadioGroup.Option
-                            key={stock.id}
-                            value={stock.size}
-                            onClick={() => handleStockSelected(stock)}
-                            selected={selectedStock?.id == stock.id}
-                            className={`cursor-pointer focus:outline-none ${selectedStock?.id == stock.id ? 'ring-2 ring-yellow-500 ring-offset-2 border-transparent bg-yellow-500 text-white hover:bg-yellow-500' : 'border-gray-200 bg-white text-gray-900 hover:bg-gray-50'} flex items-center justify-center rounded-md border py-3 px-3 text-sm font-medium uppercase sm:flex-1 `}
-                          >
-                            <RadioGroup.Label as="span">{stock.size}</RadioGroup.Label>
-                          </RadioGroup.Option>
-                        ))}
+                  {
+                    isShowSize && (
+                      <div className="mt-8">
+                        <h3 className="text-sm text-gray-600">Size</h3>
+                        <RadioGroup className="mt-2">
+                          <RadioGroup.Label className="sr-only">Choose a size</RadioGroup.Label>
+                          <div className="grid grid-cols-3 gap-3 sm:grid-cols-6">
+                            {stocks.map((stock) => (
+                              <RadioGroup.Option
+                                key={stock.id}
+                                value={stock.size}
+                                onClick={() => handleStockSelected(stock)}
+                                selected={selectedStock?.id == stock.id}
+                                className={`cursor-pointer focus:outline-none ${selectedStock?.id == stock.id ? 'ring-2 ring-yellow-500 ring-offset-2 border-transparent bg-yellow-500 text-white hover:bg-yellow-500' : 'border-gray-200 bg-white text-gray-900 hover:bg-gray-50'} flex items-center justify-center rounded-md border py-3 px-3 text-sm font-medium uppercase sm:flex-1 `}
+                              >
+                                <RadioGroup.Label as="span">{stock.size}</RadioGroup.Label>
+                              </RadioGroup.Option>
+                            ))}
+
+                          </div>
+                        </RadioGroup>
                       </div>
-                    </RadioGroup>
-                  </div>
+                    )
+                  }
 
                   <div className="mt-10 flex">
                     <button
