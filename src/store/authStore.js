@@ -1,18 +1,24 @@
-import { create } from 'zustand'
-import { devtools } from 'zustand/middleware'
+import { create } from "zustand"
+import { persist, createJSONStorage } from "zustand/middleware"
 
-const authStore = (set, get) => ({
-    allUserData: null, // Use this to store all user data
-    loading: false,
-    isLoggedIn: false,
-    user: () => ({ user_id: get().allUserData?.user_id || null, }),
-    setUser: (user) => set({ allUserData: user }),
-    setLoading: (loading) => set({ loading }),
-    setIsLoggedIn: (isLoggedIn) => set({ isLoggedIn }),
-});
+const authStore = (set) => ({
+  loading: false,
+  isLoggedIn: false,
+  user: null,
+  accessExpiration: null,
+  refreshExpiration: null,
+  setUser: (user) => set({ user }),
+  setLoading: (loading) => set({ loading }),
+  setIsLoggedIn: (isLoggedIn) => set({ isLoggedIn }),
+  setAccessExpiration: (accessExpiration) => set({ accessExpiration }),
+  setRefreshExpiration: (refreshExpiration) => set({ refreshExpiration }),
+})
 
 const useAuthStore = create(
-    devtools(authStore)
-);
+  persist(authStore, {
+    name: "user-data",
+    storage: createJSONStorage(() => localStorage),
+  })
+)
 
-export default useAuthStore;
+export default useAuthStore

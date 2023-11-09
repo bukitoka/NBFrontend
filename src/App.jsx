@@ -10,7 +10,6 @@ import Home from "@/pages/Home"
 import Signin from "@/pages/Signin"
 import Signup from "@/pages/Signup"
 import Profile from "@/pages/profile/Profile"
-import Logout from "@/pages/Logout"
 import Products from "@/pages/Product"
 import Detail from "@/pages/ProductDetail"
 import Google from "@/pages/GoogleCallBack"
@@ -65,14 +64,16 @@ const App = () => {
     document.body.appendChild(script)
   }
 
-  const { isLogin, allUserData } = useAuthStore()
+  const isLoggedIn = useAuthStore((state) => state.isLoggedIn)
+  const user = useAuthStore((state) => state.user)
+
   const handleIntercomUser = () => {
-    if (isLogin) {
+    if (isLoggedIn && user) {
       window.Intercom("update", {
         app_id: import.meta.env.VITE_INTERCOM_APP_ID,
-        name: allUserData?.first_name + " " + allUserData?.last_name,
-        email: allUserData?.email,
-        user_id: allUserData?.id,
+        name: user?.first_name + " " + user?.last_name,
+        email: user?.email,
+        user_id: user?.id,
       })
     } else {
       window.Intercom("boot", {
@@ -85,7 +86,7 @@ const App = () => {
     appendRecaptcha()
     appendIntercom()
     handleIntercomUser()
-  }, [])
+  }, [user])
 
   return (
     <BrowserRouter>
@@ -110,7 +111,6 @@ const App = () => {
           <Route path="/" element={<Home />} />
           <Route path="/signin" element={<Signin />} />
           <Route path="/signup" element={<Signup />} />
-          <Route path="/logout" element={<Logout />} />
           <Route path="/products" element={<Products />} />
           <Route path="/products/:slug" element={<Detail />} />
           <Route path="/google" element={<Google />} />
