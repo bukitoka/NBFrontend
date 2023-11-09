@@ -2,6 +2,19 @@ import { ChevronRightIcon } from "@heroicons/react/20/solid"
 import { useTranslation } from "react-i18next"
 
 const TopPromo = () => {
+  
+  const fetchCoupons = async () => {
+    await apiGet('coupons/', (data) => onGetCouponsSuccess(data), (err) => onGetCouponsError(err))
+  };
+
+  const onGetCouponsSuccess = (response) => {
+    setCoupons(response.results)
+  }
+
+  const onGetCouponsError = (error) => {
+    // console.log(error)
+  }
+
   const { t, i18n } = useTranslation()
   return (
     <div className="bg-white py-16">
