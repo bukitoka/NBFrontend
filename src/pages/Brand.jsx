@@ -18,7 +18,6 @@ import Footer from "../components/Footer"
 import { fetchProducts } from "../api/ProductApi"
 import { getParamValue } from "../tools/urlParams"
 import { nbDefaultImage } from "@/assets/"
-import api from "../tools/api"
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa"
 
 const navigation = {
@@ -337,7 +336,7 @@ const Brand = () => {
                     <div className="relative">
                       <div className="relative h-72 w-full overflow-hidden rounded-lg">
                         <img
-                          src={brand.cover}
+                          src={brand.logo}
                           alt={brand.name}
                           className="h-full w-full object-cover object-center"
                           onError={(e) => (e.target.src = nbDefaultImage)}

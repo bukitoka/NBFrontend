@@ -10,7 +10,6 @@ import Home from "@/pages/Home"
 import Signin from "@/pages/Signin"
 import Signup from "@/pages/Signup"
 import Profile from "@/pages/profile/Profile"
-import Logout from "@/pages/Logout"
 import Products from "@/pages/Product"
 import Detail from "@/pages/ProductDetail"
 import Google from "@/pages/GoogleCallBack"
@@ -31,6 +30,9 @@ import Finish from "@/pages/payment/Finish"
 import Unfinish from "@/pages/payment/Unfinish"
 import Error from "@/pages/payment/Error"
 
+// store
+import useAuthStore from "@/store/authStore"
+
 const App = () => {
   const appendRecaptcha = () => {
     const siteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY
@@ -46,9 +48,45 @@ const App = () => {
     }
   }
 
+  const appendIntercom = () => {
+    const script = document.createElement("script")
+    const appId = import.meta.env.VITE_INTERCOM_APP_ID
+    script.textContent =
+      "(function(){var w=window;var ic=w.Intercom;if(typeof ic==='function'){ic('reattach_activator');ic('update',w.intercomSettings);}else{var d=document;var i=function(){i.c(arguments);};i.q=[];i.c=function(args){i.q.push(args);};w.Intercom=i;var l=function(){var s=d.createElement('script');s.type='text/javascript';s.async=true;s.src='https://widget.intercom.io/widget/" +
+      appId +
+      "';var x=d.getElementsByTagName('script')[0];x.parentNode.insertBefore(s,x);};if(document.readyState==='complete'){l();}else if(w.attachEvent){w.attachEvent('onload',l);}else{w.addEventListener('load',l,false);}}})();"
+    script.async = true
+    script.defer = true
+
+    if (document.body.contains(script)) {
+      return
+    }
+    document.body.appendChild(script)
+  }
+
+  const isLoggedIn = useAuthStore((state) => state.isLoggedIn)
+  const user = useAuthStore((state) => state.user)
+
+  const handleIntercomUser = () => {
+    if (isLoggedIn && user) {
+      window.Intercom("update", {
+        app_id: import.meta.env.VITE_INTERCOM_APP_ID,
+        name: user?.first_name + " " + user?.last_name,
+        email: user?.email,
+        user_id: user?.id,
+      })
+    } else {
+      window.Intercom("boot", {
+        app_id: import.meta.env.VITE_INTERCOM_APP_ID,
+      })
+    }
+  }
+
   useEffect(() => {
     appendRecaptcha()
-  }, [])
+    appendIntercom()
+    handleIntercomUser()
+  }, [user])
 
   return (
     <BrowserRouter>
@@ -73,7 +111,6 @@ const App = () => {
           <Route path="/" element={<Home />} />
           <Route path="/signin" element={<Signin />} />
           <Route path="/signup" element={<Signup />} />
-          <Route path="/logout" element={<Logout />} />
           <Route path="/products" element={<Products />} />
           <Route path="/products/:slug" element={<Detail />} />
           <Route path="/google" element={<Google />} />

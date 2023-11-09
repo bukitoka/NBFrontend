@@ -1,24 +1,20 @@
 import React, { useState, useEffect } from "react"
-import { ToastContainer, toast } from "react-toastify"
-import "react-toastify/dist/ReactToastify.css"
-
-import { login } from "../tools/auth"
+import toast from "react-hot-toast"
+import { login } from "@/tools/auth"
 import { useNavigate } from "react-router-dom"
-import useAuthStore from "../store/authStore"
-
-import { nanobeepa, google } from "../assets"
-
+import useAuthStore from "@/store/authStore"
+import Success from "@/components/messages/Success"
+import Error from "@/components/messages/Error"
+import { nanobeepa, google } from "@/assets"
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline"
 
 const Signin = () => {
   const navigate = useNavigate()
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
-  const [rememberMe, setRememberMe] = useState(false)
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn)
 
   useEffect(() => {
-    // getCartId();
     if (isLoggedIn) {
       navigate("/")
     }
@@ -27,14 +23,16 @@ const Signin = () => {
   const resetForm = () => {
     setEmail("")
     setPassword("")
-    setRememberMe(false)
   }
 
   const handleLogin = async (e) => {
     e.preventDefault()
-    const { error } = await login(email, password, rememberMe)
+    const { error } = await login(email, password)
     if (error) {
-      toast.error(error)
+      const status = "Whoops!"
+      const message = "Something went wrong. Please try again."
+
+      toast.custom((t) => <Error t={t} status={status} message={message} />)
     } else {
       navigate("/")
       resetForm()
@@ -54,7 +52,6 @@ const Signin = () => {
 
       return response
     } catch (err) {
-      console.log(err)
       toast.error(err)
     }
   }
@@ -62,12 +59,6 @@ const Signin = () => {
   return (
     <div className="bg-white h-screen block lg:grid lg:grid-cols-2">
       <div className="w-full px-8 md:px-32 lg:px-24 pt-16">
-        <ToastContainer
-          toastClassName="rounded-lg"
-          bodyClassName="text-sm font-semibold"
-          position="top-center"
-        />
-
         <div className="py-12 sm:px-12">
           <div className="mb-3">
             <a href="/" className="flex justify-center">
@@ -138,24 +129,7 @@ const Signin = () => {
               </div>
             </div>
 
-            <div className="flex items-center justify-between">
-              <div className="flex items-center">
-                <input
-                  id="remember-me"
-                  name="remember-me"
-                  type="checkbox"
-                  className="h-4 w-4 rounded border-gray-300 text-yellow-600 focus:ring-yellow-600"
-                  checked={rememberMe}
-                  onChange={(e) => setRememberMe(e.target.checked)}
-                />
-                <label
-                  htmlFor="remember-me"
-                  className="ml-3 block text-sm leading-6 text-gray-900"
-                >
-                  Remember me
-                </label>
-              </div>
-
+            <div className="flex items-center justify-end">
               <div className="text-sm leading-6">
                 <a
                   href="/reset-password"

@@ -1,18 +1,20 @@
-import { useEffect, useState } from 'react';
-import { setUser } from '../tools/auth';
+import { useEffect, useState } from "react"
+import { tokenChecking } from "@/tools/auth"
 
 const MainWrapper = ({ children }) => {
-    const [loading, setLoading] = useState(true);
-    useEffect(() => {
-        const handler = async () => {
-            setLoading(true);
-            await setUser();
-            setLoading(false);
-        };
-        handler();
-    }, []);
+  const [loading, setLoading] = useState(false)
 
-    return <>{loading ? null : children}</>;
-};
+  const checkToken = async () => {
+    setLoading(true)
+    await tokenChecking()
+    setLoading(false)
+  }
 
-export default MainWrapper;
+  useEffect(() => {
+    checkToken()
+  }, [])
+
+  return loading ? null : <>{children}</>
+}
+
+export default MainWrapper

@@ -1,17 +1,15 @@
-import useAuthStore from "../store/authStore"
-import jwt_decode from "jwt-decode"
-import Cookies from "js-cookie"
+import useAuthStore from "@/store/authStore"
+import api from "@/tools/api"
 import dayjs from "dayjs"
-import api from "./api"
 
-export const login = async (email, password, rememberMe) => {
+export const login = async (email, password) => {
   try {
     const { data, status } = await api.post("auth/login/", {
       email,
       password,
     })
     if (status === 200) {
-      setAuthUser(data.access, data.refresh, rememberMe)
+      setUser(data.user, data.access_expiration, data.refresh_expiration)
     }
     return { data, error: null }
   } catch (error) {
@@ -48,18 +46,11 @@ export const register = async (
 }
 
 export const logout = async () => {
-  const refreshToken = Cookies.get("refresh_token")
-
   try {
-    const { data, status } = await api.post("auth/logout/", {
-      refresh: refreshToken,
-    })
+    const { data, status } = await api.post("auth/logout/", {})
 
     if (status === 200) {
-      Cookies.remove("access_token")
-      Cookies.remove("refresh_token")
-      useAuthStore.getState().setUser(null)
-      useAuthStore.getState().setIsLoggedIn(false)
+      setUser(null, null, null)
     }
 
     return { data, error: null }
@@ -71,83 +62,23 @@ export const logout = async () => {
   }
 }
 
-export const setUser = async () => {
-  // ON PAGE LOAD
-  const accessToken = Cookies.get("access_token")
-  const refreshToken = Cookies.get("refresh_token")
+export const setUser = async (user, access_expiration, refresh_expiration) => {
+  useAuthStore.getState().setLoading(true)
+  if (user && access_expiration && refresh_expiration) {
+    const accessExp = dayjs(access_expiration).unix()
+    const refreshExp = dayjs(refresh_expiration).unix()
 
-  if (!refreshToken || isRefreshTokenExpired(refreshToken)) {
-    return // If no refresh token or refresh token is expired, ask user to login
-  } else if (!accessToken || isAccessTokenExpired(accessToken)) {
-    try {
-      const response = await refreshAccessToken(refreshToken)
-      setAuthUser(response.access, refreshToken)
-    } catch (error) {
-      console.error("Error refreshing access token:", error)
-    }
-  } else {
-    setAuthUser(accessToken, refreshToken)
-  }
-}
-
-export const setAuthUser = (access_token, refresh_token, rememberMe) => {
-  const accessExpirationMinutes = rememberMe ? 1 * 24 * 60 : 15 // 1 days if rememberMe, otherwise 15 minutes
-  const accessExpirationDate = dayjs().add(accessExpirationMinutes, "minutes")
-
-  Cookies.set("access_token", access_token, {
-    expires: accessExpirationDate.toDate(),
-    secure: true,
-  })
-
-  const existingRefreshToken = Cookies.get("refresh_token")
-  if (!existingRefreshToken) {
-    const refreshExpirationDays = rememberMe ? 3 : 1 // 3 days if rememberMe, otherwise 1 days
-    const refreshExpirationDate = dayjs().add(refreshExpirationDays, "days")
-
-    Cookies.set("refresh_token", refresh_token, {
-      expires: refreshExpirationDate.toDate(),
-      secure: true,
-    })
-  }
-
-  const user = jwt_decode(access_token) ?? null
-
-  if (user) {
-    // store only the user_id in the authStore
-    useAuthStore.getState().setUser(user.user_id)
+    useAuthStore.getState().setUser(user)
     useAuthStore.getState().setIsLoggedIn(true)
+    useAuthStore.getState().setAccessExpiration(accessExp)
+    useAuthStore.getState().setRefreshExpiration(refreshExp)
+  } else {
+    useAuthStore.getState().setUser(null)
+    useAuthStore.getState().setIsLoggedIn(false)
+    useAuthStore.getState().setAccessExpiration(null)
+    useAuthStore.getState().setRefreshExpiration(null)
   }
-
   useAuthStore.getState().setLoading(false)
-}
-
-export const refreshAccessToken = async () => {
-  const refresh_token = Cookies.get("refresh_token")
-  const response = await api.post("auth/token/refresh/", {
-    refresh: refresh_token,
-  })
-
-  return response.data
-}
-
-export const isAccessTokenExpired = (accessToken) => {
-  try {
-    const decodedToken = jwt_decode(accessToken)
-    const expirationTime = dayjs.unix(decodedToken.exp)
-    return dayjs().isAfter(expirationTime) // Check if current time is after token's expiration time
-  } catch (err) {
-    return true // Token is invalid or expired
-  }
-}
-
-export const isRefreshTokenExpired = (refreshToken) => {
-  try {
-    const decodedToken = jwt_decode(refreshToken)
-    const expirationTime = dayjs.unix(decodedToken.exp)
-    return dayjs().isAfter(expirationTime) // Check if current time is after token's expiration time
-  } catch (err) {
-    return true // Token is invalid or expired
-  }
 }
 
 // store user info from google auth
@@ -158,8 +89,11 @@ export const googleAuthenticate = async (code) => {
     })
 
     if (res.status === 200) {
-      setAuthUser(res.data.access, res.data.refresh, true)
-      useAuthStore.getState().setIsLoggedIn(true)
+      setUser(
+        res.data.user,
+        res.data.access_expiration,
+        res.data.refresh_expiration
+      )
     }
 
     return { data: res.data, error: null }
@@ -256,4 +190,44 @@ export const changePassword = async (
       error: err.response.data?.detail || "Something went wrong",
     }
   }
+}
+
+export const refreshToken = async () => {
+  try {
+    const res = await api.post("auth/token/refresh/", {})
+
+    return { data: res.data, error: res.status }
+  } catch (err) {
+    return {
+      data: null,
+      status: err.response.status,
+    }
+  }
+}
+
+export const tokenChecking = async () => {
+  const isLoggedIn = useAuthStore.getState().isLoggedIn
+  const accessExpiration = useAuthStore.getState().accessExpiration
+  const refreshExpiration = useAuthStore.getState().refreshExpiration
+  const now = dayjs().unix()
+
+  if (isLoggedIn && now < refreshExpiration) {
+    // if refresh token is not expired, check access token
+    if (now > accessExpiration) {
+      // token is expired, refresh it
+      try {
+        const { data } = await refreshToken()
+        useAuthStore
+          .getState()
+          .setAccessExpiration(dayjs(data.access_expiration).unix())
+      } catch (err) {
+        console.log(err)
+      }
+    }
+  } else {
+    // if refresh token is expired, redirect to login page
+    await setUser(null, null, null)
+  }
+
+  return
 }
