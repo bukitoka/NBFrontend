@@ -37,8 +37,6 @@ import bank25 from "./BANK/uob.svg"
 import bank26 from "./BANK/visa.svg"
 
 export {
-  tabCoverSample,
-  smartPhoneSample,
   background,
   nanobeepa,
   nbwhite,

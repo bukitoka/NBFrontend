@@ -11,9 +11,7 @@ import { languageOptions } from '@/constant/constant'
 import Navbar from "../components/Navbar"
 import Footer from "../components/Footer"
 import {
-  nbDefaultImage,
-  tabCoverSample,
-  smartPhoneSample
+  nbDefaultImage
 } from "@/assets/"
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa"
 
