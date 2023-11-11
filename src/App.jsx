@@ -24,6 +24,7 @@ import BrandDetail from "@/pages/BrandDetail"
 import NewArrival from "@/pages/NewArrival"
 import Category from "@/pages/Category"
 import OrderHistoryDetail from "@/pages/OrderHistoryDetail"
+import FeedbackPage from "@/pages/FeedbackPage"
 
 // payment
 import Finish from "@/pages/payment/Finish"
@@ -175,6 +176,16 @@ const App = () => {
               </PrivateRoute>
             }
           />
+
+          <Route
+            path="/feedback"
+            element={
+              <PrivateRoute>
+                <FeedbackPage />
+              </PrivateRoute>
+            }
+          />
+
         </Routes>
       </MainWrapper>
     </BrowserRouter>
