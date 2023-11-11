@@ -6,8 +6,6 @@ import nbDefaultImage from "./noimage.svg"
 import staticBanner from "./banner.jpg"
 import nodata from "./nodata.svg"
 import recaptchaLogo from "./google_recaptcha.svg"
-import tabCoverSample from "./tableCover.jpg"
-import smartPhoneSample from "./smartPhone.png"
 import newArrivalCover from "./newArrivalCover.jpg"
 
 // BANK LOGOS
