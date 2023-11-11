@@ -24,6 +24,9 @@ import BrandDetail from "@/pages/BrandDetail"
 import NewArrival from "@/pages/NewArrival"
 import Category from "@/pages/Category"
 import OrderHistoryDetail from "@/pages/OrderHistoryDetail"
+import FeedbackPage from "@/pages/FeedbackPage"
+import Blog from "@/pages/Blog"
+import BlogDetail from "@/pages/BlogDetail"
 
 // payment
 import Finish from "@/pages/payment/Finish"
@@ -147,6 +150,8 @@ const App = () => {
           <Route path="/new-arrival" element={<NewArrival />} />
           <Route path="/category/:slug?" element={<Category />} />
           <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="/blogs" element={<Blog />} />
+          <Route path="/blogs/:slug" element={<BlogDetail />} />
           <Route
             path="/reset-password/:uid/:token"
             element={<ResetPasswordConfirm />}
@@ -172,6 +177,15 @@ const App = () => {
             element={
               <PrivateRoute>
                 <Error />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/feedback"
+            element={
+              <PrivateRoute>
+                <FeedbackPage />
               </PrivateRoute>
             }
           />
