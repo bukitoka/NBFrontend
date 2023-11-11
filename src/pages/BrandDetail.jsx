@@ -94,17 +94,12 @@ const BrandDetail = () => {
           <div className="h-32 lg:h-60  w-full py-2 px-6 mt-4">
             <img
               className="object-cover w-full h-full rounded-lg hidden lg:block"
-              src={`${brand != null ? brand.cover : nbDefaultImage}`}
+              src={brand?.cover}
               onError={(e) => (e.target.src = nbDefaultImage)}
             />
             <img
-              className="object-cover w-full h-full rounded-lg hidden md:block  lg:hidden"
-              src={tabCoverSample}
-              onError={(e) => (e.target.src = nbDefaultImage)}
-            />
-            <img
-              className="object-cover w-full h-full rounded-lg block md:hidden "
-              src={smartPhoneSample}
+              className="object-cover w-full h-full rounded-lg block lg:hidden "
+              src={brand?.cover_mobile}
               onError={(e) => (e.target.src = nbDefaultImage)}
             />
 
@@ -160,9 +155,9 @@ const BrandDetail = () => {
                             <p className="text-sm font-medium text-gray-900">
                               {product.name}
                             </p>
-                            <p className="mt-1 text-sm text-gray-500">
+                            {/* <p className="mt-1 text-sm text-gray-500">
                               Discount: {product.discount}
-                            </p>
+                            </p> */}
                             {product.min_price == product.max_price ? (
                               <h4 className=" text-sm">
                                 Rp.{priceFormatter(product.min_price)}

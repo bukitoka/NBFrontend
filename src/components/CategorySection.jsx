@@ -1,7 +1,28 @@
 import { ChevronRightIcon } from "@heroicons/react/20/solid"
 import { useTranslation } from "react-i18next"
+import { useEffect, useState } from 'react'
+import { apiGet } from '@/api/ApiService';
+import { nbDefaultImage } from "@/assets"
 
 const CategorySection = ({ categories }) => {
+  const [topCategories, setTopCategories] = useState([])
+
+  useEffect(() => {
+    fetchTopCategories()
+  }, [])
+
+  const fetchTopCategories = async () => {
+    await apiGet('top-category/', (response) => onSuccessfulFetch(response), (error) => onFailedFetch(error))
+  }
+
+  const onSuccessfulFetch = (response) => {
+    setTopCategories(response)
+  }
+
+  const onFailedFetch = (error) => {
+    console.log(error)
+  }
+
   const { t } = useTranslation()
   return (
     <section
@@ -27,9 +48,9 @@ const CategorySection = ({ categories }) => {
       <div className="mx-auto max-w-7xl px-4 lg:px-0">
         <div className="mx-auto max-w-2xl lg:max-w-none w-full">
           <div className="mt-8 flex flex-row space-x-4 lg:grid lg:grid-cols-5 lg:gap-x-8 lg:space-x-0 overflow-x-auto no-scrollbar rounded-lg">
-            {categories.map((category) => (
+            {topCategories.map((category) => (
               <div
-                key={category.name}
+                key={category?.category_id}
                 className="group shrink-0 relative rounded-lg bg-white"
               >
                 <div>
@@ -39,9 +60,10 @@ const CategorySection = ({ categories }) => {
                   >
                     <div className="overflow-hidden group-hover:opacity-75">
                       <img
-                        src={category.imageSrc}
-                        alt={category.name}
+                        src={category?.category_cover_homepage}
+                        alt=""
                         className="h-80 w-56 object-cover object-center group-hover:scale-110 ease-in duration-150"
+                        onError={(e) => (e.target.src = nbDefaultImage)}
                       />
                     </div>
                     <div className="absolute rounded-lg h-full mt-auto inset-0 bg-gradient-to-b from-transparent to-black opacity-50" />
@@ -49,9 +71,9 @@ const CategorySection = ({ categories }) => {
                   <div className="absolute inset-0 flex items-end rounded-lg p-6">
                     <div>
                       <h3 className="font-semibold text-white">
-                        <a href={category.href}>
+                        <a href="#">
                           <span className="absolute inset-0" />
-                          {category.name}
+                          {category?.category_name}
                         </a>
                       </h3>
                     </div>

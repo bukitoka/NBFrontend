@@ -1,10 +1,14 @@
 import { ChevronRightIcon } from "@heroicons/react/20/solid"
 import { useTranslation } from "react-i18next"
+import { useEffect, useState } from 'react'
+import { apiGet } from '@/api/ApiService';
+import { nbDefaultImage } from "@/assets"
 
 const TopPromo = () => {
-  
+  const [coupons, setCoupons] = useState([])
+
   const fetchCoupons = async () => {
-    await apiGet('coupons/', (data) => onGetCouponsSuccess(data), (err) => onGetCouponsError(err))
+    await apiGet('coupons/?ordering=-created_at', (data) => onGetCouponsSuccess(data), (err) => onGetCouponsError(err))
   };
 
   const onGetCouponsSuccess = (response) => {
@@ -12,8 +16,12 @@ const TopPromo = () => {
   }
 
   const onGetCouponsError = (error) => {
-    // console.log(error)
+    console.log(error)
   }
+
+  useEffect(() => {
+    fetchCoupons()
+  }, [])
 
   const { t, i18n } = useTranslation()
   return (
@@ -30,36 +38,17 @@ const TopPromo = () => {
             </p>
           </div>
           <div className="mt-12 flex flex-row space-x-4 lg:grid lg:grid-cols-3 lg:gap-x-8 lg:space-x-0 overflow-x-auto no-scrollbar rounded-lg">
-            <a
+            {coupons.map((coupon) => (<a
               href="#"
               className="flex flex-shrink-0 overflow-hidden rounded-lg"
             >
               <img
-                src="https://images.unsplash.com/photo-1607082349566-187342175e2f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80"
+                src={coupon?.cover}
                 alt=""
                 className="h-60 w-80 lg:w-96 object-cover rounded-lg hover:scale-110 ease-in duration-150"
+                onError={(e) => (e.target.src = nbDefaultImage)}
               />
-            </a>
-            <a
-              href="#"
-              className="flex flex-shrink-0 overflow-hidden rounded-lg"
-            >
-              <img
-                src="https://images.unsplash.com/photo-1607082349566-187342175e2f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80"
-                alt=""
-                className="h-60 w-80 lg:w-96 object-cover rounded-lg hover:scale-110 ease-in duration-150"
-              />
-            </a>
-            <a
-              href="#"
-              className="flex flex-shrink-0 overflow-hidden rounded-lg"
-            >
-              <img
-                src="https://images.unsplash.com/photo-1607082349566-187342175e2f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80"
-                alt=""
-                className="h-60 w-80 lg:w-96 object-cover rounded-lg hover:scale-110 ease-in duration-150"
-              />
-            </a>
+            </a>))}
           </div>
         </div>
         <div className="flex justify-center mt-8 w-full">
