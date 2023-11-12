@@ -4,8 +4,6 @@ import { StarIcon } from '@heroicons/react/20/solid'
 import { HeartIcon } from '@heroicons/react/24/outline'
 import { useParams } from 'react-router-dom';
 import useAuthStore from '../store/authStore';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
 import { apiPost } from '../api/ApiService';
 import ProductReviews from '../components/ProductReviews';
@@ -16,15 +14,15 @@ import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
 import { priceFormatter } from '@/tools/reformat'
 const baseurl = import.meta.env.VITE_API_BASE_URL;
 
+import Success from "@/components/messages/Success"
+import Error from "@/components/messages/Error"
+import toast from "react-hot-toast"
+import useCartStore from "@/store/cartStore"
 
 // components
 import Navbar from "../components/Navbar"
 import Footer from '../components/Footer'
 import { fetchProduct } from '../api/ProductApi'
-
-
-
-
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -43,7 +41,11 @@ export default function ProductDetail() {
   const [selectedStock, setSelectedStock] = useState(null);
 
   const [isShowColor, setShowColor] = useState(false);
+  const [isShowSize, setShowSize] = useState(true);
+  // const [isShowSecondColor, setShowSecondColor] = useState(false)
+  const [isShowVariant, setShowVariant] = useState(false)
   const [latestRating, setLatestRating] = useState([]);
+  const { fetchCarts } = useCartStore()
 
 
 
@@ -61,11 +63,42 @@ export default function ProductDetail() {
 
     // foreach stocks and check if there is color set to true
     stocks.forEach((stock) => {
-      if (stock.color_code != null) {
+      if (stock.color != null) {
         setShowColor(true);
         return;
       }
     })
+  }
+
+  const doesShowSize = (stocks) => {
+    if (stocks == null) {
+      setShowSize(false);
+      return;
+    }
+
+    // foreach stocks and check if there is color set to true
+    stocks.forEach((stock) => {
+      if (stock.size != null) {
+        setShowSize(true);
+        return;
+      }
+    })
+  }
+
+  const doesShowVariant = (stocks) => {
+    if (stocks == null) {
+      setShowVariant(false);
+      return;
+    }
+
+    // foreach stocks and check if there is color set to true
+    stocks.forEach((stock) => {
+      if (stock.variant != null) {
+        setShowVariant(true);
+        return;
+      }
+    })
+
   }
 
   const getProductdetail = async (slug) => {
@@ -78,6 +111,8 @@ export default function ProductDetail() {
       setProductImages(productsData.images);
       setRating(productsData.total_rating);
       doesShowColor(productsData.stock);
+      doesShowSize(productsData.stock)
+      doesShowVariant(productsData.stock)
       setLatestRating(productsData.latest_rating);
       setTotalRatingCount(productsData.total_rating);
       setLoading(false);
@@ -114,7 +149,9 @@ export default function ProductDetail() {
   // function for adding to cart
   const addToCart = async (productId, stcockId) => {
     if (!isLoggedIn) {
-      toast.error("Please login to add to cart");
+      const status = "Whoops!"
+      const message = "Please login to add to cart"
+      toast.custom((t) => <Error t={t} status={status} message={message} />)
     } else {
       await handleAddToCart(productId, stcockId);
     }
@@ -131,13 +168,16 @@ export default function ProductDetail() {
 
   const onSucceessAddToCart = (response) => {
     //  show toast
-    toast.success("Product added to cart");
+    const status = "Success!"
+    const message = "Product added to cart"
+    toast.custom((t) => <Success t={t} status={status} message={message} />)
+    fetchCarts();
   }
 
   const onErrorAddToCart = (error) => {
-    console.log("error", error)
-    //  show toast
-    toast.error("Error adding to cart");
+    const status = "Error!"
+    const message = "Error adding to cart"
+    toast.custom((t) => <Error t={t} status={status} message={message} />)
   }
 
   const addWishList = async (productId) => {
@@ -148,12 +188,16 @@ export default function ProductDetail() {
 
   const onSucessAddWishList = (response) => {
     //  show toast
-    toast.success("Product added to wishlist");
+    const status = "Success!"
+    const message = "Product added to wishlist"
+    toast.custom((t) => <Success t={t} status={status} message={message} />)
   }
 
   const onErrorAddWishList = (error) => {
     //  show toast
-    toast.error("Error adding to wishlist");
+    const status = "Error!"
+    const message = "Error adding to wishlist"
+    toast.custom((t) => <Error t={t} status={status} message={message} />)
   }
 
 
@@ -165,11 +209,6 @@ export default function ProductDetail() {
       <Navbar />
       <main>
         <div className="bg-white  pt-[130px] lg:pt-[86px] ">
-          <ToastContainer
-            toastClassName="rounded-lg"
-            bodyClassName="text-sm font-semibold"
-            position="top-center"
-          />
           <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
             <div className="lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-8">
               {/* Image gallery */}
@@ -245,8 +284,8 @@ export default function ProductDetail() {
                 </div>
 
                 <form className="mt-6">
-                  {/* Colors */}
-                  {
+                  {/* Colors code*/}
+                  {/* {
                     isShowColor && (
                       <div>
                         <h3 className="text-sm text-gray-600">Color</h3>
@@ -281,29 +320,90 @@ export default function ProductDetail() {
                         </RadioGroup>
                       </div>
                     )
+                  } */}
+
+                  {/* Variant */}
+                  {
+                    isShowVariant && (
+                      <div className="mt-8">
+                        <h3 className="text-sm text-gray-600">Variant</h3>
+                        <RadioGroup className="mt-2">
+                          <RadioGroup.Label className="sr-only">Choose a variant</RadioGroup.Label>
+                          <div className="grid grid-cols-3 gap-3 sm:grid-cols-4">
+                            {stocks.map((stock) => (
+                              stock.variant && (
+                                <RadioGroup.Option
+                                  key={stock.id}
+                                  value={stock.variant}
+                                  onClick={() => handleStockSelected(stock)}
+                                  selected={selectedStock?.id == stock.id}
+                                  className={`cursor-pointer focus:outline-none truncate ${selectedStock?.id == stock.id ? 'ring-2 ring-yellow-500 ring-offset-2 border-transparent bg-yellow-500 text-white hover:bg-yellow-500' : 'border-gray-200 bg-white text-gray-900 hover:bg-gray-50'} flex items-center justify-center rounded-md border py-3 px-3 text-sm font-medium uppercase sm:flex-1 `}
+                                >
+                                  <RadioGroup.Label as="span">{stock.variant}</RadioGroup.Label>
+                                </RadioGroup.Option>)
+                            ))}
+
+                          </div>
+                        </RadioGroup>
+                      </div>
+                    )
+                  }
+
+
+                  {
+                    isShowColor && (
+                      <div className="mt-8">
+                        <h3 className="text-sm text-gray-600">Color</h3>
+                        <RadioGroup className="mt-2">
+                          <RadioGroup.Label className="sr-only">Choose a size</RadioGroup.Label>
+                          <div className="grid grid-cols-3 gap-3 sm:grid-cols-4">
+                            {stocks.map((stock) => (
+                              stock.color && (
+                                <RadioGroup.Option
+                                  key={stock.id}
+                                  value={stock.color}
+                                  onClick={() => handleStockSelected(stock)}
+                                  selected={selectedStock?.id == stock.id}
+                                  className={`cursor-pointer focus:outline-none truncate ${selectedStock?.id == stock.id ? 'ring-2 ring-yellow-500 ring-offset-2 border-transparent bg-yellow-500 text-white hover:bg-yellow-500' : 'border-gray-200 bg-white text-gray-900 hover:bg-gray-50'} flex items-center justify-center rounded-md border py-3 px-3 text-sm font-medium uppercase sm:flex-1 `}
+                                >
+                                  <RadioGroup.Label as="span">{stock.color}</RadioGroup.Label>
+                                </RadioGroup.Option>)
+                            ))}
+
+                          </div>
+                        </RadioGroup>
+                      </div>)
                   }
 
 
                   {/* Sizes */}
-                  <div className="mt-8">
-                    <h3 className="text-sm text-gray-600">Size</h3>
-                    <RadioGroup className="mt-2">
-                      <RadioGroup.Label className="sr-only">Choose a size</RadioGroup.Label>
-                      <div className="grid grid-cols-3 gap-3 sm:grid-cols-6">
-                        {stocks.map((stock) => (
-                          <RadioGroup.Option
-                            key={stock.id}
-                            value={stock.size}
-                            onClick={() => handleStockSelected(stock)}
-                            selected={selectedStock?.id == stock.id}
-                            className={`cursor-pointer focus:outline-none ${selectedStock?.id == stock.id ? 'ring-2 ring-yellow-500 ring-offset-2 border-transparent bg-yellow-500 text-white hover:bg-yellow-500' : 'border-gray-200 bg-white text-gray-900 hover:bg-gray-50'} flex items-center justify-center rounded-md border py-3 px-3 text-sm font-medium uppercase sm:flex-1 `}
-                          >
-                            <RadioGroup.Label as="span">{stock.size}</RadioGroup.Label>
-                          </RadioGroup.Option>
-                        ))}
+                  {
+                    isShowSize && (
+                      <div className="mt-8">
+                        <h3 className="text-sm text-gray-600">Size</h3>
+                        <RadioGroup className="mt-2">
+                          <RadioGroup.Label className="sr-only">Choose a size</RadioGroup.Label>
+                          <div className="grid grid-cols-3 gap-3 sm:grid-cols-4">
+                            {stocks.map((stock) => (
+                              stock.size && (
+                                <RadioGroup.Option
+                                  key={stock.id}
+                                  value={stock.size}
+                                  onClick={() => handleStockSelected(stock)}
+                                  selected={selectedStock?.id == stock.id}
+                                  className={`cursor-pointer focus:outline-none truncate ${selectedStock?.id == stock.id ? 'ring-2 ring-yellow-500 ring-offset-2 border-transparent bg-yellow-500 text-white hover:bg-yellow-500' : 'border-gray-200 bg-white text-gray-900 hover:bg-gray-50'} flex items-center justify-center rounded-md border py-3 px-3 text-sm font-medium uppercase sm:flex-1 `}
+                                >
+                                  <RadioGroup.Label as="span">{stock.size}</RadioGroup.Label>
+                                </RadioGroup.Option>
+                              )
+
+                            ))}
+
+                          </div>
+                        </RadioGroup>
                       </div>
-                    </RadioGroup>
-                  </div>
+                    )
+                  }
 
                   <div className="mt-10 flex">
                     <button

@@ -22,6 +22,7 @@ import Feedback from "./Feedback"
 
 // store
 import useCategoryStore from "@/store/categoryStore"
+import useCartStore from "@/store/cartStore"
 import useAuthStore from "@/store/authStore"
 
 const Navbar = () => {
@@ -45,6 +46,7 @@ const Navbar = () => {
   }
 
   const { categories, fetchCategories } = useCategoryStore()
+  const { carts, fetchCarts } = useCartStore()
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn)
 
   const [totalItems, setTotalItems] = useState(0)
@@ -56,6 +58,7 @@ const Navbar = () => {
   useEffect(() => {
     fetchCategories()
     if (isLoggedIn) {
+      fetchCarts()
       fetchCart()
     }
   }, [])
@@ -71,6 +74,8 @@ const Navbar = () => {
       return
     }
   }
+
+  console.log("test count", carts)
 
   function onSuccessLoadCart(data) {
     setTotalItems(data.cart_items.length)
@@ -172,7 +177,8 @@ const Navbar = () => {
                           aria-hidden="true"
                         />
                         <span className="ml-2 text-sm font-medium text-yellow-500 group-hover:text-yellow-600">
-                          {totalItems}
+                          {/* {totalItems} */}
+                          {carts?.cart_items?.length ?? 0}
                         </span>
                         <span className="sr-only">items in cart, view bag</span>
                       </a>

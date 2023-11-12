@@ -1,5 +1,5 @@
 
-import {  ShoppingBagIcon, CircleStackIcon } from '@heroicons/react/20/solid'
+import { ShoppingBagIcon, CircleStackIcon, CreditCardIcon } from '@heroicons/react/20/solid'
 import { apiGet, apiPost } from '@/api/ApiService'
 import { useEffect, useState } from 'react'
 import { FiShoppingBag } from 'react-icons/fi'
@@ -24,7 +24,6 @@ export default function OrderHistory() {
   }
 
   function onGetOrdersSuccess(response) {
-    console.log("order hostory", response)
     setOrders(response.results)
   }
 
@@ -90,7 +89,7 @@ export default function OrderHistory() {
                 <div
                   key={order.id}
                   className="border-b border-t border-gray-200 bg-white shadow-sm sm:rounded-lg sm:border">
-                  <div className="flex items-center border-b border-gray-200 p-4 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:p-4">
+                  <div className="flex items-center border-b border-gray-200 p-4 sm:grid sm:grid-cols-3 sm:gap-x-6 sm:p-4">
                     <div className='flex flex-row '>
                       <ShoppingBagIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
                       <time dateTime={order.created_at} className="text-gray-500 ml-2">{dayjs(order.created_at).format('DD/MM/YYYY')}</time>
@@ -98,6 +97,10 @@ export default function OrderHistory() {
                     <div className='flex flex-row'>
                       <CircleStackIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
                       <p className='text-gray-500 ml-2'>Order Status: {order.status}</p>
+                    </div>
+                    <div className='flex flex-row'>
+                      <CreditCardIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
+                      <p className='text-gray-500 ml-2'>Payment Status: {order.payment_status}</p>
                     </div>
                   </div>
 
@@ -141,7 +144,7 @@ export default function OrderHistory() {
                                 </a>
                               </div>
                               {
-                                order.status == 'pending' && (
+                                order.payment_status == 'pending' && (
                                   <div className="flex flex-1 justify-center pl-4">
                                     <button type="button"
                                       onClick={() => handlePayOrder(order.id)}

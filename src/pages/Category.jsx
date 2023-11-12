@@ -83,7 +83,13 @@ const ProductByCategories = () => {
             <img
               src={subsubcategory?.cover}
               alt="New Arrival"
-              className=" h-52 w-full object-cover object-center mt-4"
+              className=" h-52 w-full object-cover object-center mt-4 hidden lg:block"
+              onError={(e) => (e.target.src = nbDefaultImage)}
+            />
+            <img
+              src={subsubcategory?.cover_mobile}
+              alt="New Arrival"
+              className=" h-52 w-full object-cover object-center mt-4 block lg:hidden"
               onError={(e) => (e.target.src = nbDefaultImage)}
             />
 
@@ -109,9 +115,9 @@ const ProductByCategories = () => {
                         <p className="text-sm font-medium text-gray-900">
                           {product.name}
                         </p>
-                        <p className="mt-1 text-sm text-gray-500">
+                        {/* <p className="mt-1 text-sm text-gray-500">
                           Discount: {product.discount}
-                        </p>
+                        </p> */}
                         {product.min_price == product.max_price ? (
                           <h4 className=" text-sm">
                             Rp.{priceFormatter(product.min_price)}
