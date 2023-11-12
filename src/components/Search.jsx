@@ -13,6 +13,9 @@ import { useDebounce } from "use-debounce"
 import { apiGet } from "@/api/ApiService"
 import { useTranslation } from "react-i18next"
 import NanoClamp from "nanoclamp"
+import { useClipboard } from "use-clipboard-copy"
+import Success from "@/components/messages/Success"
+import toast from "react-hot-toast"
 
 const Search = () => {
   const [searchQuery, setSearchQuery] = useState("")
@@ -143,6 +146,15 @@ const Search = () => {
     setSearchQuery(trend)
   }
 
+  const clipboard = useClipboard()
+  const copyCoupon = (code) => {
+    clipboard.copy(code)
+    const status = "Success!"
+    const message =
+      "Coupon code has been copied to your clipboard. please paste it on the checkout page."
+    toast.custom((t) => <Success t={t} status={status} message={message} />)
+  }
+
   return (
     <div className="flex relative items-center py-4 md:mx-auto md:max-w-2xl lg:mx-0 lg:max-w-sm xl:px-0">
       <label htmlFor="search" className="sr-only">
@@ -220,7 +232,7 @@ const Search = () => {
               searchResults.coupons.map((coupon) => (
                 <li key={coupon.id}>
                   <a
-                    href={`/coupons/${coupon.id}`}
+                    href="#"
                     className="px-2 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 rounded-lg flex items-center"
                   >
                     <img
@@ -229,17 +241,19 @@ const Search = () => {
                           ? import.meta.env.VITE_API_BASE_URL + coupon.cover
                           : nbDefaultImage
                       }
+                      onError={(e) => (e.target.src = nbDefaultImage)}
                       className="h-8 w-8 object-cover mr-2 rounded-md"
                     />
                     <NanoClamp
                       is="p"
                       className="text-gray-700 font-medium hover:text-gray-900"
                       lines={1}
-                      text={coupon.name}
-                    />
-                    <ArrowRightIcon
-                      className="h-5 w-5 text-gray-400 ml-auto"
-                      aria-hidden="true"
+                      text={`${coupon.name} - ${coupon.prefix_code}${coupon.private_code}`}
+                      onClick={() =>
+                        copyCoupon(
+                          `${coupon.prefix_code}${coupon.private_code}`
+                        )
+                      }
                     />
                   </a>
                 </li>
@@ -264,6 +278,7 @@ const Search = () => {
                           ? import.meta.env.VITE_API_BASE_URL + product.cover
                           : nbDefaultImage
                       }
+                      onError={(e) => (e.target.src = nbDefaultImage)}
                       className="h-8 w-8 object-cover mr-2 rounded-md"
                     />
                     <NanoClamp
@@ -290,7 +305,7 @@ const Search = () => {
               searchResults.brands.map((brand) => (
                 <li key={brand.id}>
                   <a
-                    href={`/brands/${brand.slug}`}
+                    href={`/brand-detail/${brand.slug}`}
                     className="px-2 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 rounded-lg flex items-center"
                   >
                     <img
@@ -299,6 +314,7 @@ const Search = () => {
                           ? import.meta.env.VITE_API_BASE_URL + brand.logo
                           : nbDefaultImage
                       }
+                      onError={(e) => (e.target.src = nbDefaultImage)}
                       className="h-8 w-8 object-cover mr-2 rounded-md"
                     />
                     <NanoClamp
@@ -359,9 +375,14 @@ const Search = () => {
                     href={`/blogs/${blog.slug}`}
                     className="px-2 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 rounded-lg flex items-center"
                   >
-                    <BookmarkIcon
-                      className="h-4 w-4 text-gray-400 mr-2"
-                      aria-hidden="true"
+                    <img
+                      src={
+                        blog.cover != "/media/blog_covers/default.jpg"
+                          ? import.meta.env.VITE_API_BASE_URL + blog.cover
+                          : nbDefaultImage
+                      }
+                      onError={(e) => (e.target.src = nbDefaultImage)}
+                      className="h-8 w-8 object-cover mr-2 rounded-md"
                     />
                     <NanoClamp
                       is="p"
