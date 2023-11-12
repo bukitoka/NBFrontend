@@ -22,8 +22,10 @@ const ProductByCategories = () => {
   const [arrproducts, setProducts] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+
   const [nextPage, setNextPage] = useState(null)
   const [prevPage, setPrevPage] = useState(null)
+
   const [subsubcategory, setSubSubCategory] = useState(null)
   const [count, setCount] = useState(0)
   const baseurl = import.meta.env.VITE_API_BASE_URL
@@ -41,11 +43,17 @@ const ProductByCategories = () => {
     )
   }
 
+  const getProductPaginations = async (url) => {
+    await apiGet(
+      url,
+      (data) => onGetProductsSuccess(data),
+      (error) => onGetProductsFailed(error)
+    )
+  }
+
   const onGetProductsSuccess = (data) => {
-    console.log(data)
     setProducts(data.results)
-    setNextPage(getParamValue("page", data.next))
-    setPrevPage(getParamValue("page", data.previous))
+    setNavigationParam(data.next, data.previous)
     setCount(data.count)
     setLoading(false)
   }
@@ -53,6 +61,36 @@ const ProductByCategories = () => {
   const onGetProductsFailed = (error) => {
     setError(error)
     setLoading(false)
+  }
+
+  const setNavigationParam = (fullNext, fullPrev) => {
+    if (fullNext == null) {
+      setNextPage(null)
+    }
+
+    if (fullPrev == null) {
+      setPrevPage(null)
+    }
+
+    if (fullNext != null) {
+      let page = getParamValue("page", fullNext)
+      let subSubCategory = getParamValue("subsubcategory__slug", fullNext)
+      let fullNextParams = "product/?page=" + page + "&subsubcategory__slug=" + subSubCategory
+      setNextPage(fullNextParams)
+    }
+
+    if (fullPrev != null) {
+      let page = getParamValue("page", fullPrev)
+      let subSubCategory = getParamValue("subsubcategory__slug", fullPrev)
+      let fullPrevParams = "product/?page=" + page + "&subsubcategory__slug=" + subSubCategory
+      let fullPrevOnlySub = "product/?subsubcategory__slug=" + subSubCategory
+      if (page == null) {
+        setPrevPage(fullPrevOnlySub)
+      } else {
+        setPrevPage(fullPrevParams)
+      }
+
+    }
   }
 
   const getSubSubCategory = async (slug) => {
@@ -142,7 +180,7 @@ const ProductByCategories = () => {
                   <a
                     href="#"
                     className="w-9 h-9 flex items-center justify-center rounded-md text-lg border border-[#EDEFF1]text-[#838995] hover:text-xl"
-                    onClick={() => getProducts(prevPage)}
+                    onClick={() => getProductPaginations(prevPage)}
                   >
                     <span>
                       <FaChevronLeft className="h-15 w-8" />
@@ -153,7 +191,7 @@ const ProductByCategories = () => {
                   <a
                     href="#"
                     className=" w-9 h-9 flex items-center text-lg justify-center rounded-md border  border-[#EDEFF1]text-[#838995] hover:text-xl"
-                    onClick={() => getProducts(nextPage)}
+                    onClick={() => getProductPaginations(nextPage)}
                   >
                     <span>
                       <FaChevronRight className="h-15 w-8" />

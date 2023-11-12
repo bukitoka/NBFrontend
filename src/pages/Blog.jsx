@@ -4,6 +4,8 @@ import { nbDefaultImage } from "@/assets";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { apiGet } from "@/api/ApiService";
 const baseurl = import.meta.env.VITE_API_BASE_URL;
+import { useTranslation } from "react-i18next"
+import { languageOptions } from '@/constant/constant'
 
 // components
 import Navbar from "@/components/Navbar";
@@ -16,6 +18,7 @@ function classNames(...classes) {
 
 const Blog = () => {
   const [blogs, setBlogs] = useState([]);
+  const { t, i18n } = useTranslation()
 
   useEffect(() => {
     fetchBlogs();
@@ -62,7 +65,7 @@ const Blog = () => {
                         </div>
                         <div className="relative mt-0">
                           <p className="text-sm font-medium text-gray-900 font-bold">
-                            {blog.title}
+                            {i18n.language == languageOptions.english ? blog.title : blog.title_id}
                           </p>
                         </div>
 
