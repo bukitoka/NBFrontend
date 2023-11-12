@@ -335,7 +335,7 @@ const Navbar = () => {
                     BEAUTY BLOGS
                   </a>
                   <a
-                    href="#"
+                    href="/promo"
                     className="flex py-3 items-center text-sm font-medium text-gray-200 hover:text-yellow-500"
                   >
                     SALE & PROMO

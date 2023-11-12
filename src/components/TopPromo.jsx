@@ -73,7 +73,7 @@ const TopPromo = () => {
         </div>
         <div className="flex justify-center mt-8 w-full">
           <a
-            href="#"
+            href="/promo"
             className="bg-black group hover:bg-yellow-600 flex py-2 px-6 text-sm text-white rounded-full"
           >
             {t("topPromo_browseAll")}

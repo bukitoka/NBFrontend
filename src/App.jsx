@@ -27,6 +27,7 @@ import OrderHistoryDetail from "@/pages/OrderHistoryDetail"
 import FeedbackPage from "@/pages/FeedbackPage"
 import Blog from "@/pages/Blog"
 import BlogDetail from "@/pages/BlogDetail"
+import PromoPage from "@/pages/PromoPage"
 
 // payment
 import Finish from "@/pages/payment/Finish"
@@ -152,6 +153,7 @@ const App = () => {
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/blogs" element={<Blog />} />
           <Route path="/blogs/:slug" element={<BlogDetail />} />
+          <Route path="/promo" element={<PromoPage />} />
           <Route
             path="/reset-password/:uid/:token"
             element={<ResetPasswordConfirm />}

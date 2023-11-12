@@ -52,11 +52,11 @@ const MobileMenu = ({ open, setOpen }) => {
     },
     {
       name: "Beauty Stories",
-      href: "/beauty-stories/",
+      href: "/blogs",
     },
     {
       name: "Sale & Promo",
-      href: "/sale-and-promo/",
+      href: "/promo",
     },
     {
       name: "Feedback",
