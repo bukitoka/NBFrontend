@@ -134,8 +134,8 @@ const MobileMenu = ({ open, setOpen }) => {
                   </Tab.List>
                 </div>
                 <Tab.Panels as={Fragment}>
-                  <Tab.Panel key="Shop by Category" className="px-4 py-2">
-                    <div className="space-y-1 max-h-96 overflow-y-auto pb-20">
+                  <Tab.Panel key="Shop by Category" className="px-4">
+                    <div className="space-y-1 h-screen pb-[420px] overflow-y-auto">
                       {categories.map((category) => (
                         <div key={category.id}>
                           {/* Category */}
@@ -220,8 +220,8 @@ const MobileMenu = ({ open, setOpen }) => {
                       ))}
                     </div>
                   </Tab.Panel>
-                  <Tab.Panel key="Shop by Brand" className="px-4 py-2">
-                    <div className="space-y-1 max-h-96 overflow-y-auto pb-20">
+                  <Tab.Panel key="Shop by Brand" className="px-4">
+                    <div className="space-y-1 h-screen pb-[420px] overflow-y-auto">
                       {alphabet.map((letter) => (
                         <div key={letter}>
                           {/* Brands Group Alphabet */}
@@ -231,6 +231,10 @@ const MobileMenu = ({ open, setOpen }) => {
                               className="-ml-2 hover:ml-0 px-3 py-2 block font-medium rounded-lg hover:bg-zinc-100 text-gray-700 hover:text-gray-900 cursor-pointer"
                             >
                               {letter}
+                              <ArrowRightIcon
+                                className="float-right h-5 w-5 text-gray-400"
+                                aria-hidden="true"
+                              />
                             </a>
                           </div>
                         </div>
