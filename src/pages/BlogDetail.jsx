@@ -4,6 +4,9 @@ import { apiGet } from "@/api/ApiService";
 import { useParams } from 'react-router-dom';
 const baseurl = import.meta.env.VITE_API_BASE_URL;
 import dayjs from "dayjs"
+import { useTranslation } from "react-i18next"
+import { languageOptions } from '@/constant/constant'
+import parse from 'html-react-parser';
 
 // components
 import Navbar from "@/components/Navbar";
@@ -13,6 +16,7 @@ import { NewspaperIcon, ClockIcon } from '@heroicons/react/20/solid'
 const BlogDetail = () => {
   const { slug } = useParams()
   const [blog, setBlog] = useState(null);
+  const { t, i18n } = useTranslation()
 
   useEffect(() => {
     fetchBlogDetail();
@@ -33,8 +37,6 @@ const BlogDetail = () => {
   const onGetBlogError = (error) => {
     console.log(error)
   }
-
-  // dayjs(dateOfBirth).format('MMMM D, YYYY') ?? '-'
 
   return (
     <div className="bg-white">
@@ -68,14 +70,14 @@ const BlogDetail = () => {
                 </div>
                 <div className="flex flex-row mt-2">
                   <NewspaperIcon className="w-6 h-6 text-zinc-600" />
-                  <span className="text-xl font-bold tracking-tight ms-3">{blog?.title}</span>
+                  <span className="text-xl font-bold tracking-tight ms-3">  {i18n.language == languageOptions.english ? blog?.title : blog?.title_id}</span>
                 </div>
               </div>
               {/* content section */}
               <div>
-                <p className="mt-4 text-base text-gray-500">
-                  {blog?.content}
-                </p>
+                <div className="mt-4 text-zinc-600 text-lg">
+                  {i18n.language == languageOptions.english ? parse(blog?.content ?? "") : parse(blog?.content_id ?? "")}
+                </div>
               </div>
             </div>
           </div>
