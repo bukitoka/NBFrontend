@@ -1,57 +1,63 @@
-import "keen-slider/keen-slider.min.css"
-import { useKeenSlider } from "keen-slider/react"
 import { useTranslation } from "react-i18next"
-import { useEffect, useState } from 'react'
-import { apiGet } from '@/api/ApiService';
-import { nbDefaultImage } from "@/assets"
+import { useEffect, useState, useRef } from "react"
+import { apiGet } from "@/api/ApiService"
+import { register } from "swiper/element/bundle"
+
+register()
 
 const InvestorSection = () => {
   const [invertors, setInvertors] = useState([])
+  const swiperElRef = useRef(null)
+
+  const swiperParams = {
+    spaceBetween: 10,
+    loop: true,
+    autoplay: {
+      delay: 0,
+    },
+    speed: 300,
+    breakpoints: {
+      640: {
+        slidesPerView: 3,
+        spaceBetween: 20,
+      },
+      768: {
+        slidesPerView: 4,
+        spaceBetween: 40,
+      },
+      1024: {
+        slidesPerView: 5,
+        spaceBetween: 50,
+      },
+    },
+  }
 
   useEffect(() => {
     fetchInvertors()
+
+    const swiper = swiperElRef.current
+    Object.assign(swiper, swiperParams)
+    swiper.initialize()
   }, [])
 
   const fetchInvertors = async () => {
-    await apiGet('investor/', (response) => onSuccessfulFetch(response), (error) => onFailedFetch(error))
+    await apiGet(
+      "investor/",
+      (response) => onSuccessfulFetch(response),
+      (error) => onFailedFetch(error)
+    )
   }
 
   const onSuccessfulFetch = (response) => {
-    console.log("invertors", response)
+    // console.log("invertors", response)
     setInvertors(response.results)
   }
 
   const onFailedFetch = (error) => {
-    console.log(error)
+    // console.log(error)
   }
 
   const { t } = useTranslation()
-  const animation = { duration: 50000, easing: (t) => t }
-  const [sliderRef] = useKeenSlider({
-    loop: true,
-    renderMode: "performance",
-    drag: false,
-    breakpoints: {
-      "(min-width: 300px)": {
-        slides: { perView: 2, spacing: 15 },
-      },
-      "(min-width: 768px)": {
-        slides: { perView: 3, spacing: 15 },
-      },
-      "(min-width: 1000px)": {
-        slides: { perView: 4, spacing: 15 },
-      },
-    },
-    created(s) {
-      s.moveToIdx(8, true, animation)
-    },
-    updated(s) {
-      s.moveToIdx(s.track.details.abs + 8, true, animation)
-    },
-    animationEnded(s) {
-      s.moveToIdx(s.track.details.abs + 8, true, animation)
-    },
-  })
 
   return (
     <div className="bg-white pb-16">
@@ -64,19 +70,21 @@ const InvestorSection = () => {
         </p>
       </div>
       <div className="mt-12 mx-auto max-w-7xl px-6 lg:px-8">
-        <div ref={sliderRef} className="keen-slider rounded-lg">
+        <swiper-container ref={swiperElRef} init="false">
           {invertors.map((invertor) => (
-            <div key={invertor.id} className="keen-slider__slide p-6 bg-slate-100 rounded-lg">
-              <img
-                className="col-span-2 max-h-12 w-full object-contain"
-                src={invertor?.logo}
-                alt="Transistor"
-                width={158}
-                height={48}
-              />
-            </div>
+            <swiper-slide key={invertor.id}>
+              <div className="p-6 bg-slate-100 rounded-lg">
+                <img
+                  className="col-span-2 max-h-12 w-full object-contain"
+                  src={invertor?.logo}
+                  alt="Transistor"
+                  width={158}
+                  height={48}
+                />
+              </div>
+            </swiper-slide>
           ))}
-        </div>
+        </swiper-container>
       </div>
     </div>
   )
