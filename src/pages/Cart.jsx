@@ -470,7 +470,7 @@ export default function Cart() {
                       name="comments"
                       type="checkbox"
                       onChange={handleSelectAll}
-                      className="h-4 w-4 rounded border-gray-300 text-zinc-800 focus:ring-white"
+                      className="h-4 w-4 rounded border-gray-300 text-zinc-800 ring-1 ring-zinc-800 focus:ring-white"
                     />
                   </div>
                   <div className="ml-3 text-sm leading-6">
@@ -494,7 +494,7 @@ export default function Cart() {
                             type="checkbox"
                             onChange={(e) => handleChangeCheckbox(e, cart.id)}
                             checked={cart.is_selected}
-                            className="h-4 w-4 rounded border-gray-300 text-zinc-800 mr-2 focus:ring-white"
+                            className="h-4 w-4 rounded border-gray-300 ring-1 ring-zinc-800 text-zinc-800 mr-2 focus:ring-white"
                           />
                           <img
                             src={`${baseurl}${cart.product_data.image}`}
