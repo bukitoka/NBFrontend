@@ -41,11 +41,21 @@ const ProductByCategories = () => {
     )
   }
 
+  const getPaginations = async (url) => {
+    await apiGet(
+      url,
+      (data) => onGetProductsSuccess(data),
+      (error) => onGetProductsFailed(error)
+    )
+  }
+
   const onGetProductsSuccess = (data) => {
     console.log(data)
     setProducts(data.results)
+
     setNextPage(getParamValue("page", data.next))
     setPrevPage(getParamValue("page", data.previous))
+
     setCount(data.count)
     setLoading(false)
   }

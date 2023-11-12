@@ -59,31 +59,8 @@ const Navbar = () => {
     fetchCategories()
     if (isLoggedIn) {
       fetchCarts()
-      fetchCart()
     }
   }, [])
-
-  const fetchCart = async () => {
-    if (isLoggedIn) {
-      await apiGet(
-        `cart/`,
-        (data) => onSuccessLoadCart(data),
-        (err) => onErrorLoadCart(err)
-      )
-    } else {
-      return
-    }
-  }
-
-  console.log("test count", carts)
-
-  function onSuccessLoadCart(data) {
-    setTotalItems(data.cart_items.length)
-  }
-
-  function onErrorLoadCart(error) {
-    console.log(error)
-  }
 
   return (
     <div className="bg-transparent">
@@ -352,10 +329,10 @@ const Navbar = () => {
                   </Popover>
 
                   <a
-                    href="#"
+                    href="/blogs"
                     className="flex py-3 items-center text-sm font-medium text-gray-200 hover:text-yellow-500"
                   >
-                    BEAUTY STORIES
+                    BEAUTY BLOGS
                   </a>
                   <a
                     href="#"
