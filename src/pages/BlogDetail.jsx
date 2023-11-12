@@ -6,6 +6,7 @@ const baseurl = import.meta.env.VITE_API_BASE_URL;
 import dayjs from "dayjs"
 import { useTranslation } from "react-i18next"
 import { languageOptions } from '@/constant/constant'
+import parse from 'html-react-parser';
 
 // components
 import Navbar from "@/components/Navbar";
@@ -74,9 +75,9 @@ const BlogDetail = () => {
               </div>
               {/* content section */}
               <div>
-                <p className="mt-4 text-base text-gray-500">
-                  {i18n.language == languageOptions.english ? blog?.content : blog?.content_id}
-                </p>
+                <div className="mt-4 text-zinc-600 text-lg">
+                  {i18n.language == languageOptions.english ? parse(blog?.content ?? "") : parse(blog?.content_id ?? "")}
+                </div>
               </div>
             </div>
           </div>

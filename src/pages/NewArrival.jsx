@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import { Link } from "react-router-dom";
-import { nbDefaultImage, staticBanner, nodata, newArrivalCover } from "@/assets";
+import { nbDefaultImage, staticBanner, nodata, newArrivalCover, newArrivalCoverMobile } from "@/assets";
 import { priceFormatter } from "../tools/reformat";
 
 
@@ -61,12 +61,13 @@ const NewArrival = () => {
             <img
               src={newArrivalCover}
               alt="New Arrival"
-              className=" h-52 w-full object-cover object-center mt-4 rounded-lg"
+              className=" h-56 w-full object-cover object-center mt-4 rounded-lg hidden lg:block"
             />
-
-            {/* <p className="mx-auto mt-4 max-w-xl text-base text-gray-500">
-              The secret to a tidy desk? Don't get rid of anything, just put it in really really nice looking containers.
-            </p> */}
+            <img
+              src={newArrivalCoverMobile}
+              alt="New Arrival"
+              className=" h-52 w-full object-cover object-center mt-4 rounded-lg block lg:hidden"
+            />
           </div>
           <div className="mx-auto max-w-2xl px-4 sm:px-6 lg:max-w-7xl lg:px-8">
             <div className="mt-8 grid grid-cols-1 gap-y-12 sm:grid-cols-2 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8 ">
