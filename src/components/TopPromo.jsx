@@ -3,8 +3,12 @@ import { useTranslation } from "react-i18next"
 import { useEffect, useState } from 'react'
 import { apiGet } from '@/api/ApiService';
 import { nbDefaultImage } from "@/assets"
+import { useClipboard } from 'use-clipboard-copy';
+import Success from "@/components/messages/Success"
+import toast from "react-hot-toast"
 
 const TopPromo = () => {
+  const clipboard = useClipboard();
   const [coupons, setCoupons] = useState([])
 
   const fetchCoupons = async () => {
@@ -12,12 +16,21 @@ const TopPromo = () => {
   };
 
   const onGetCouponsSuccess = (response) => {
+    console.log("Coupon Response on the Top Coupon", response)
     setCoupons(response.results)
   }
 
   const onGetCouponsError = (error) => {
     console.log(error)
   }
+
+  const copyCoupon = (code) => {
+    clipboard.copy(code);
+    const status = "Success!"
+    const message = "Coupon code has been copied to your clipboard. please paste it on the checkout page."
+    toast.custom((t) => <Success t={t} status={status} message={message} />)
+  }
+
 
   useEffect(() => {
     fetchCoupons()
@@ -41,6 +54,7 @@ const TopPromo = () => {
             {coupons.map((coupon) => (<a
               href="#"
               className="flex flex-shrink-0 overflow-hidden rounded-lg"
+              onClick={() => copyCoupon(`${coupon?.prefix_code}${coupon?.private_code}`)}
             >
               <img
                 src={coupon?.cover}
