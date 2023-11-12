@@ -59,7 +59,7 @@ export default {
 
   // Investor Section translation
   investorSection_Title: "Our Investor",
-  investorSection_Descriptions: "We are backed by top-class investors with deep experience in the industry.",
+  investorSection_Description: "We are backed   by top-class investors with deep experience in the industry.",
   // end of Investor Section translation
 
   // Profile page translation

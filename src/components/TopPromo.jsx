@@ -3,8 +3,12 @@ import { useTranslation } from "react-i18next"
 import { useEffect, useState } from "react"
 import { apiGet } from "@/api/ApiService"
 import { nbDefaultImage } from "@/assets"
+import { useClipboard } from 'use-clipboard-copy';
+import Success from "@/components/messages/Success"
+import toast from "react-hot-toast"
 
 const TopPromo = () => {
+  const clipboard = useClipboard();
   const [coupons, setCoupons] = useState([])
 
   const fetchCoupons = async () => {
@@ -16,12 +20,21 @@ const TopPromo = () => {
   }
 
   const onGetCouponsSuccess = (response) => {
+    console.log("Coupon Response on the Top Coupon", response)
     setCoupons(response.results)
   }
 
   const onGetCouponsError = (error) => {
     console.log(error)
   }
+
+  const copyCoupon = (code) => {
+    clipboard.copy(code);
+    const status = "Success!"
+    const message = "Coupon code has been copied to your clipboard. please paste it on the checkout page."
+    toast.custom((t) => <Success t={t} status={status} message={message} />)
+  }
+
 
   useEffect(() => {
     fetchCoupons()
@@ -47,6 +60,7 @@ const TopPromo = () => {
                 key={coupon.id}
                 href="#"
                 className="flex flex-shrink-0 overflow-hidden rounded-lg"
+                onClick={() => copyCoupon(`${coupon?.prefix_code}${coupon?.private_code}`)}
               >
                 <img
                   src={coupon?.cover}
@@ -54,13 +68,12 @@ const TopPromo = () => {
                   className="h-60 w-80 lg:w-96 object-cover rounded-lg hover:scale-110 ease-in duration-150"
                   onError={(e) => (e.target.src = nbDefaultImage)}
                 />
-              </a>
-            ))}
+              </a>))}
           </div>
         </div>
         <div className="flex justify-center mt-8 w-full">
           <a
-            href="#"
+            href="/promo"
             className="bg-black group hover:bg-yellow-600 flex py-2 px-6 text-sm text-white rounded-full"
           >
             {t("topPromo_browseAll")}
