@@ -1,4 +1,4 @@
-import { useEffect } from "react"
+import { useEffect, useRef } from "react"
 import dayjs from "dayjs"
 import {
   nbwhite,
@@ -43,6 +43,7 @@ import {
   EnvelopeIcon,
 } from "@heroicons/react/24/solid"
 import { useTranslation } from "react-i18next"
+import useHorizontalScroll from "@/hooks/horizontalScroll"
 
 const navigation = {
   support: [
@@ -125,11 +126,17 @@ const navigation = {
 
 const Footer = () => {
   const { t } = useTranslation()
+  const paymentMethodRef = useRef()
+  const { setScrollTarget: setScrollTarget } = useHorizontalScroll()
+
   useEffect(() => {
     // get current year using day js
     const year = dayjs().format("YYYY")
     // set current year to footer
     document.getElementById("year").innerHTML = year
+
+    // set scroll target
+    setScrollTarget(paymentMethodRef)
   }, [])
 
   return (
@@ -253,45 +260,49 @@ const Footer = () => {
           </div>
         </div>
       </div>
-      <div className="mx-auto flex items-center max-w-7xl px-6 lg:px-8 py-8 text-sm leading-6 text-gray-300">
-        <div className="pr-2 hidden lg:block">Payment Method:</div>
-        <div className="pr-2 block lg:hidden">Payment:</div>
-        <div className="flex flex-1 gap-x-2 overflow-x-scroll no-scrollbar rounded-sm">
-          {[
-            bank1,
-            bank2,
-            bank3,
-            bank4,
-            bank5,
-            bank6,
-            bank7,
-            bank8,
-            bank9,
-            bank10,
-            bank11,
-            bank12,
-            bank13,
-            bank14,
-            bank15,
-            bank16,
-            bank17,
-            bank18,
-            bank19,
-            bank20,
-            bank21,
-            bank22,
-            bank23,
-            bank24,
-            bank25,
-            bank26,
-          ].map((item, index) => (
-            <img
-              key={index}
-              className="h-8 w-auto"
-              src={item}
-              alt="Payment Method"
-            />
-          ))}
+      <div className="mx-auto max-w-7xl px-6 lg:px-8 py-4 text-sm leading-6 text-gray-300">
+        <div className="bg-zinc-800 border border-zinc-700 px-2 py-2 rounded-md flex items-center w-full">
+          <div className="pr-2 block">Payment</div>
+          <div
+            ref={paymentMethodRef}
+            className="flex flex-1 gap-x-2 overflow-x-scroll rounded-sm"
+          >
+            {[
+              bank1,
+              bank2,
+              bank3,
+              bank4,
+              bank5,
+              bank6,
+              bank7,
+              bank8,
+              bank9,
+              bank10,
+              bank11,
+              bank12,
+              bank13,
+              bank14,
+              bank15,
+              bank16,
+              bank17,
+              bank18,
+              bank19,
+              bank20,
+              bank21,
+              bank22,
+              bank23,
+              bank24,
+              bank25,
+              bank26,
+            ].map((item, index) => (
+              <img
+                key={index}
+                className="h-8 w-auto"
+                src={item}
+                alt="Payment Method"
+              />
+            ))}
+          </div>
         </div>
       </div>
       <hr className="border-white/10" />

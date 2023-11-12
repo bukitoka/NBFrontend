@@ -1,7 +1,7 @@
 import { ChevronRightIcon } from "@heroicons/react/20/solid"
 import { useTranslation } from "react-i18next"
-import { useEffect, useState } from 'react'
-import { apiGet } from '@/api/ApiService';
+import { useEffect, useState } from "react"
+import { apiGet } from "@/api/ApiService"
 import { nbDefaultImage } from "@/assets"
 import { useClipboard } from 'use-clipboard-copy';
 import Success from "@/components/messages/Success"
@@ -12,8 +12,12 @@ const TopPromo = () => {
   const [coupons, setCoupons] = useState([])
 
   const fetchCoupons = async () => {
-    await apiGet('coupons/?ordering=-created_at', (data) => onGetCouponsSuccess(data), (err) => onGetCouponsError(err))
-  };
+    await apiGet(
+      "coupons/?ordering=-created_at",
+      (data) => onGetCouponsSuccess(data),
+      (err) => onGetCouponsError(err)
+    )
+  }
 
   const onGetCouponsSuccess = (response) => {
     console.log("Coupon Response on the Top Coupon", response)
@@ -51,18 +55,20 @@ const TopPromo = () => {
             </p>
           </div>
           <div className="mt-12 flex flex-row space-x-4 lg:grid lg:grid-cols-3 lg:gap-x-8 lg:space-x-0 overflow-x-auto no-scrollbar rounded-lg">
-            {coupons.map((coupon) => (<a
-              href="#"
-              className="flex flex-shrink-0 overflow-hidden rounded-lg"
-              onClick={() => copyCoupon(`${coupon?.prefix_code}${coupon?.private_code}`)}
-            >
-              <img
-                src={coupon?.cover}
-                alt=""
-                className="h-60 w-80 lg:w-96 object-cover rounded-lg hover:scale-110 ease-in duration-150"
-                onError={(e) => (e.target.src = nbDefaultImage)}
-              />
-            </a>))}
+            {coupons.map((coupon) => (
+              <a
+                key={coupon.id}
+                href="#"
+                className="flex flex-shrink-0 overflow-hidden rounded-lg"
+                onClick={() => copyCoupon(`${coupon?.prefix_code}${coupon?.private_code}`)}
+              >
+                <img
+                  src={coupon?.cover}
+                  alt=""
+                  className="h-60 w-80 lg:w-96 object-cover rounded-lg hover:scale-110 ease-in duration-150"
+                  onError={(e) => (e.target.src = nbDefaultImage)}
+                />
+              </a>))}
           </div>
         </div>
         <div className="flex justify-center mt-8 w-full">
