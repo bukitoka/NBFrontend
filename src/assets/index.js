@@ -8,6 +8,10 @@ import nodata from "./nodata.svg"
 import recaptchaLogo from "./google_recaptcha.svg"
 import newArrivalCover from "./newArrival/newArrivalCover.png"
 import newArrivalCoverMobile from "./newArrival/newArrivalCoverMobile.png"
+import NotFound from "./404.svg"
+import relax from "./relax.svg"
+import confirmed from "./confirmed.svg"
+import security from "./security.svg"
 
 // BANK LOGOS
 import bank1 from "./BANK/gopay.svg"
@@ -48,6 +52,10 @@ export {
   recaptchaLogo,
   newArrivalCover,
   newArrivalCoverMobile,
+  NotFound,
+  relax,
+  confirmed,
+  security,
   bank1,
   bank2,
   bank3,
