@@ -1,35 +1,34 @@
-import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { nbDefaultImage } from "@/assets";
-import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
-import { apiGet } from "@/api/ApiService";
-const baseurl = import.meta.env.VITE_API_BASE_URL;
+import { useState, useEffect } from "react"
+import { Link } from "react-router-dom"
+import { nbDefaultImage } from "@/assets"
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa"
+import { apiGet } from "@/api/ApiService"
+const baseurl = import.meta.env.VITE_API_BASE_URL
 import { useTranslation } from "react-i18next"
-import { languageOptions } from '@/constant/constant'
+import { languageOptions } from "@/constant/constant"
 
 // components
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-
+import Navbar from "@/components/Navbar"
+import Footer from "@/components/Footer"
 
 function classNames(...classes) {
-  return classes.filter(Boolean).join(" ");
+  return classes.filter(Boolean).join(" ")
 }
 
 const Blog = () => {
-  const [blogs, setBlogs] = useState([]);
+  const [blogs, setBlogs] = useState([])
   const { t, i18n } = useTranslation()
 
   useEffect(() => {
-    fetchBlogs();
-  }, []);
+    fetchBlogs()
+  }, [])
 
   const fetchBlogs = async () => {
     await apiGet(
       `blogs/`,
       (data) => onGetBlogsSuccess(data),
       (error) => onGetBlogsError(error)
-    );
+    )
   }
 
   const onGetBlogsSuccess = (data) => {
@@ -41,7 +40,6 @@ const Blog = () => {
     console.log(error)
   }
 
-
   return (
     <div className="bg-white">
       {/* Navbar */}
@@ -50,29 +48,29 @@ const Blog = () => {
         <div className="bg-white pt-[130px] lg:pt-[86px] mb-4">
           <div className="mx-auto max-w-2xl px-4 pt-16  sm:px-6 sm:pt-24 lg:max-w-7xl lg:px-8">
             <div className="mt-2 grid grid-cols-1 gap-y-12 sm:grid-cols-2 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8">
-              {
-                (blogs.map((blog) => (
-                  <div key={blog.id}>
-                    <Link to={`/blogs/${blog.slug}`}>
-                      <div className="relative">
-                        <div className="relative h-72 w-full overflow-hidden rounded-lg">
-                          <img
-                            src={`${baseurl}${blog.cover}`}
-                            alt=""
-                            onError={(e) => (e.target.src = nbDefaultImage)}
-                            className="h-full w-full object-cover object-center"
-                          />
-                        </div>
-                        <div className="relative mt-0">
-                          <p className="text-sm font-medium text-gray-900 font-bold">
-                            {i18n.language == languageOptions.english ? blog.title : blog.title_id}
-                          </p>
-                        </div>
-
+              {blogs.map((blog) => (
+                <div key={blog.id}>
+                  <Link to={`/blogs/${blog.slug}`}>
+                    <div className="relative">
+                      <div className="relative h-72 w-full overflow-hidden rounded-lg">
+                        <img
+                          src={`${baseurl}${blog.cover}`}
+                          alt=""
+                          onError={(e) => (e.target.src = nbDefaultImage)}
+                          className="h-full w-full object-cover object-center"
+                        />
                       </div>
-                    </Link>
-                  </div>
-                )))}
+                      <div className="relative mt-0">
+                        <p className="text-sm text-gray-900 font-bold">
+                          {i18n.language == languageOptions.english
+                            ? blog.title
+                            : blog.title_id}
+                        </p>
+                      </div>
+                    </div>
+                  </Link>
+                </div>
+              ))}
             </div>
 
             {/* <!-- component --> */}
@@ -105,7 +103,7 @@ const Blog = () => {
       {/* Footer */}
       <Footer />
     </div>
-  );
-};
+  )
+}
 
-export default Blog;
+export default Blog

@@ -200,7 +200,7 @@ const Search = () => {
               <p className="text-gray-400 text-sm px-2 mb-2">Trending search</p>
             </li>
             <li key="trending" className="mb-4 px-2 py-2 text-sm text-gray-700">
-              <div className="flex items-center overflow-x-scroll no-scrollbar rounded-md w-full">
+              <div className="flex items-center overflow-x-scroll   rounded-md w-full">
                 {trendingSearch.trending_searches &&
                   trendingSearch.trending_searches.map((trend) => (
                     <div

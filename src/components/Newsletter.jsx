@@ -41,7 +41,7 @@ const Newsletter = () => {
   }
 
   const onNewsletterSuccess = (data) => {
-    const status = "Success!"
+    const status = "Subscribed!"
     const message = "You have successfully subscribed to our newsletter."
 
     toast.custom((t) => <Success t={t} status={status} message={message} />)
