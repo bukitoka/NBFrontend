@@ -1,43 +1,13 @@
 import { useTranslation } from "react-i18next"
-import { useEffect, useState, useRef } from "react"
+import { useEffect, useState } from "react"
 import { apiGet } from "@/api/ApiService"
-import { register } from "swiper/element/bundle"
-
-register()
+import Marquee from "react-fast-marquee"
 
 const InvestorSection = () => {
   const [invertors, setInvertors] = useState([])
-  const swiperElRef = useRef(null)
-
-  const swiperParams = {
-    spaceBetween: 10,
-    loop: true,
-    autoplay: {
-      delay: 0,
-    },
-    speed: 300,
-    breakpoints: {
-      640: {
-        slidesPerView: 3,
-        spaceBetween: 20,
-      },
-      768: {
-        slidesPerView: 4,
-        spaceBetween: 40,
-      },
-      1024: {
-        slidesPerView: 5,
-        spaceBetween: 50,
-      },
-    },
-  }
 
   useEffect(() => {
     fetchInvertors()
-
-    const swiper = swiperElRef.current
-    Object.assign(swiper, swiperParams)
-    swiper.initialize()
   }, [])
 
   const fetchInvertors = async () => {
@@ -70,21 +40,19 @@ const InvestorSection = () => {
         </p>
       </div>
       <div className="mt-12 mx-auto max-w-7xl px-6 lg:px-8">
-        <swiper-container ref={swiperElRef} init="false">
-          {invertors.map((invertor) => (
-            <swiper-slide key={invertor.id}>
-              <div className="p-6 bg-slate-100 rounded-lg">
+        <Marquee className="rounded-lg" pauseOnHover={true} autoFill={true}>
+          <div className="flex gap-x-4 mr-4">
+            {invertors.map((invertor) => (
+              <div key={invertor.id} className="p-4 bg-slate-100 rounded-lg">
                 <img
-                  className="col-span-2 max-h-12 w-full object-contain"
+                  className="h-12 w-auto object-contain"
                   src={invertor?.logo}
-                  alt="Transistor"
-                  width={158}
-                  height={48}
+                  alt="Investor Logo"
                 />
               </div>
-            </swiper-slide>
-          ))}
-        </swiper-container>
+            ))}
+          </div>
+        </Marquee>
       </div>
     </div>
   )
