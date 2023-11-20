@@ -1,7 +1,7 @@
 import { ChevronRightIcon } from "@heroicons/react/20/solid"
 import { useTranslation } from "react-i18next"
-import { useEffect, useState } from 'react'
-import { apiGet } from '@/api/ApiService';
+import { useEffect, useState } from "react"
+import { apiGet } from "@/api/ApiService"
 import { nbDefaultImage } from "@/assets"
 
 const CategorySection = ({ categories }) => {
@@ -12,7 +12,11 @@ const CategorySection = ({ categories }) => {
   }, [])
 
   const fetchTopCategories = async () => {
-    await apiGet('top-category/', (response) => onSuccessfulFetch(response), (error) => onFailedFetch(error))
+    await apiGet(
+      "top-category/",
+      (response) => onSuccessfulFetch(response),
+      (error) => onFailedFetch(error)
+    )
   }
 
   const onSuccessfulFetch = (response) => {
@@ -47,7 +51,7 @@ const CategorySection = ({ categories }) => {
 
       <div className="mx-auto max-w-7xl px-4 lg:px-0">
         <div className="mx-auto max-w-2xl lg:max-w-none w-full">
-          <div className="mt-8 flex flex-row space-x-4 lg:grid lg:grid-cols-5 lg:gap-x-8 lg:space-x-0 overflow-x-auto no-scrollbar rounded-lg">
+          <div className="mt-8 flex flex-row space-x-4 lg:grid lg:grid-cols-5 lg:gap-x-8 lg:space-x-0 overflow-x-auto   rounded-lg">
             {topCategories.map((category) => (
               <div
                 key={category?.category_id}

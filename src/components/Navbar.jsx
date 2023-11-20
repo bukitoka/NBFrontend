@@ -310,7 +310,7 @@ const Navbar = () => {
                           <div className="relative bg-white">
                             <div className="flex gap-4 mx-auto max-w-7xl px-8 py-16">
                               {/* maaping alphabet as link */}
-                              <div className="overflow-x-scroll no-scrollbar flex gap-x-2 rounded-md">
+                              <div className="overflow-x-scroll   flex gap-x-2 rounded-md">
                                 {alphabet.map((item) => (
                                   <a
                                     href={`/brand/${item}`}

@@ -8,7 +8,6 @@ import toast from "react-hot-toast"
 import Navbar from "@/components/Navbar"
 import Footer from "@/components/Footer"
 
-
 export default function FeedbackPage() {
   const [selected, setSelected] = useState("feature")
   const [title, setTitle] = useState("")
@@ -37,8 +36,8 @@ export default function FeedbackPage() {
   }
 
   const onSuccessfulFeedback = (data) => {
-    const status = "Success!"
-    const message = "You have successfully submitted your feedback."
+    const status = "Thank you!"
+    const message = "Your feedback has been submitted successfully."
     toast.custom((t) => <Success t={t} status={status} message={message} />)
     resetForm()
   }
@@ -71,20 +70,22 @@ export default function FeedbackPage() {
                         <Tab
                           key={"feature"}
                           onClick={() => setSelected("feature")}
-                          className={`w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-yellow-500  ring-white/60 ring-offset-1 ring-offset-yellow-500 focus:outline-none focus:ring-1 ${selected === "feature"
-                            ? "bg-white shadow"
-                            : " text-zinc-800 hover:bg-zinc-400 hover:text-white"
-                            }`}
+                          className={`w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-yellow-500  ring-white/60 ring-offset-1 ring-offset-yellow-500 focus:outline-none focus:ring-1 ${
+                            selected === "feature"
+                              ? "bg-white shadow"
+                              : " text-zinc-800 hover:bg-zinc-400 hover:text-white"
+                          }`}
                         >
                           Feature
                         </Tab>
                         <Tab
                           key={"product"}
                           onClick={() => setSelected("product")}
-                          className={`w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-yellow-500  ring-white/60 ring-offset-2 ring-offset-yellow-500 focus:outline-none focus:ring-2 ${selected === "product"
-                            ? "bg-white shadow"
-                            : " text-zinc-800 hover:bg-zinc-400 hover:text-white"
-                            }`}
+                          className={`w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-yellow-500  ring-white/60 ring-offset-2 ring-offset-yellow-500 focus:outline-none focus:ring-2 ${
+                            selected === "product"
+                              ? "bg-white shadow"
+                              : " text-zinc-800 hover:bg-zinc-400 hover:text-white"
+                          }`}
                         >
                           product
                         </Tab>

@@ -7,19 +7,22 @@ import PrivateRoute from "@/layouts/PrivateWrapper"
 
 // pages
 import Home from "@/pages/Home"
-import Signin from "@/pages/Signin"
-import Signup from "@/pages/Signup"
+
+// auth
+import Signin from "@/pages/auth/Signin"
+import Signup from "@/pages/auth/Signup"
+import VerifyEmail from "@/pages/auth/VerifyEmail"
+import Google from "@/pages/auth/GoogleCallBack"
+import ResetPassword from "@/pages/auth/ResetPassword"
+import ResetPasswordConfirm from "@/pages/auth/ResetPasswordConfirm"
+import ChangePassword from "@/pages/auth/ChangePassword"
+
 import Profile from "@/pages/profile/Profile"
 import Products from "@/pages/Product"
 import Detail from "@/pages/ProductDetail"
-import Google from "@/pages/GoogleCallBack"
-import VerifyEmail from "@/pages/VerifyEmail"
 import Cart from "@/pages/Cart"
 import CheckOut from "@/pages/Checkout"
 import Brand from "@/pages/Brand"
-import ResetPassword from "@/pages/ResetPassword"
-import ResetPasswordConfirm from "@/pages/ResetPasswordConfirm"
-import ChangePassword from "@/pages/ChangePassword"
 import BrandDetail from "@/pages/BrandDetail"
 import NewArrival from "@/pages/NewArrival"
 import Category from "@/pages/Category"
@@ -28,6 +31,7 @@ import FeedbackPage from "@/pages/FeedbackPage"
 import Blog from "@/pages/Blog"
 import BlogDetail from "@/pages/BlogDetail"
 import PromoPage from "@/pages/PromoPage"
+import PageNotFound from "@/pages/PageNotFound"
 
 // payment
 import Finish from "@/pages/payment/Finish"
@@ -191,6 +195,7 @@ const App = () => {
               </PrivateRoute>
             }
           />
+          <Route path="*" element={<PageNotFound />} />
         </Routes>
       </MainWrapper>
     </BrowserRouter>

@@ -2,11 +2,12 @@ import useAuthStore from "@/store/authStore"
 import api from "@/tools/api"
 import dayjs from "dayjs"
 
-export const login = async (email, password) => {
+export const signin = async (email, password, token) => {
   try {
     const { data, status } = await api.post("auth/login/", {
-      email,
-      password,
+      email: email,
+      password: password,
+      recaptcha: token,
     })
     if (status === 200) {
       setUser(data.user, data.access_expiration, data.refresh_expiration)
@@ -20,20 +21,22 @@ export const login = async (email, password) => {
   }
 }
 
-export const register = async (
+export const signup = async (
   first_name,
   last_name,
   email,
   password1,
-  password2
+  password2,
+  token
 ) => {
   try {
     const { data } = await api.post("auth/registration/", {
-      first_name,
-      last_name,
-      email,
-      password1,
-      password2,
+      first_name: first_name,
+      last_name: last_name,
+      email: email,
+      password1: password1,
+      password2: password2,
+      recaptcha: token,
     })
 
     return { data, error: null }
@@ -126,10 +129,11 @@ export const verifyEmail = async (key) => {
 }
 
 // password reset
-export const resetPassword = async (email) => {
+export const resetPassword = async (email, token) => {
   try {
     const res = await api.post("auth/password/reset/", {
-      email,
+      email: email,
+      recaptcha: token,
     })
 
     return { data: res.data, error: null }
@@ -174,7 +178,9 @@ export const changePassword = async (
   new_password1,
   new_password2
 ) => {
+  console.log(old_password, new_password1, new_password2)
   try {
+    await tokenChecking()
     const res = await api.post("auth/password/change/", {
       old_password,
       new_password1,
