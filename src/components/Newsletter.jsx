@@ -1,5 +1,4 @@
 import { useForm } from "react-hook-form"
-import { useNavigate } from "react-router-dom"
 import { CalendarDaysIcon, HandRaisedIcon } from "@heroicons/react/24/outline"
 import toast from "react-hot-toast"
 
@@ -9,8 +8,13 @@ import Success from "./messages/Success"
 import Error from "./messages/Error"
 
 const Newsletter = () => {
-  const { register, handleSubmit } = useForm()
-  const navigate = useNavigate()
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    mode: "onChange",
+  })
 
   // Handle form submission
   const onSubmit = async (data) => {
@@ -19,7 +23,6 @@ const Newsletter = () => {
       .catch((err) => console.log(err))
 
     if (!token) {
-      console.log("No reCAPTCHA token!")
       return
     }
 
@@ -32,12 +35,7 @@ const Newsletter = () => {
   }
 
   const updateNewsletter = async (data) => {
-    await apiPost(
-      "newsletter/subscribe/",
-      data,
-      onNewsletterSuccess,
-      onNewsletterError
-    )
+    await apiPost("subscription/", data, onNewsletterSuccess, onNewsletterError)
   }
 
   const onNewsletterSuccess = (data) => {
@@ -48,15 +46,12 @@ const Newsletter = () => {
   }
 
   const onNewsletterError = (err) => {
-    if (err.response.status === 401) {
-      navigate("/signin")
-    } else {
-      const status = "Whoops!"
-      const message =
-        "Something went wrong. Please try again or contact us if the problem persists."
+    const status = "Whoops!"
+    const message =
+      "We were unable to subscribe you to our newsletter. " +
+      err.response.data.email
 
-      toast.custom((t) => <Error t={t} status={status} message={message} />)
-    }
+    toast.custom((t) => <Error t={t} status={status} message={message} />)
   }
 
   return (
@@ -84,8 +79,13 @@ const Newsletter = () => {
                     name="email"
                     type="email"
                     autoComplete="email"
-                    required
-                    {...register("email")}
+                    {...register("email", {
+                      required: "Please enter your email address.",
+                      pattern: {
+                        value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
+                        message: "Invalid email address.",
+                      },
+                    })}
                     className="min-w-0 flex-auto rounded-md border-0 bg-white/5 px-3.5 py-2 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-yellow-600 sm:text-sm sm:leading-6"
                     placeholder="Enter your email"
                   />
@@ -96,6 +96,11 @@ const Newsletter = () => {
                     Subscribe
                   </button>
                 </div>
+                {errors.email && (
+                  <small className="mt-2 text-sm text-red-300">
+                    {errors.email.message}
+                  </small>
+                )}
               </form>
             </div>
             <dl className="grid grid-cols-1 gap-x-8 gap-y-10 sm:grid-cols-2 lg:pt-2">
