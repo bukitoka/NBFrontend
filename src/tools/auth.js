@@ -101,7 +101,7 @@ export const googleAuthenticate = async (code) => {
 
     return { data: res.data, error: null }
   } catch (err) {
-    console.log(err)
+    // console.log(err)
 
     return {
       data: null,
@@ -119,7 +119,7 @@ export const verifyEmail = async (key) => {
 
     return { data: res.data, error: null }
   } catch (err) {
-    console.log(err)
+    // console.log(err)
 
     return {
       data: null,
@@ -138,7 +138,7 @@ export const resetPassword = async (email, token) => {
 
     return { data: res.data, error: null }
   } catch (err) {
-    console.log(err)
+    // console.log(err)
 
     return {
       data: null,
@@ -164,7 +164,7 @@ export const resetPasswordConfirm = async (
 
     return { data: res.data, error: null }
   } catch (err) {
-    console.log(err)
+    // console.log(err)
 
     return {
       data: null,
@@ -178,7 +178,7 @@ export const changePassword = async (
   new_password1,
   new_password2
 ) => {
-  console.log(old_password, new_password1, new_password2)
+  // console.log(old_password, new_password1, new_password2)
   try {
     await tokenChecking()
     const res = await api.post("auth/password/change/", {
@@ -189,7 +189,7 @@ export const changePassword = async (
 
     return { data: res.data, error: null }
   } catch (err) {
-    console.log(err)
+    // console.log(err)
 
     return {
       data: null,
@@ -227,7 +227,7 @@ export const tokenChecking = async () => {
           .getState()
           .setAccessExpiration(dayjs(data.access_expiration).unix())
       } catch (err) {
-        console.log(err)
+        // console.log(err)
       }
     }
   } else {
