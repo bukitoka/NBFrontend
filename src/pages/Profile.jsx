@@ -190,9 +190,8 @@ const Profile = () => {
               <div className="mt-6 rounded-xl border bg-white py-6 px-6">
                 <div className="hidden lg:block">
                   {items.map((item) => (
-                    <>
+                    <div key={item.id}>
                       <div
-                        key={item.id}
                         onClick={handleItemClick(item.id)}
                         className={`p-2 rounded-lg ${
                           selected === item.id ? "bg-zinc-100 " : ""
@@ -281,7 +280,7 @@ const Profile = () => {
                           <></>
                         )}
                       </div>
-                    </>
+                    </div>
                   ))}
                 </div>
                 <div className="block lg:hidden">

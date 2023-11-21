@@ -3,8 +3,8 @@ import { Dialog, Popover, RadioGroup, Tab, Transition } from "@headlessui/react"
 import { useLocation } from "react-router-dom"
 import { fetchCartItems } from "../api/CartApi"
 import { apiGet, apiPost } from "../api/ApiService"
-import Modal from "../components/Modal"
-import NewAddressModal from "./confirmOrder/component/addNewAddress"
+import Modal from "@/components/Modal"
+import NewAddressModal from "@/components/AddNewAddress"
 import ConfirmOrder from "../components/ConfirmOrder"
 import { nbDefaultImage } from "@/assets"
 import { priceFormatter } from "@/tools/reformat"
@@ -12,7 +12,6 @@ import { CheckCircleIcon } from "@heroicons/react/20/solid"
 
 // components
 import Navbar from "../components/Navbar"
-import MobileMenu from "../components/MobileMenu"
 import Footer from "../components/Footer"
 
 function classNames(...classes) {
