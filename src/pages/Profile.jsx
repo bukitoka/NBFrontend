@@ -9,22 +9,17 @@ import {
 } from "@heroicons/react/24/solid"
 
 import { PiPencilSimple } from "react-icons/pi"
-import {
-  ScrollMenu,
-  VisibilityContext,
-  constants,
-} from "react-horizontal-scrolling-menu"
+import { ScrollMenu } from "react-horizontal-scrolling-menu"
 import "react-horizontal-scrolling-menu/dist/styles.css"
-import useDrag from "./_component/useDrag"
-import "./styles/profile.css"
-import ProfileDetail from "./_component/detail/ProfileDetail"
-import OrderHistory from "./_component/orderHistory/OrderHistory"
-import WishList from "./_component/wishlist/WishList"
-import Footer from "../../components/Footer"
-import Coupon from "./_component/coupon/Coupon"
-import Setting from "./_component/setting/Setting"
+import useDrag from "@/tools/useDrag"
+import ProfileDetail from "@/components/profile/ProfileDetail"
+import OrderHistory from "@/components/profile/OrderHistory"
+import WishList from "@/components/profile/WishList"
+import Footer from "@/components/Footer"
+import Coupon from "@/components/profile/Coupon"
+import Setting from "@/components/profile/Setting"
 
-import { Card } from "./_component/menuItem/card"
+import { Card } from "@/components/profile/card"
 
 import { apiPatchMultipart, apiGetRoute } from "@/api/ApiService"
 
@@ -290,7 +285,7 @@ const Profile = () => {
                   ))}
                 </div>
                 <div className="block lg:hidden">
-                  <div className="example">
+                  <div>
                     <div onMouseLeave={dragStop}>
                       <ScrollMenu
                         onWheel={onWheel}

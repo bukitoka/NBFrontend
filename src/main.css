@@ -21,3 +21,7 @@ body {
 .grecaptcha-badge {
   visibility: hidden;
 }
+
+.setZIndex-9999 {
+  z-index: 9999;
+}
