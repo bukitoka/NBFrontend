@@ -34,6 +34,10 @@ const ProfileDetail = () => {
     getShippingData()
   }
 
+  const handleNotificationChangeAddress = () => {
+    getShippingData()
+  }
+
   const [datePickerValue, setDatePickerValue] = useState({
     startDate: null,
     endDate: null,
@@ -238,7 +242,7 @@ const ProfileDetail = () => {
                 type="text"
                 required
                 className="lg:col-span-2 text-sm p-1 border-2 border-zinc-100 rounded-md  bg-white pl-2  transition-all duration-300 focus:ring focus:border-yellow-500 focus:ring-yellow-500/20"
-                placeholder="last name"
+                placeholder="phone number"
                 value={phoneNumber}
                 onChange={(e) => setPhoneNumber(e.target.value)}
               />
@@ -366,6 +370,7 @@ const ProfileDetail = () => {
         open={open}
         setOpen={setOpen}
         openModalNewAddress={handleOpenModalNewAddress}
+        notifyChangeDefaultAddress={handleNotificationChangeAddress}
       />
       <NewAddressModal
         open={openModalNewAdress}
