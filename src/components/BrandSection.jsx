@@ -66,7 +66,8 @@ const BrandSection = () => {
                       <img
                         src={
                           brand.brand_cover_homepage
-                            ? brand.brand_cover_homepage
+                            ? import.meta.env.VITE_API_BASE_URL +
+                              brand.brand_cover_homepage
                             : nbDefaultImage
                         }
                         className="h-80 w-56 object-cover object-center group-hover:scale-110 ease-in duration-150"

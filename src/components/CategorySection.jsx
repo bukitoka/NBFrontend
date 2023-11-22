@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import { apiGet } from "@/api/ApiService"
 import { nbDefaultImage } from "@/assets"
 
-const CategorySection = ({ categories }) => {
+const CategorySection = () => {
   const [topCategories, setTopCategories] = useState([])
 
   useEffect(() => {
@@ -66,7 +66,8 @@ const CategorySection = ({ categories }) => {
                       <img
                         src={
                           category.category_cover_homepage
-                            ? category.category_cover_homepage
+                            ? import.meta.env.VITE_API_BASE_URL +
+                              category.category_cover_homepage
                             : nbDefaultImage
                         }
                         className="h-80 w-56 object-cover object-center group-hover:scale-110 ease-in duration-150"
