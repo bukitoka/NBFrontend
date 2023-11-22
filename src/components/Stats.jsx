@@ -47,7 +47,7 @@ const Stats = () => {
                   {stat.name}
                 </dt>
                 <small className="mt-3 italic text-gray-700 hover:text-gray-900">
-                  <a href={stat.url}>{stat.more} &rarr;</a>
+                  <a href={stat.url}>{stat.more}</a>
                 </small>
                 <div className="order-first bg-clip-text text-transparent bg-gradient-to-t from-yellow-700 to-yellow-200">
                   <dd className="text-3xl font-semibold tracking-tight">
