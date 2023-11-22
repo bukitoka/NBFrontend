@@ -24,7 +24,7 @@ const CategorySection = ({ categories }) => {
   }
 
   const onFailedFetch = (error) => {
-    console.log(error)
+    // console.log(error)
   }
 
   const { t } = useTranslation()
@@ -51,28 +51,31 @@ const CategorySection = ({ categories }) => {
 
       <div className="mx-auto max-w-7xl px-4 lg:px-0">
         <div className="mx-auto max-w-2xl lg:max-w-none w-full">
-          <div className="mt-8 flex flex-row space-x-4 lg:grid lg:grid-cols-5 lg:gap-x-8 lg:space-x-0 overflow-x-auto   rounded-lg">
+          <div className="mt-8 flex flex-row space-x-4 lg:grid lg:grid-cols-5 lg:gap-x-8 lg:space-x-0 overflow-x-auto rounded-xl">
             {topCategories.map((category) => (
               <div
                 key={category?.category_id}
-                className="group shrink-0 relative rounded-lg bg-white"
+                className="group shrink-0 relative rounded-xl bg-white"
               >
                 <div>
                   <div
                     aria-hidden="true"
-                    className="overflow-hidden rounded-lg"
+                    className="overflow-hidden rounded-xl"
                   >
                     <div className="overflow-hidden group-hover:opacity-75">
                       <img
-                        src={category?.category_cover_homepage}
-                        alt=""
+                        src={
+                          category.category_cover_homepage
+                            ? category.category_cover_homepage
+                            : nbDefaultImage
+                        }
                         className="h-80 w-56 object-cover object-center group-hover:scale-110 ease-in duration-150"
                         onError={(e) => (e.target.src = nbDefaultImage)}
                       />
                     </div>
-                    <div className="absolute rounded-lg h-full mt-auto inset-0 bg-gradient-to-b from-transparent to-black opacity-50" />
+                    <div className="absolute rounded-xl h-full mt-auto inset-0 bg-gradient-to-b from-transparent to-black opacity-50" />
                   </div>
-                  <div className="absolute inset-0 flex items-end rounded-lg p-6">
+                  <div className="absolute inset-0 flex items-end rounded-xl p-6">
                     <div>
                       <h3 className="font-semibold text-white">
                         <a href="#">
