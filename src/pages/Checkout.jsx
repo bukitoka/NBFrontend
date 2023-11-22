@@ -131,11 +131,11 @@ export default function Example() {
     )
   }
 
-  const requestToken = async (order_id) => {
+  const requestToken = async (order_ref_code) => {
     await apiPost(
       `payment/`,
       {
-        order_id: order_id,
+        ref_code: order_ref_code,
       },
       (data) => onSuccessRequestToken(data),
       (err) => onErrorRequestToken(err)
@@ -188,7 +188,7 @@ export default function Example() {
     console.log("success create order")
     console.log("order", data)
 
-    requestToken(data.id)
+    requestToken(data.ref_code)
   }
 
   function onErrorCreateOrder(error) {
