@@ -40,6 +40,7 @@ import bank23 from "./BANK/permata.svg"
 import bank24 from "./BANK/prima.svg"
 import bank25 from "./BANK/uob.svg"
 import bank26 from "./BANK/visa.svg"
+import EmptyData from "./emptydata.svg"
 
 export {
   background,
@@ -82,4 +83,5 @@ export {
   bank24,
   bank25,
   bank26,
+  EmptyData,
 }
