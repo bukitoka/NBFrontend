@@ -75,7 +75,7 @@ const Profile = () => {
     if (dragging) {
       return false
     }
-    setSelected(selected !== itemId ? itemId : "")
+    setSelected(selected !== itemId ? itemId : selected)
   }
 
   const onWheel = (apiObj, ev) => {
