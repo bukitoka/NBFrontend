@@ -43,11 +43,13 @@ const Search = () => {
     }
 
     const onTrendingError = (error) => {
-      console.log(error)
+      // console.log(error)
     }
 
     fetchTrendingSearch()
+  }, [])
 
+  useEffect(() => {
     // search
     const fetchSearchResults = async () => {
       setIsLoading(true)
@@ -71,14 +73,29 @@ const Search = () => {
         response.coupons.length === 0
       ) {
         setIsEmpty(true)
+      } else {
+        // store search query
+        apiGet(
+          `search/store/?q=${debouncedSearchQuery}`,
+          (data) => onStoreSearchSuccess(data),
+          (error) => onStoreSearchError(error)
+        )
       }
 
       setSearchResults(response)
     }
 
     const onSearchError = (error) => {
-      console.log(error)
+      // console.log(error)
       setIsLoading(false)
+    }
+
+    const onStoreSearchSuccess = (response) => {
+      // console.log(response)
+    }
+
+    const onStoreSearchError = (error) => {
+      // console.log(error)
     }
 
     if (debouncedSearchQuery) {
