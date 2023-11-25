@@ -1,33 +1,29 @@
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next"
 const Stats = () => {
   const stats = [
     {
       id: 1,
       name: "Best quality products",
       value: "1,000+",
-      more: "See all product",
-      url: "#",
+      more: "Carefully selected products",
     },
     {
       id: 2,
       name: "Top brands",
       value: "50+",
-      more: "See all brand",
-      url: "#",
+      more: "Brand from all over the world",
     },
     {
       id: 3,
       name: "Support assistent",
       value: "24/7",
-      more: "Talk to our CS",
-      url: "#",
+      more: "We always here to help you",
     },
     {
       id: 4,
-      name: "Money back guarantee",
-      value: "100%",
-      more: "Learn more",
-      url: "#",
+      name: "Free voucher",
+      value: "100+",
+      more: "Get free voucher every month",
     },
   ]
 
@@ -38,10 +34,10 @@ const Stats = () => {
         <div className="mx-auto max-w-2xl lg:max-w-none">
           <div className="text-center">
             <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-              {t('statSection_Title')}
+              {t("statSection_Title")}
             </h2>
             <p className="mt-4 text-lg leading-8 text-gray-600">
-              {t('statSection_Description')}
+              {t("statSection_Description")}
             </p>
           </div>
           <dl className="mt-12 grid grid-cols-1 gap-0.5 overflow-hidden rounded-2xl text-center sm:grid-cols-2 lg:grid-cols-4">
@@ -51,7 +47,7 @@ const Stats = () => {
                   {stat.name}
                 </dt>
                 <small className="mt-3 italic text-gray-700 hover:text-gray-900">
-                  <a href={stat.url}>{stat.more} &rarr;</a>
+                  <a href={stat.url}>{stat.more}</a>
                 </small>
                 <div className="order-first bg-clip-text text-transparent bg-gradient-to-t from-yellow-700 to-yellow-200">
                   <dd className="text-3xl font-semibold tracking-tight">

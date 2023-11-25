@@ -6,8 +6,7 @@ import { nbDefaultImage } from "@/assets"
 import { languageOptions } from "@/constant/constant"
 
 const StorySection = () => {
-  const [topBlogs, setTopBlogs] = useState([])
-  const [headlineBlogs, setHeadlineBlogs] = useState(null)
+  const [blogs, setBlogs] = useState([])
 
   const getTopBlogs = async () => {
     await apiGet(
@@ -18,37 +17,21 @@ const StorySection = () => {
   }
 
   const onGetTopBlogsSuccess = (data) => {
-    setTopBlogs(data.results)
-    getHeadlineBlogs(data.results)
+    setBlogs(data.results)
   }
 
   const onGetTopBlogsError = (error) => {
-    console.log(error)
+    // console.log(error)
   }
 
   useEffect(() => {
     getTopBlogs()
   }, [])
 
-  const getHeadlineBlogs = (blogs) => {
-    if (blogs == null) {
-      setHeadlineBlogs(null)
-      return
-    }
-
-    const headline = blogs.find((blog) => blog.is_headline && blog.is_published)
-    // set headline to first blog if no headline blog
-    if (headline == null) {
-      setHeadlineBlogs(blogs[0])
-      return
-    }
-    setHeadlineBlogs(headline)
-  }
-
   const { t, i18n } = useTranslation()
   return (
     <>
-      {headlineBlogs && (
+      {blogs && (
         <section aria-labelledby="category-heading" className="bg-white">
           <div className="mx-auto max-w-7xl px-4 pt-24 sm:px-6 lg:px-8">
             <div className="sm:flex sm:items-baseline sm:justify-between">
@@ -69,48 +52,69 @@ const StorySection = () => {
 
             <div className="mt-8 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:grid-rows-2 sm:gap-x-6 lg:gap-8 ">
               {/* headline blogs*/}
-              <div className="group aspect-h-1 aspect-w-2 overflow-hidden rounded-lg sm:aspect-h-1 sm:aspect-w-1 sm:row-span-2">
-                <img
-                  src={headlineBlogs?.cover_homepage_headline}
-                  alt=""
-                  className="object-cover object-center group-hover:opacity-75"
-                  onError={(e) => (e.target.src = nbDefaultImage)}
-                />
-                <div
-                  aria-hidden="true"
-                  className="bg-gradient-to-b from-transparent to-black opacity-50"
-                />
-                <div className="flex items-end p-6">
-                  <div>
-                    <h3 className="font-semibold text-white">
-                      <a href={`/blogs/${headlineBlogs?.slug}`}>
-                        <span className="absolute inset-0" />
-                        {i18n.language == languageOptions.english
-                          ? headlineBlogs?.title
-                          : headlineBlogs?.title_id}
-                      </a>
-                    </h3>
-                  </div>
-                </div>
-              </div>
-
-              {/* normal blogs */}
-              {topBlogs.map(
+              {blogs.map(
                 (blog) =>
-                  !blog.is_headline && (
+                  blog.is_headline &&
+                  blog.is_featured &&
+                  blog.is_published && (
+                    <div
+                      key={blog.id}
+                      className="group aspect-h-1 aspect-w-2 overflow-hidden rounded-xl sm:aspect-h-1 sm:aspect-w-1 sm:row-span-2"
+                    >
+                      <img
+                        src={
+                          blog.cover_homepage_headline
+                            ? blog.cover_homepage_headline
+                            : nbDefaultImage
+                        }
+                        className="object-cover object-center group-hover:opacity-75"
+                        onError={(e) => (e.target.src = nbDefaultImage)}
+                      />
+                      <div
+                        aria-hidden="true"
+                        className="bg-gradient-to-b from-transparent to-black opacity-50"
+                      />
+                      <div className="flex items-end p-6">
+                        <div>
+                          <h3 className="font-semibold text-white">
+                            <a href={`/blogs/${blog?.slug}`}>
+                              <span className="absolute inset-0" />
+                              {i18n.language == languageOptions.english
+                                ? blog?.title
+                                : blog?.title_id}
+                            </a>
+                          </h3>
+                        </div>
+                      </div>
+                    </div>
+                  )
+              )}
+
+              {/* other featured blogs */}
+              {blogs.map(
+                (blog) =>
+                  !blog.is_headline &&
+                  blog.is_featured &&
+                  blog.is_published && (
                     <div
                       key={blog.id}
                       className="group aspect-h-1 aspect-w-2 overflow-hidden rounded-lg sm:aspect-none sm:relative sm:h-full"
                     >
                       <img
-                        src={blog?.cover_homepage_mobile}
-                        alt=""
+                        src={
+                          blog.cover_homepage_mobile
+                            ? blog.cover_homepage_mobile
+                            : nbDefaultImage
+                        }
                         className="object-cover object-center group-hover:opacity-75 sm:absolute sm:inset-0 sm:h-full sm:w-full block lg:hidden"
                         onError={(e) => (e.target.src = nbDefaultImage)}
                       />
                       <img
-                        src={blog?.cover_homepage}
-                        alt=""
+                        src={
+                          blog.cover_homepage
+                            ? blog.cover_homepage
+                            : nbDefaultImage
+                        }
                         className="object-cover object-center group-hover:opacity-75 sm:absolute sm:inset-0 sm:h-full sm:w-full hidden lg:block"
                         onError={(e) => (e.target.src = nbDefaultImage)}
                       />

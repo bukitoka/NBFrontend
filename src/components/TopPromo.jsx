@@ -20,19 +20,17 @@ const TopPromo = () => {
   }
 
   const onGetCouponsSuccess = (response) => {
-    console.log("Coupon Response on the Top Coupon", response)
     setCoupons(response.results)
   }
 
   const onGetCouponsError = (error) => {
-    console.log(error)
+    // console.log(error)
   }
 
   const copyCoupon = (code) => {
     clipboard.copy(code)
-    const status = "Success!"
-    const message =
-      "Coupon code has been copied to your clipboard. please paste it on the checkout page."
+    const status = "Copied!"
+    const message = "Coupon code has been copied to your clipboard."
     toast.custom((t) => <Success t={t} status={status} message={message} />)
   }
 
@@ -56,21 +54,19 @@ const TopPromo = () => {
           </div>
           <div className="mt-12 flex flex-row space-x-4 lg:grid lg:grid-cols-3 lg:gap-x-8 lg:space-x-0 overflow-x-auto   rounded-lg">
             {coupons.map((coupon) => (
-              <a
+              <span
                 key={coupon.id}
-                href="#"
-                className="flex flex-shrink-0 overflow-hidden rounded-lg"
+                className="flex flex-shrink-0 overflow-hidden rounded-xl"
                 onClick={() =>
                   copyCoupon(`${coupon?.prefix_code}${coupon?.private_code}`)
                 }
               >
                 <img
-                  src={coupon?.cover}
-                  alt=""
-                  className="h-60 w-80 lg:w-96 object-cover rounded-lg hover:scale-110 ease-in duration-150"
+                  src={coupon.cover ? coupon.cover : nbDefaultImage}
+                  className="h-60 w-80 lg:w-96 object-cover rounded-xl hover:scale-110 ease-in duration-150"
                   onError={(e) => (e.target.src = nbDefaultImage)}
                 />
-              </a>
+              </span>
             ))}
           </div>
         </div>

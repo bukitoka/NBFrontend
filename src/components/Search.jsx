@@ -3,7 +3,6 @@ import {
   MagnifyingGlassIcon,
   ArrowRightIcon,
   QuestionMarkCircleIcon,
-  BookmarkIcon,
   XMarkIcon,
   FireIcon,
 } from "@heroicons/react/20/solid"
@@ -44,11 +43,13 @@ const Search = () => {
     }
 
     const onTrendingError = (error) => {
-      console.log(error)
+      // console.log(error)
     }
 
     fetchTrendingSearch()
+  }, [])
 
+  useEffect(() => {
     // search
     const fetchSearchResults = async () => {
       setIsLoading(true)
@@ -72,14 +73,29 @@ const Search = () => {
         response.coupons.length === 0
       ) {
         setIsEmpty(true)
+      } else {
+        // store search query
+        apiGet(
+          `search/store/?q=${debouncedSearchQuery}`,
+          (data) => onStoreSearchSuccess(data),
+          (error) => onStoreSearchError(error)
+        )
       }
 
       setSearchResults(response)
     }
 
     const onSearchError = (error) => {
-      console.log(error)
+      // console.log(error)
       setIsLoading(false)
+    }
+
+    const onStoreSearchSuccess = (response) => {
+      // console.log(response)
+    }
+
+    const onStoreSearchError = (error) => {
+      // console.log(error)
     }
 
     if (debouncedSearchQuery) {
@@ -149,9 +165,8 @@ const Search = () => {
   const clipboard = useClipboard()
   const copyCoupon = (code) => {
     clipboard.copy(code)
-    const status = "Success!"
-    const message =
-      "Coupon code has been copied to your clipboard. please paste it on the checkout page."
+    const status = "Copied!"
+    const message = "Coupon code has been copied to your clipboard."
     toast.custom((t) => <Success t={t} status={status} message={message} />)
   }
 
@@ -231,13 +246,10 @@ const Search = () => {
             {searchResults.coupons &&
               searchResults.coupons.map((coupon) => (
                 <li key={coupon.id}>
-                  <a
-                    href="#"
-                    className="px-2 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 rounded-lg flex items-center"
-                  >
+                  <span className="px-2 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 rounded-lg flex items-center">
                     <img
                       src={
-                        coupon.cover != "/media/coupon_covers/default.jpg"
+                        coupon.cover
                           ? import.meta.env.VITE_API_BASE_URL + coupon.cover
                           : nbDefaultImage
                       }
@@ -255,7 +267,7 @@ const Search = () => {
                         )
                       }
                     />
-                  </a>
+                  </span>
                 </li>
               ))}
 
@@ -274,7 +286,7 @@ const Search = () => {
                   >
                     <img
                       src={
-                        product.cover != "/media/products/default.jpg"
+                        product.cover
                           ? import.meta.env.VITE_API_BASE_URL + product.cover
                           : nbDefaultImage
                       }
@@ -310,7 +322,7 @@ const Search = () => {
                   >
                     <img
                       src={
-                        brand.logo != "/media/brand_logos/default.jpg"
+                        brand.logo
                           ? import.meta.env.VITE_API_BASE_URL + brand.logo
                           : nbDefaultImage
                       }
@@ -344,10 +356,12 @@ const Search = () => {
                     href={`/faqs/${faq.id}`}
                     className="px-2 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 rounded-lg flex items-center"
                   >
-                    <QuestionMarkCircleIcon
-                      className="h-4 w-4 text-gray-400 mr-2"
-                      aria-hidden="true"
-                    />
+                    <div className="h-8 w-8 mr-2 rounded-md flex items-center justify-center bg-zinc-400">
+                      <QuestionMarkCircleIcon
+                        className="h-4 w-4 text-white"
+                        aria-hidden="true"
+                      />
+                    </div>
                     <NanoClamp
                       is="p"
                       className="text-gray-700 font-medium hover:text-gray-900"
@@ -377,7 +391,7 @@ const Search = () => {
                   >
                     <img
                       src={
-                        blog.cover != "/media/blog_covers/default.jpg"
+                        blog.cover
                           ? import.meta.env.VITE_API_BASE_URL + blog.cover
                           : nbDefaultImage
                       }
