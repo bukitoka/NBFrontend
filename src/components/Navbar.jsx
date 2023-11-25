@@ -1,6 +1,5 @@
 import { Fragment, useState, useEffect } from "react"
 import { Popover, Transition } from "@headlessui/react"
-import { apiGet } from "@/api/ApiService"
 
 // hero icons
 import {
@@ -48,8 +47,6 @@ const Navbar = () => {
   const { categories, fetchCategories } = useCategoryStore()
   const { carts, fetchCarts } = useCartStore()
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn)
-
-  const [totalItems, setTotalItems] = useState(0)
 
   function classNames(...classes) {
     return classes.filter(Boolean).join(" ")
