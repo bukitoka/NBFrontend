@@ -1,12 +1,11 @@
-import { Fragment, useState, useCallback, useEffect } from "react"
+import { Fragment, useState, useEffect } from "react"
 import { Dialog, Transition } from "@headlessui/react"
 import { XMarkIcon } from "@heroicons/react/24/outline"
 import AsyncSelect from "react-select/async"
-import { apiGet, apiPost } from "../../../api/ApiService"
-import { useDebounce } from "use-debounce"
+import { apiGet, apiPost } from "../api/ApiService"
 import verifyRecaptcha from "@/tools/recaptcha"
 
-export default function Example({ open, setOpen }) {
+export default function AddNewAddress({ open, setOpen, callBack }) {
   const [inputValue, setValue] = useState("")
   const [shippingList, setShippingList] = useState([])
   const [selectedValue, setSelectedValue] = useState(null)
@@ -55,9 +54,6 @@ export default function Example({ open, setOpen }) {
 
     setOptions(formattedOptions)
 
-    // console.log("formatted options length" + formattedOptions.length);
-    // console.log(formattedOptions);
-
     return formattedOptions
   }
 
@@ -88,7 +84,8 @@ export default function Example({ open, setOpen }) {
     )
   }
 
-  function onSuccessSaving(data) {
+function onSuccessSaving(data) {
+    callBack()
     setOpen(false)
     resetForm()
   }
@@ -105,61 +102,7 @@ export default function Example({ open, setOpen }) {
     setPhone("")
   }
 
-  // wrap the loadOptions function with useDebounce
-  const [debouncedLoadOptions] = useDebounce(loadOptions, 500)
-
-  useEffect(() => {
-    // Calculate the desired height based on the number of options in AsyncSelect
-    const numOptions = shippingList ? shippingList.length : 0
-    // console.log("number options" + numOptions);
-
-    // const optionsLength = options ? options.length : 0;
-    // console.log(`options lenght` + optionsLength)
-
-    // const calculatedHeight = `${Math.min(500, 500 + numOptions * 50)}px`; // Adjust as needed
-    // const calculatedHeight = `${Math.min(500 + optionsLength * 50)}px`; // Adjust as needed
-    // const calculatedHeight = `${Math.min(470, 470)}px`; // Adjust as needed
-
-    // Set the dialog height
-    // setDialogHeight(calculatedHeight);
-
-    // console.log("dialog height" + dialogHeight);
-    // checkLength()
-    // loadOptions()
-  }, [options])
-
-  function checkLength() {
-    const optionsLength = options ? options.length : 0
-    const optionstest = document.querySelectorAll(".select__option")
-    console.log("options length gasa" + optionstest.length)
-    // setOptionsCount(options.length);
-    // console.log(`options lenght` + optionsLength)
-    // console.log("on Open data");
-    // console.log("isi data ")
-    // console.log(shippingList);
-    // console.log("length" + shippingList.length);
-
-    // console.log(`options lenght` + optionsLength)
-
-    // const calculatedHeight = `${Math.min(500, 500 + numOptions * 50)}px`; // Adjust as needed
-    // const calculatedHeight = `${Math.min(500 + optionsLength * 50)}px`; // Adjust as needed
-    // const calculatedHeight = `${Math.min(470, 470)}px`; // Adjust as needed
-
-    // Set the dialog height
-    // setDialogHeight();
-    // setDialogHeight('auto');
-    setDialogHeight("530px")
-  }
-
-  function closeMenu() {
-    console.log("close menu")
-    setDialogHeight("500px")
-  }
-
-  const customstyles = {
-    menuportal: (provided) => ({ ...provided, zindex: 9999 }),
-    menu: (provided) => ({ ...provided, zindex: 9999 }),
-  }
+  useEffect(() => {}, [options])
 
   return (
     <Transition.Root show={open} as={Fragment}>

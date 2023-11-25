@@ -1,18 +1,17 @@
 import useAuthStore from "@/store/authStore"
 import { useState, useEffect } from "react"
 import { apiGet, apiGetRoute, apiPatchRoute } from "@/api/ApiService"
-import { ToastContainer, toast } from "react-toastify"
 import { PencilSquareIcon, XMarkIcon } from "@heroicons/react/24/solid"
 import dayjs from "dayjs"
 import Datepicker from "react-tailwindcss-datepicker"
-import "./ProfileDetail.css"
 import Modal from "@/components/Modal"
-import NewAddressModal from "@/pages/confirmOrder/component/addNewAddress"
-// import Modal from "components/Modal"
+import NewAddressModal from "@/components/AddNewAddress"
 import { useTranslation } from "react-i18next"
+import Success from "@/components/messages/Success"
+import Error from "@/components/messages/Error"
+import toast from "react-hot-toast"
 
 const ProfileDetail = () => {
-  const allUserData = useAuthStore((state) => state.allUserData)
   const [temporaryUser, setTemporaryUser] = useState({})
   const [shippingList, setShippingList] = useState(null)
   const [isEdit, setIsEdit] = useState(false)
@@ -21,10 +20,7 @@ const ProfileDetail = () => {
   const [phoneNumber, setPhoneNumber] = useState("")
   const [dateOfBirth, setDateOfBirth] = useState("")
   const [email, setEmail] = useState("")
-  const [address, setAddress] = useState("")
-  const [detailAddress, setDetailAddress] = useState("")
   const [gender, setGender] = useState("")
-  const [startDate, setStartDate] = useState(new Date())
   const [open, setOpen] = useState(false)
   const [openModalNewAdress, setModalNewAddress] = useState(false)
   const { t } = useTranslation()
@@ -32,6 +28,14 @@ const ProfileDetail = () => {
   const handleOpenModalNewAddress = () => {
     setOpen(false)
     setModalNewAddress(true)
+  }
+
+  const handleCallbackAddress = () => {
+    getShippingData()
+  }
+
+  const handleNotificationChangeAddress = () => {
+    getShippingData()
   }
 
   const [datePickerValue, setDatePickerValue] = useState({
@@ -82,7 +86,9 @@ const ProfileDetail = () => {
     setUserData(data)
     setTemporaryUser(data)
     setIsEdit(false)
-    toast.success("Your Profile Has been updated.")
+    const status = "Success! "
+    const message = "Your profile has been updated successfully"
+    toast.custom((t) => <Success t={t} status={status} message={message} />)
   }
 
   const onProfileUpdateError = (error) => {
@@ -148,11 +154,6 @@ const ProfileDetail = () => {
 
   return (
     <form>
-      <ToastContainer
-        toastClassName="rounded-lg"
-        bodyClassName="text-sm font-semibold"
-        position="top-center"
-      />
       <div className="flex flex-col">
         <div className="flex justify-end pb-4">
           {isEdit ? (
@@ -241,7 +242,7 @@ const ProfileDetail = () => {
                 type="text"
                 required
                 className="lg:col-span-2 text-sm p-1 border-2 border-zinc-100 rounded-md  bg-white pl-2  transition-all duration-300 focus:ring focus:border-yellow-500 focus:ring-yellow-500/20"
-                placeholder="last name"
+                placeholder="phone number"
                 value={phoneNumber}
                 onChange={(e) => setPhoneNumber(e.target.value)}
               />
@@ -369,8 +370,13 @@ const ProfileDetail = () => {
         open={open}
         setOpen={setOpen}
         openModalNewAddress={handleOpenModalNewAddress}
+        notifyChangeDefaultAddress={handleNotificationChangeAddress}
       />
-      <NewAddressModal open={openModalNewAdress} setOpen={setModalNewAddress} />
+      <NewAddressModal
+        open={openModalNewAdress}
+        setOpen={setModalNewAddress}
+        callBack={handleCallbackAddress}
+      />
     </form>
   )
 }

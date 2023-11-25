@@ -17,7 +17,7 @@ import ResetPassword from "@/pages/auth/ResetPassword"
 import ResetPasswordConfirm from "@/pages/auth/ResetPasswordConfirm"
 import ChangePassword from "@/pages/auth/ChangePassword"
 
-import Profile from "@/pages/profile/Profile"
+import Profile from "@/pages/Profile"
 import Products from "@/pages/Product"
 import Detail from "@/pages/ProductDetail"
 import Cart from "@/pages/Cart"

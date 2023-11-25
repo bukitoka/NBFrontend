@@ -42,20 +42,25 @@ export default function WishList() {
       <div className="bg-white">
         <ul role="list" className="">
           {wishList.map((item) => (
-            <Link to={`/products/${item.product_details.slug}`}>
-              <li key={item.id} className="flex gap-x-4 py-5">
-
-                <img className="h-12 w-12 flex-none rounded-full bg-gray-50" src={`${baseurl}${item.product_details.cover}`} alt="" />
+            <Link key={item.id} to={`/products/${item.product_details.slug}`}>
+              <li className="flex gap-x-4 py-5">
+                <img
+                  className="h-12 w-12 flex-none rounded-full bg-gray-50"
+                  src={`${baseurl}${item.product_details.cover}`}
+                  alt=""
+                />
                 <div className="min-w-0">
-                  <p className="text-sm font-semibold leading-6 text-gray-900">{item.product_details.name}</p>
-                  <p className="mt-1 truncate text-xs leading-5 text-gray-500">Out of stock</p>
+                  <p className="text-sm font-semibold leading-6 text-gray-900">
+                    {item.product_details.name}
+                  </p>
+                  <p className="mt-1 truncate text-xs leading-5 text-gray-500">
+                    Out of stock
+                  </p>
                 </div>
-
               </li>
             </Link>
           ))}
         </ul>
-
       </div>
     </>
   )

@@ -1,13 +1,22 @@
-import { Fragment, useEffect, useState } from 'react'
-import { Dialog, Transition } from '@headlessui/react'
-import { ExclamationTriangleIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import RadioGroup from './RadioGroup'
+import { Fragment, useEffect, useState } from "react"
+import { Dialog, Transition } from "@headlessui/react"
+import { ExclamationTriangleIcon, XMarkIcon } from "@heroicons/react/24/outline"
+import RadioGroup from "./RadioGroup"
 
-export default function Modal({ open, setOpen, openModalNewAddress }) {
+export default function Modal({
+  open,
+  setOpen,
+  openModalNewAddress,
+  notifyChangeDefaultAddress,
+}) {
   const [selected, setSelected] = useState(null)
 
   const handleSelected = (value) => {
-    setSelected(value);
+    setSelected(value)
+  }
+
+  const handleNotifyChangeDefaultAddress = () => {
+    notifyChangeDefaultAddress()
     setOpen(false)
   }
 
@@ -50,15 +59,26 @@ export default function Modal({ open, setOpen, openModalNewAddress }) {
                 </div>
                 <div className="sm:flex sm:items-start items-center justify-center w-full">
                   <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left w-full">
-                    <Dialog.Title as="h3" className="text-base font-semibold leading-6 text-gray-900">
+                    <Dialog.Title
+                      as="h3"
+                      className="text-base font-semibold leading-6 text-gray-900"
+                    >
                       Select Address
                     </Dialog.Title>
                     <div className="mt-2 w-full">
-                      <button className="bg-zinc-800 hover:bg-yellow-500 text-white font-bold py-2 px-4 mb-4 rounded-lg w-full"
-                        onClick={() => openModalNewAddress()}>
+                      <button
+                        className="bg-zinc-800 hover:bg-yellow-500 text-white font-bold py-2 px-4 mb-4 rounded-lg w-full"
+                        onClick={() => openModalNewAddress()}
+                      >
                         Add new Address
                       </button>
-                      <RadioGroup selected={selected} setSelected={handleSelected} />
+                      <RadioGroup
+                        selected={selected}
+                        setSelected={handleSelected}
+                        notifyUpdateDefaultAddress={
+                          handleNotifyChangeDefaultAddress
+                        }
+                      />
                     </div>
                   </div>
                 </div>
