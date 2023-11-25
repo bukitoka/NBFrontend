@@ -1,6 +1,7 @@
 import { create } from "zustand"
-import { devtools, persist, createJSONStorage } from "zustand/middleware"
+import { persist, createJSONStorage } from "zustand/middleware"
 import api from "@/tools/api"
+import { tokenChecking } from "@/tools/auth"
 
 const cartStore = (set) => ({
   carts: [],
@@ -11,6 +12,7 @@ const cartStore = (set) => ({
     set({ loading: true, error: null })
 
     try {
+      await tokenChecking()
       const { data } = await api.get("api/v1/cart/")
       set({ carts: data, loading: false })
     } catch (error) {
