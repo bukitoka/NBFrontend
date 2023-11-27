@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next"
 import { useState, useEffect } from "react"
 import { apiGet } from "@/api/ApiService"
 import { nbDefaultImage } from "@/assets"
-import { languageOptions } from "@/constant/constant"
+import { languageOptions } from "@/tools/constants"
 
 const StorySection = () => {
   const [blogs, setBlogs] = useState([])

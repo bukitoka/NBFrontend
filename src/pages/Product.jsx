@@ -52,7 +52,7 @@ const NewArrival = () => {
       {/* Navbar */}
       <Navbar/>
       <main>
-        <div className="bg-white pt-[130px] lg:pt-[86px]  bg-red-400">
+        <div className="bg-white pt-[130px] lg:pt-[86px]">
           <div className="mx-auto max-w-2xl px-4 pt-16  sm:px-6 sm:pt-24 lg:max-w-7xl lg:px-8">
             <div className="mt-8 grid grid-cols-1 gap-y-12 sm:grid-cols-2 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8">
               {

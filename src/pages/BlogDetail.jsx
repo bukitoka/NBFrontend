@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 const baseurl = import.meta.env.VITE_API_BASE_URL;
 import dayjs from "dayjs"
 import { useTranslation } from "react-i18next"
-import { languageOptions } from '@/constant/constant'
+import { languageOptions } from "@/tools/constants"
 import parse from 'html-react-parser';
 
 // components

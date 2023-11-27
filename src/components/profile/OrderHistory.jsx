@@ -9,6 +9,8 @@ import { FiShoppingBag } from "react-icons/fi"
 import dayjs from "dayjs"
 import { nbDefaultImage } from "@/assets"
 import { priceFormatter } from "@/tools/reformat"
+import { paymentStatus, orderStatus } from "@/tools/constants"
+import { Link } from "react-router-dom"
 
 const baseurl = import.meta.env.VITE_API_BASE_URL
 const altImage = import.meta.env.VITE_API_NO_IMAGE_URL
@@ -25,6 +27,7 @@ export default function OrderHistory() {
   }
 
   function onGetOrdersSuccess(response) {
+    console.log("order data,", response)
     setOrders(response.results)
   }
 
@@ -188,17 +191,35 @@ export default function OrderHistory() {
                                 View details
                               </a>
                             </div>
-                            {order.payment_status == "pending" && (
+                            {order.payment_status == paymentStatus.pending && (
                               <div className="flex flex-1 justify-center pl-4">
                                 <button
                                   type="button"
-                                  onClick={() => handlePayOrder(order.ref_code)}
+                                  onClick={() =>
+                                    handlePayOrder(order.order_item)
+                                  }
                                   className="whitespace-nowrap text-indigo-600 hover:text-indigo-500"
                                 >
                                   Pay
                                 </button>
                               </div>
                             )}
+
+                            {order.payment_status == paymentStatus.settlement &&
+                              order.status == orderStatus.complete && (
+                                <div className="flex flex-1 justify-center pl-4">
+                                  <Link
+                                    to={`/review/${order.order_items[0].product_slug}`}
+                                  >
+                                    <button
+                                      type="button"
+                                      className="whitespace-nowrap text-indigo-600 hover:text-indigo-500"
+                                    >
+                                      Review
+                                    </button>
+                                  </Link>
+                                </div>
+                              )}
                           </div>
                         </div>
                       </li>

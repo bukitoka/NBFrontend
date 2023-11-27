@@ -49,7 +49,6 @@ const TopPromo = () => {
             </h2>
             <p className="mt-4 text-lg leading-8 text-gray-600">
               {t("topPromo_Description")}
-              Beauty shopping with exclusive promos everyday. Happy shopping!
             </p>
           </div>
           <div className="mt-12 flex flex-row space-x-4 lg:grid lg:grid-cols-3 lg:gap-x-8 lg:space-x-0 overflow-x-auto   rounded-lg">

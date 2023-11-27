@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom"
 import { Link } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { priceFormatter } from "@/tools/reformat"
-import { languageOptions } from '@/constant/constant'
+import { languageOptions } from "@/tools/constants"
 
 
 // components

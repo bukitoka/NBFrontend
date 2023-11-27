@@ -9,61 +9,6 @@ import { apiPostMultipart } from "@/api/ApiService"
 import { TrashIcon } from "@heroicons/react/20/solid"
 import verifyRecaptcha from "@/tools/recaptcha"
 
-const reviewss = {
-  average: 4,
-  totalCount: 1624,
-  counts: [
-    { rating: 5, count: 1019 },
-    { rating: 4, count: 162 },
-    { rating: 3, count: 97 },
-    { rating: 2, count: 199 },
-    { rating: 1, count: 147 },
-  ],
-  featured: [
-    {
-      id: 1,
-      rating: 5,
-      content: `
-        <p>This is the bag of my dreams. I took it on my last vacation and was able to fit an absurd amount of snacks for the many long and hungry flights.</p>
-      `,
-      author: "Emily Selman",
-      avatarSrc:
-        "https://images.unsplash.com/photo-1502685104226-ee32379fefbe?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=256&h=256&q=80",
-    },
-    {
-      id: 2,
-      rating: 5,
-      content: `
-        <p>Love this bag! It's stylish and can fit a ton of things. I use it every time I leave my house.</p>
-      `,
-      author: "Lisa Marie",
-      avatarSrc:
-        "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=256&h=256&q=80",
-    },
-    {
-      id: 3,
-      rating: 5,
-      content: `
-        <p>I love this bag so much I bought it in every color!</p>
-      `,
-      author: "Hector Gibbons",
-      avatarSrc:
-        "https://images.unsplash.com/photo-1503443207922-dff7d543fd0e?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=256&h=256&q=80",
-    },
-    {
-      id: 4,
-      rating: 5,
-      content: `
-        <p>So glad I purchased this bag! It's really helped me stay organized.</p>
-      `,
-      author: "Emma Dorsey",
-      avatarSrc:
-        "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=256&h=256&q=80",
-    },
-    // More reviews...
-  ],
-}
-
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ")
 }
@@ -156,52 +101,11 @@ export default function ProductReviews(props) {
                   />
                 ))}
               </div>
-              <p className="sr-only">{reviewss.average} out of 5 stars</p>
             </div>
             <p className="ml-2 text-sm text-gray-900">
               Based on {reviews.length ?? 0} reviews
             </p>
           </div>
-
-          {/* <div className="mt-6">
-            <h3 className="sr-only">Review data</h3>
-
-            <dl className="space-y-3">
-              {reviewss.counts.map((count) => (
-                <div key={count.rating} className="flex items-center text-sm">
-                  <dt className="flex flex-1 items-center">
-                    <p className="w-3 font-medium text-gray-900">
-                      {count.rating}
-                      <span className="sr-only"> star reviews</span>
-                    </p>
-                    <div aria-hidden="true" className="ml-1 flex flex-1 items-center">
-                      <StarIcon
-                        className={classNames(
-                          count.count > 0 ? 'text-yellow-400' : 'text-gray-300',
-                          'h-5 w-5 flex-shrink-0'
-                        )}
-                        aria-hidden="true"
-                      />
-
-                      <div className="relative ml-3 flex-1">
-                        <div className="h-3 rounded-full border border-gray-200 bg-gray-100" />
-                        {count.count > 0 ? (
-                          <div
-                            className="absolute inset-y-0 rounded-full border border-yellow-400 bg-yellow-400"
-                            style={{ width: `calc(${count.count} / ${reviewss.totalCount} * 100%)` }}
-                          />
-                        ) : null}
-                      </div>
-                    </div>
-                  </dt>
-                  <dd className="ml-3 w-10 text-right text-sm tabular-nums text-gray-900">
-                    {Math.round((count.count / reviewss.totalCount) * 100)}%
-                  </dd>
-                </div>
-              ))}
-            </dl>
-          </div> */}
-
           <div className="mt-10">
             <h3 className="text-lg font-medium text-gray-900">
               Share your thoughts

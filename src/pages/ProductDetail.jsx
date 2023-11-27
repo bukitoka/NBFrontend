@@ -1,18 +1,18 @@
-import { useEffect, useState } from 'react'
-import { Disclosure, RadioGroup, Tab } from '@headlessui/react'
-import { StarIcon } from '@heroicons/react/20/solid'
-import { HeartIcon } from '@heroicons/react/24/outline'
-import { useParams } from 'react-router-dom';
-import useAuthStore from '../store/authStore';
+import { useEffect, useState } from "react"
+import { Disclosure, RadioGroup, Tab } from "@headlessui/react"
+import { StarIcon } from "@heroicons/react/20/solid"
+import { HeartIcon } from "@heroicons/react/24/outline"
+import { useParams } from "react-router-dom"
+import useAuthStore from "../store/authStore"
 
-import { apiPost } from '../api/ApiService';
-import ProductReviews from '../components/ProductReviews';
-import { nbDefaultImage } from '@/assets';
-import { useTranslation } from 'react-i18next';
-import { languageOptions } from '@/constant/constant'
-import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
-import { priceFormatter } from '@/tools/reformat'
-const baseurl = import.meta.env.VITE_API_BASE_URL;
+import { apiPost } from "../api/ApiService"
+import ProductReviews from "../components/ProductReviews"
+import { nbDefaultImage } from "@/assets"
+import { useTranslation } from "react-i18next"
+import { languageOptions } from "@/tools/constants"
+import { FaChevronDown, FaChevronUp } from "react-icons/fa"
+import { priceFormatter } from "@/tools/reformat"
+const baseurl = import.meta.env.VITE_API_BASE_URL
 
 import Success from "@/components/messages/Success"
 import Error from "@/components/messages/Error"
@@ -21,129 +21,124 @@ import useCartStore from "@/store/cartStore"
 
 // components
 import Navbar from "../components/Navbar"
-import Footer from '../components/Footer'
-import { fetchProduct } from '../api/ProductApi'
+import Footer from "../components/Footer"
+import { fetchProduct } from "../api/ProductApi"
 
 function classNames(...classes) {
-  return classes.filter(Boolean).join(' ')
+  return classes.filter(Boolean).join(" ")
 }
 
 export default function ProductDetail() {
-  const { slug } = useParams();
-  const [newProduct, setProduct] = useState({});
-  const [stocks, setStock] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [productImages, setProductImages] = useState([]);
-  const [totalRating, setTotalRating] = useState([]);
-  const [totalRatingCount, setTotalRatingCount] = useState(0);
-  const { t, i18n } = useTranslation();
-  const [selectedStock, setSelectedStock] = useState(null);
+  const { slug } = useParams()
+  const [newProduct, setProduct] = useState({})
+  const [stocks, setStock] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+  const [productImages, setProductImages] = useState([])
+  const [totalRating, setTotalRating] = useState([])
+  const [totalRatingCount, setTotalRatingCount] = useState(0)
+  const { t, i18n } = useTranslation()
+  const [selectedStock, setSelectedStock] = useState(null)
 
-  const [isShowColor, setShowColor] = useState(false);
-  const [isShowSize, setShowSize] = useState(true);
+  const [isShowColor, setShowColor] = useState(false)
+  const [isShowSize, setShowSize] = useState(true)
   // const [isShowSecondColor, setShowSecondColor] = useState(false)
   const [isShowVariant, setShowVariant] = useState(false)
-  const [latestRating, setLatestRating] = useState([]);
+  const [latestRating, setLatestRating] = useState([])
   const { fetchCarts } = useCartStore()
 
-
-
-  const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
+  const isLoggedIn = useAuthStore((state) => state.isLoggedIn)
 
   useEffect(() => {
-    getProductdetail(slug);
+    getProductdetail(slug)
   }, [])
 
   const doesShowColor = (stocks) => {
     if (stocks == null) {
-      setShowColor(false);
-      return;
+      setShowColor(false)
+      return
     }
 
     // foreach stocks and check if there is color set to true
     stocks.forEach((stock) => {
       if (stock.color != null) {
-        setShowColor(true);
-        return;
+        setShowColor(true)
+        return
       }
     })
   }
 
   const doesShowSize = (stocks) => {
     if (stocks == null) {
-      setShowSize(false);
-      return;
+      setShowSize(false)
+      return
     }
 
     // foreach stocks and check if there is color set to true
     stocks.forEach((stock) => {
       if (stock.size != null) {
-        setShowSize(true);
-        return;
+        setShowSize(true)
+        return
       }
     })
   }
 
   const doesShowVariant = (stocks) => {
     if (stocks == null) {
-      setShowVariant(false);
-      return;
+      setShowVariant(false)
+      return
     }
 
     // foreach stocks and check if there is color set to true
     stocks.forEach((stock) => {
       if (stock.variant != null) {
-        setShowVariant(true);
-        return;
+        setShowVariant(true)
+        return
       }
     })
-
   }
 
   const getProductdetail = async (slug) => {
     // console.log("Check update data")
     try {
-      const productsData = await fetchProduct(slug);
-      setProduct(productsData.product);
-      setStock(productsData.stock);
-      setFirstStock(productsData.stock);
-      setProductImages(productsData.images);
-      setRating(productsData.total_rating);
-      doesShowColor(productsData.stock);
+      const productsData = await fetchProduct(slug)
+      setProduct(productsData.product)
+      setStock(productsData.stock)
+      setFirstStock(productsData.stock)
+      setProductImages(productsData.images)
+      setRating(productsData.total_rating)
+      doesShowColor(productsData.stock)
       doesShowSize(productsData.stock)
       doesShowVariant(productsData.stock)
-      setLatestRating(productsData.latest_rating);
-      setTotalRatingCount(productsData.total_rating);
-      setLoading(false);
+      setLatestRating(productsData.latest_rating)
+      setTotalRatingCount(productsData.total_rating)
+      setLoading(false)
     } catch (error) {
-      setError(error);
-      setLoading(false);
+      setError(error)
+      setLoading(false)
     }
   }
 
   const setFirstStock = (stocks) => {
     if (stocks == null) {
-      return;
+      return
     }
-    setSelectedStock(stocks[0] ?? null);
+    setSelectedStock(stocks[0] ?? null)
   }
-
 
   // function for set rating
   const setRating = (rating) => {
-    let ratingArray = [];
+    let ratingArray = []
     for (let i = 0; i < rating; i++) {
-      ratingArray.push(i);
+      ratingArray.push(i)
     }
 
-    setTotalRating(ratingArray);
+    setTotalRating(ratingArray)
   }
-
 
   // function for handle size selection
   const handleStockSelected = (stock) => {
-    setSelectedStock(stock);
+    setSelectedStock(stock)
   }
 
   // function for adding to cart
@@ -153,17 +148,21 @@ export default function ProductDetail() {
       const message = "Please login to add to cart"
       toast.custom((t) => <Error t={t} status={status} message={message} />)
     } else {
-      await handleAddToCart(productId, stcockId);
+      await handleAddToCart(productId, stcockId)
     }
   }
 
   const handleAddToCart = async (productId, stcockId) => {
-    await apiPost('cart-item/', {
-      product: productId,
-      stock: stcockId,
-      quantity: 1
-    }, (response) => onSucceessAddToCart(response), (error) => onErrorAddToCart(error));
-
+    await apiPost(
+      "cart-item/",
+      {
+        product: productId,
+        stock: stcockId,
+        quantity: 1,
+      },
+      (response) => onSucceessAddToCart(response),
+      (error) => onErrorAddToCart(error)
+    )
   }
 
   const onSucceessAddToCart = (response) => {
@@ -171,7 +170,7 @@ export default function ProductDetail() {
     const status = "Success!"
     const message = "Product added to cart"
     toast.custom((t) => <Success t={t} status={status} message={message} />)
-    fetchCarts();
+    fetchCarts()
   }
 
   const onErrorAddToCart = (error) => {
@@ -181,9 +180,14 @@ export default function ProductDetail() {
   }
 
   const addWishList = async (productId) => {
-    await apiPost('wishlist/', {
-      product: productId,
-    }, (respone) => onSucessAddWishList(respone), (error) => onErrorAddWishList(error));
+    await apiPost(
+      "wishlist/",
+      {
+        product: productId,
+      },
+      (respone) => onSucessAddWishList(respone),
+      (error) => onErrorAddWishList(error)
+    )
   }
 
   const onSucessAddWishList = (response) => {
@@ -199,7 +203,6 @@ export default function ProductDetail() {
     const message = "Error adding to wishlist"
     toast.custom((t) => <Error t={t} status={status} message={message} />)
   }
-
 
   // open and close mobile menu
   const [open, setOpen] = useState(false)
@@ -225,12 +228,19 @@ export default function ProductDetail() {
                           <>
                             <span className="sr-only">{productImage.id}</span>
                             <span className="absolute inset-0 overflow-hidden rounded-md">
-                              <img src={`${baseurl}${productImage.image} `} alt="" className="h-full w-full object-cover object-center" onError={(e) => (e.target.src = nbDefaultImage)} />
+                              <img
+                                src={`${baseurl}${productImage.image} `}
+                                alt=""
+                                className="h-full w-full object-cover object-center"
+                                onError={(e) => (e.target.src = nbDefaultImage)}
+                              />
                             </span>
                             <span
                               className={classNames(
-                                selected ? 'ring-yellow-500' : 'ring-transparent',
-                                'pointer-events-none absolute inset-0 rounded-md ring-2 ring-offset-2'
+                                selected
+                                  ? "ring-yellow-500"
+                                  : "ring-transparent",
+                                "pointer-events-none absolute inset-0 rounded-md ring-2 ring-offset-2"
                               )}
                               aria-hidden="true"
                             />
@@ -256,11 +266,15 @@ export default function ProductDetail() {
 
               {/* Product info */}
               <div className="mt-10 px-4 sm:mt-16 sm:px-0 lg:mt-0">
-                <h1 className="text-3xl font-bold tracking-tight text-gray-900">{newProduct.name}</h1>
+                <h1 className="text-3xl font-bold tracking-tight text-gray-900">
+                  {newProduct.name}
+                </h1>
 
                 <div className="mt-3">
                   <h2 className="sr-only">Product information</h2>
-                  <p className="text-3xl tracking-tight text-gray-900">Rp. {priceFormatter(selectedStock?.price ?? 0)}</p>
+                  <p className="text-3xl tracking-tight text-gray-900">
+                    Rp. {priceFormatter(selectedStock?.price ?? 0)}
+                  </p>
                 </div>
 
                 {/* Reviews */}
@@ -272,14 +286,16 @@ export default function ProductDetail() {
                         <StarIcon
                           key={rating}
                           className={classNames(
-                            'text-yellow-500',
-                            'h-5 w-5 flex-shrink-0'
+                            "text-yellow-500",
+                            "h-5 w-5 flex-shrink-0"
                           )}
                           aria-hidden="true"
                         />
                       ))}
                     </div>
-                    <p className="sr-only">{totalRating.length} out of 5 stars</p>
+                    <p className="sr-only">
+                      {totalRating.length} out of 5 stars
+                    </p>
                   </div>
                 </div>
 
@@ -323,95 +339,115 @@ export default function ProductDetail() {
                   } */}
 
                   {/* Variant */}
-                  {
-                    isShowVariant && (
-                      <div className="mt-8">
-                        <h3 className="text-sm text-gray-600">Variant</h3>
-                        <RadioGroup className="mt-2">
-                          <RadioGroup.Label className="sr-only">Choose a variant</RadioGroup.Label>
-                          <div className="grid grid-cols-3 gap-3 sm:grid-cols-4">
-                            {stocks.map((stock) => (
+                  {isShowVariant && (
+                    <div className="mt-8">
+                      <h3 className="text-sm text-gray-600">Variant</h3>
+                      <RadioGroup className="mt-2">
+                        <RadioGroup.Label className="sr-only">
+                          Choose a variant
+                        </RadioGroup.Label>
+                        <div className="grid grid-cols-3 gap-3 sm:grid-cols-4">
+                          {stocks.map(
+                            (stock) =>
                               stock.variant && (
                                 <RadioGroup.Option
                                   key={stock.id}
                                   value={stock.variant}
                                   onClick={() => handleStockSelected(stock)}
                                   selected={selectedStock?.id == stock.id}
-                                  className={`cursor-pointer focus:outline-none truncate ${selectedStock?.id == stock.id ? 'ring-2 ring-yellow-500 ring-offset-2 border-transparent bg-yellow-500 text-white hover:bg-yellow-500' : 'border-gray-200 bg-white text-gray-900 hover:bg-gray-50'} flex items-center justify-center rounded-md border py-3 px-3 text-sm font-medium uppercase sm:flex-1 `}
+                                  className={`cursor-pointer focus:outline-none truncate ${
+                                    selectedStock?.id == stock.id
+                                      ? "ring-2 ring-yellow-500 ring-offset-2 border-transparent bg-yellow-500 text-white hover:bg-yellow-500"
+                                      : "border-gray-200 bg-white text-gray-900 hover:bg-gray-50"
+                                  } flex items-center justify-center rounded-md border py-3 px-3 text-sm font-medium uppercase sm:flex-1 `}
                                 >
-                                  <RadioGroup.Label as="span">{stock.variant}</RadioGroup.Label>
-                                </RadioGroup.Option>)
-                            ))}
+                                  <RadioGroup.Label as="span">
+                                    {stock.variant}
+                                  </RadioGroup.Label>
+                                </RadioGroup.Option>
+                              )
+                          )}
+                        </div>
+                      </RadioGroup>
+                    </div>
+                  )}
 
-                          </div>
-                        </RadioGroup>
-                      </div>
-                    )
-                  }
-
-
-                  {
-                    isShowColor && (
-                      <div className="mt-8">
-                        <h3 className="text-sm text-gray-600">Color</h3>
-                        <RadioGroup className="mt-2">
-                          <RadioGroup.Label className="sr-only">Choose a size</RadioGroup.Label>
-                          <div className="grid grid-cols-3 gap-3 sm:grid-cols-4">
-                            {stocks.map((stock) => (
+                  {isShowColor && (
+                    <div className="mt-8">
+                      <h3 className="text-sm text-gray-600">Color</h3>
+                      <RadioGroup className="mt-2">
+                        <RadioGroup.Label className="sr-only">
+                          Choose a size
+                        </RadioGroup.Label>
+                        <div className="grid grid-cols-3 gap-3 sm:grid-cols-4">
+                          {stocks.map(
+                            (stock) =>
                               stock.color && (
                                 <RadioGroup.Option
                                   key={stock.id}
                                   value={stock.color}
                                   onClick={() => handleStockSelected(stock)}
                                   selected={selectedStock?.id == stock.id}
-                                  className={`cursor-pointer focus:outline-none truncate ${selectedStock?.id == stock.id ? 'ring-2 ring-yellow-500 ring-offset-2 border-transparent bg-yellow-500 text-white hover:bg-yellow-500' : 'border-gray-200 bg-white text-gray-900 hover:bg-gray-50'} flex items-center justify-center rounded-md border py-3 px-3 text-sm font-medium uppercase sm:flex-1 `}
+                                  className={`cursor-pointer focus:outline-none truncate ${
+                                    selectedStock?.id == stock.id
+                                      ? "ring-2 ring-yellow-500 ring-offset-2 border-transparent bg-yellow-500 text-white hover:bg-yellow-500"
+                                      : "border-gray-200 bg-white text-gray-900 hover:bg-gray-50"
+                                  } flex items-center justify-center rounded-md border py-3 px-3 text-sm font-medium uppercase sm:flex-1 `}
                                 >
-                                  <RadioGroup.Label as="span">{stock.color}</RadioGroup.Label>
-                                </RadioGroup.Option>)
-                            ))}
-
-                          </div>
-                        </RadioGroup>
-                      </div>)
-                  }
-
+                                  <RadioGroup.Label as="span">
+                                    {stock.color}
+                                  </RadioGroup.Label>
+                                </RadioGroup.Option>
+                              )
+                          )}
+                        </div>
+                      </RadioGroup>
+                    </div>
+                  )}
 
                   {/* Sizes */}
-                  {
-                    isShowSize && (
-                      <div className="mt-8">
-                        <h3 className="text-sm text-gray-600">Size</h3>
-                        <RadioGroup className="mt-2">
-                          <RadioGroup.Label className="sr-only">Choose a size</RadioGroup.Label>
-                          <div className="grid grid-cols-3 gap-3 sm:grid-cols-4">
-                            {stocks.map((stock) => (
+                  {isShowSize && (
+                    <div className="mt-8">
+                      <h3 className="text-sm text-gray-600">Size</h3>
+                      <RadioGroup className="mt-2">
+                        <RadioGroup.Label className="sr-only">
+                          Choose a size
+                        </RadioGroup.Label>
+                        <div className="grid grid-cols-3 gap-3 sm:grid-cols-4">
+                          {stocks.map(
+                            (stock) =>
                               stock.size && (
                                 <RadioGroup.Option
                                   key={stock.id}
                                   value={stock.size}
                                   onClick={() => handleStockSelected(stock)}
                                   selected={selectedStock?.id == stock.id}
-                                  className={`cursor-pointer focus:outline-none truncate ${selectedStock?.id == stock.id ? 'ring-2 ring-yellow-500 ring-offset-2 border-transparent bg-yellow-500 text-white hover:bg-yellow-500' : 'border-gray-200 bg-white text-gray-900 hover:bg-gray-50'} flex items-center justify-center rounded-md border py-3 px-3 text-sm font-medium uppercase sm:flex-1 `}
+                                  className={`cursor-pointer focus:outline-none truncate ${
+                                    selectedStock?.id == stock.id
+                                      ? "ring-2 ring-yellow-500 ring-offset-2 border-transparent bg-yellow-500 text-white hover:bg-yellow-500"
+                                      : "border-gray-200 bg-white text-gray-900 hover:bg-gray-50"
+                                  } flex items-center justify-center rounded-md border py-3 px-3 text-sm font-medium uppercase sm:flex-1 `}
                                 >
-                                  <RadioGroup.Label as="span">{stock.size}</RadioGroup.Label>
+                                  <RadioGroup.Label as="span">
+                                    {stock.size}
+                                  </RadioGroup.Label>
                                 </RadioGroup.Option>
                               )
-
-                            ))}
-
-                          </div>
-                        </RadioGroup>
-                      </div>
-                    )
-                  }
+                          )}
+                        </div>
+                      </RadioGroup>
+                    </div>
+                  )}
 
                   <div className="mt-10 flex">
                     <button
                       type="button"
-                      onClick={() => addToCart(newProduct.id, selectedStock?.id ?? null)}
+                      onClick={() =>
+                        addToCart(newProduct.id, selectedStock?.id ?? null)
+                      }
                       className="flex max-w-xs flex-1 items-center justify-center rounded-md border border-transparent bg-zinc-800 px-8 py-3 text-base font-medium text-white hover:bg-yellow-500 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 focus:ring-offset-gray-50 sm:w-full"
                     >
-                      {t('productDetail_Add_to_Cart')}
+                      {t("productDetail_Add_to_Cart")}
                     </button>
 
                     <button
@@ -419,7 +455,10 @@ export default function ProductDetail() {
                       onClick={() => addWishList(newProduct.id)}
                       className="ml-4 flex items-center justify-center rounded-md px-3 py-3 text-gray-400 hover:bg-gray-100 hover:text-gray-500"
                     >
-                      <HeartIcon className="h-6 w-6 flex-shrink-0" aria-hidden="true" />
+                      <HeartIcon
+                        className="h-6 w-6 flex-shrink-0"
+                        aria-hidden="true"
+                      />
                       <span className="sr-only">Add to favorites</span>
                     </button>
                   </div>
@@ -438,23 +477,37 @@ export default function ProductDetail() {
                             <h3>
                               <Disclosure.Button className="group relative flex w-full items-center justify-between py-6 text-left">
                                 <span
-                                  className={classNames(open ? 'text-yellow-500' : 'text-gray-900', 'text-sm font-medium')}
+                                  className={classNames(
+                                    open ? "text-yellow-500" : "text-gray-900",
+                                    "text-sm font-medium"
+                                  )}
                                 >
-                                  {t('productDetail_Description')}
+                                  {t("productDetail_Description")}
                                 </span>
                                 <span className="ml-6 flex items-center">
                                   {open ? (
-                                    <FaChevronUp className='block h-4 w-4 text-yellow-500 text-sm' aria-hidden="true" />
+                                    <FaChevronUp
+                                      className="block h-4 w-4 text-yellow-500 text-sm"
+                                      aria-hidden="true"
+                                    />
                                   ) : (
-                                    <FaChevronDown className='block h-4 w-4 text-gray-400 text-sm' aria-hidden="true" />
+                                    <FaChevronDown
+                                      className="block h-4 w-4 text-gray-400 text-sm"
+                                      aria-hidden="true"
+                                    />
                                   )}
                                 </span>
                               </Disclosure.Button>
                             </h3>
-                            <Disclosure.Panel as="div" className="prose prose-sm pb-6">
+                            <Disclosure.Panel
+                              as="div"
+                              className="prose prose-sm pb-6"
+                            >
                               <ul role="list">
                                 <p>
-                                  {i18n.language == languageOptions.english ? newProduct.description : newProduct.description_id}
+                                  {i18n.language == languageOptions.english
+                                    ? newProduct.description
+                                    : newProduct.description_id}
                                 </p>
                               </ul>
                             </Disclosure.Panel>
@@ -467,12 +520,17 @@ export default function ProductDetail() {
               </div>
             </div>
           </div>
-
         </div>
       </main>
 
       {/* Product reviews */}
-      <ProductReviews data={{ reviews: latestRating, productId: newProduct.id, totalRatingCount: totalRatingCount }} />
+      <ProductReviews
+        data={{
+          reviews: latestRating,
+          productId: newProduct.id,
+          totalRatingCount: totalRatingCount,
+        }}
+      />
       {/* Footer */}
       <Footer />
     </div>

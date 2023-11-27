@@ -32,6 +32,7 @@ import Blog from "@/pages/Blog"
 import BlogDetail from "@/pages/BlogDetail"
 import PromoPage from "@/pages/PromoPage"
 import PageNotFound from "@/pages/PageNotFound"
+import ReviewPage from "@/pages/Review"
 
 // payment
 import Finish from "@/pages/payment/Finish"
@@ -179,6 +180,15 @@ const App = () => {
             element={
               <PrivateRoute>
                 <Error />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/review/:productSlug"
+            element={
+              <PrivateRoute>
+                <ReviewPage />
               </PrivateRoute>
             }
           />
