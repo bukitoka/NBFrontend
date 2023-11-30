@@ -9,6 +9,10 @@ import { useTranslation } from "react-i18next"
 import { nbDefaultImage } from "@/assets"
 import { priceFormatter } from "@/tools/reformat"
 import { apiGet, apiPost } from "@/api/ApiService"
+import { useForm } from "react-hook-form"
+import useImagePreview from "@/hooks/useImagePreview"
+import { apiPostMultipart } from "@/api/ApiService"
+import verifyRecaptcha from "@/tools/recaptcha"
 
 // components
 import Navbar from "../components/Navbar"
@@ -21,15 +25,14 @@ export default function Review() {
   const [video, setVideo] = useState(null)
   const [videoPreview, setVideoPreview] = useState(null)
   const [comment, setComment] = useState("")
+  const [product, setProduct] = useState(null)
   const { productSlug } = useParams()
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
-    mode: "onChange",
-  })
+  // const for valaidation
+  const [errorRating, setErrorRating] = useState(false)
+  const [errorComment, setErrorComment] = useState(false)
+  const [errorImage, setErrorImage] = useState(false)
+  const [errorVideo, setErrorVideo] = useState(false)
 
   const { t } = useTranslation()
 
@@ -48,7 +51,7 @@ export default function Review() {
   }
 
   const onProductSuccess = (data) => {
-    console.log("product detail", data)
+    setProduct(data?.product)
   }
 
   const onProductError = (error) => {
@@ -59,31 +62,84 @@ export default function Review() {
     const file = event.target.files[0]
     //   maximun file was 5 MB
     if (file.size > 5 * 1000 * 1024) {
+      setErrorImage(true)
       console.log("File with maximum size of 1MB is allowed")
-      return false
+      return
     }
-    console.log("checkpoint", file)
+    setErrorImage(false)
     setImagePreview(URL.createObjectURL(file))
     setImage(file)
   }
 
-  /**
-   * Updates the star rating and triggers a re-render of the component.
-   *
-   * @param {number} newRating - The new star rating.
-   */
   const handleStarClick = (newRating) => {
+    setErrorRating(false)
     setStarRating(newRating)
   }
 
-  const onSubmit = async (data) => {}
+  const handleVideoInputChange = async (event) => {
+    const file = event.target.files[0]
+    //   maximun file was 5 MB
+    if (file.size > 10 * 1000 * 1024) {
+      setErrorVideo(true)
+      console.log("File with maximum size of 5MB is allowed")
+      return
+    }
+    setErrorVideo(false)
+    setVideoPreview(URL.createObjectURL(file))
+    setVideo(file)
+    console.log(file)
+  }
+
+  const createReview = async () => {
+    if (rating === 0 || comment === "") {
+      if (comment === "") {
+        setErrorComment(true)
+      }
+
+      if (rating === 0) {
+        setErrorRating(true)
+      }
+      return
+    }
+
+    const token = await verifyRecaptcha()
+      .then((token) => token)
+      .catch((err) => console.log(err))
+
+    if (!token) {
+      console.log("No reCAPTCHA token!")
+      return
+    }
+
+    await apiPostMultipart(
+      "rating/",
+      {
+        product: product?.id,
+        rating: rating,
+        review: comment,
+        image: image,
+        video: video,
+        recaptcha: token,
+      },
+      (respone) => onSuccessCreateReview(respone),
+      (error) => onErrorCreateReview(error)
+    )
+  }
+
+  const onSuccessCreateReview = (response) => {
+    console.log(response)
+  }
+
+  const onErrorCreateReview = (error) => {
+    console.log(error)
+  }
 
   return (
     <div>
       {/* Navbar */}
       <Navbar />
       <main>
-        <div className="bg-white pt-[130px] lg:pt-[86px]">
+        <div className="bg-white pt-[130px] lg:pt-[86px] mb-3">
           <div className="mx-auto max-w-2xl px-4 pt-16  sm:px-6 sm:pt-24 lg:max-w-7xl lg:px-8">
             <ul className=" bg-red-600">
               <li className="p-4 sm:p-6">
@@ -109,7 +165,7 @@ export default function Review() {
             </ul>
             {/* review form */}
             <div>
-              <form onSubmit={handleSubmit(onSubmit)}>
+              <form>
                 <div className="space-y-5">
                   <div className=" border-gray-900/10 pb-1">
                     <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-6">
@@ -117,7 +173,7 @@ export default function Review() {
                         <label className="block text-sm font-medium leading-6 text-gray-900">
                           Rating
                         </label>
-                        <div className="flex items-center">
+                        <div className="flex items-center bg-red-500">
                           {[1, 2, 3, 4, 5].map((value) => (
                             <a
                               key={value}
@@ -134,6 +190,11 @@ export default function Review() {
                             </a>
                           ))}
                         </div>
+                        {errorRating && (
+                          <small className="mt-2 text-sm text-red-300">
+                            rating is required
+                          </small>
+                        )}
                       </div>
 
                       <div className="col-span-full">
@@ -145,15 +206,20 @@ export default function Review() {
                         </label>
                         <div className="mt-2">
                           <textarea
-                            id="about"
-                            name="about"
-                            value={comment}
-                            required
+                            id="comment"
+                            name="comment"
                             rows={3}
-                            onChange={(e) => setComment(e.target.value)}
+                            onChange={(e) => {
+                              setErrorComment(false)
+                              setComment(e.target.value)
+                            }}
                             className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-yellow-500 sm:text-sm sm:leading-6"
-                            defaultValue={""}
                           />
+                          {errorComment && (
+                            <small className="mt-2 text-sm text-red-300">
+                              comment is required
+                            </small>
+                          )}
                         </div>
                       </div>
 
@@ -190,7 +256,7 @@ export default function Review() {
                           ) : (
                             <>
                               <div className="text-center">
-                                <div className="mt-4 flex text-sm leading-6 text-gray-600">
+                                <div className="mt-4 flex justify-center text-sm leading-6 text-gray-600">
                                   <label
                                     htmlFor="file-upload"
                                     className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
@@ -209,6 +275,9 @@ export default function Review() {
                                 <p className="text-xs leading-5 text-gray-600">
                                   PNG, JPG, GIF up to 5MB
                                 </p>
+                                {errorImage && (
+                                  <small className="mt-2 text-sm text-red-300"></small>
+                                )}
                               </div>
                             </>
                           )}
@@ -229,7 +298,7 @@ export default function Review() {
                                 <div className="w-ful mb-1">
                                   <button
                                     className="float-right"
-                                    // onClick={() => setVideoPreview(null)}
+                                    onClick={() => setVideoPreview(null)}
                                   >
                                     {" "}
                                     <TrashIcon
@@ -247,11 +316,11 @@ export default function Review() {
                             </>
                           ) : (
                             <>
-                              <div className="text-center">
-                                <div className="mt-4 flex text-sm leading-6 text-gray-600">
+                              <div className="text-center flex flex-col justify-items-center">
+                                <div className="mt-4 flex text-sm leading-6 text-gray-600 justify-center">
                                   <label
                                     htmlFor="video-upload"
-                                    className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
+                                    className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500 bg-green-500 text-center"
                                   >
                                     <span>Upload a file</span>
                                     <input
@@ -259,14 +328,18 @@ export default function Review() {
                                       name="video-upload"
                                       type="file"
                                       className="sr-only"
-                                      //   onChange={handleVideoInputChange}
+                                      onChange={handleVideoInputChange}
                                     />
                                   </label>
-                                  <p className="pl-1">or drag and drop</p>
                                 </div>
-                                <p className="text-xs leading-5 text-gray-600">
+                                <p className="text-xs leading-5 text-gray-600 ">
                                   Mp4 up to 10MB
                                 </p>
+                                {errorVideo && (
+                                  <small className="mt-2 text-sm text-red-300">
+                                    video is max 10MB
+                                  </small>
+                                )}
                               </div>
                             </>
                           )}
@@ -278,8 +351,9 @@ export default function Review() {
 
                 <div className="mt-6 flex items-center justify-end gap-x-6">
                   <button
-                    type="submit"
+                    type="button"
                     className="rounded-md bg-zinc-800 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-yellow-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-500"
+                    onClick={createReview}
                   >
                     Submit
                   </button>

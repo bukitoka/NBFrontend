@@ -206,7 +206,8 @@ export default function OrderHistory() {
                             )}
 
                             {order.payment_status == paymentStatus.settlement &&
-                              order.status == orderStatus.complete && (
+                              order.status == orderStatus.complete &&
+                              !order.order_items[0].is_rated && (
                                 <div className="flex flex-1 justify-center pl-4">
                                   <Link
                                     to={`/review/${order.order_items[0].product_slug}`}
