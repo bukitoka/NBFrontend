@@ -3,10 +3,10 @@ import { Disclosure, RadioGroup, Tab } from "@headlessui/react"
 import { StarIcon } from "@heroicons/react/20/solid"
 import { HeartIcon } from "@heroicons/react/24/outline"
 import { useParams } from "react-router-dom"
-import useAuthStore from "../store/authStore"
+import useAuthStore from "@/store/authStore"
 
-import { apiPost } from "../api/ApiService"
-import ProductReviews from "../components/ProductReviews"
+import { apiPost } from "@/api/ApiService"
+import ProductReviews from "@/components/ProductReviews"
 import { nbDefaultImage } from "@/assets"
 import { useTranslation } from "react-i18next"
 import { languageOptions } from "@/tools/constants"
@@ -20,9 +20,9 @@ import toast from "react-hot-toast"
 import useCartStore from "@/store/cartStore"
 
 // components
-import Navbar from "../components/Navbar"
-import Footer from "../components/Footer"
-import { fetchProduct } from "../api/ProductApi"
+import Navbar from "@/components/Navbar"
+import Footer from "@/components/Footer"
+import { fetchProduct } from "@/api/ProductApi"
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ")
@@ -99,7 +99,6 @@ export default function ProductDetail() {
   }
 
   const getProductdetail = async (slug) => {
-    // console.log("Check update data")
     try {
       const productsData = await fetchProduct(slug)
       setProduct(productsData.product)
@@ -524,13 +523,16 @@ export default function ProductDetail() {
       </main>
 
       {/* Product reviews */}
-      <ProductReviews
-        data={{
-          reviews: latestRating,
-          productId: newProduct.id,
-          totalRatingCount: totalRatingCount,
-        }}
-      />
+      {totalRatingCount > 0 && (
+        <ProductReviews
+          data={{
+            reviews: latestRating,
+            productId: newProduct.id,
+            totalRatingCount: totalRatingCount,
+          }}
+        />
+      )}
+
       {/* Footer */}
       <Footer />
     </div>

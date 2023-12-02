@@ -15,11 +15,12 @@ import { apiPostMultipart } from "@/api/ApiService"
 import verifyRecaptcha from "@/tools/recaptcha"
 
 // components
-import Navbar from "../components/Navbar"
-import Footer from "../components/Footer"
+import Navbar from "@/components/Navbar"
+import Footer from "@/components/Footer"
 
 export default function Review() {
-  const [rating, setStarRating] = useState(0)
+  const navigate = useNavigate()
+  const [star, setStar] = useState(0)
   const [image, setImage] = useState(null)
   const [imagePreview, setImagePreview] = useState(null)
   const [video, setVideo] = useState(null)
@@ -29,14 +30,14 @@ export default function Review() {
   const { productSlug } = useParams()
 
   // const for valaidation
-  const [errorRating, setErrorRating] = useState(false)
+  const [errorStar, setErrorStar] = useState(false)
   const [errorComment, setErrorComment] = useState(false)
   const [errorImage, setErrorImage] = useState(false)
+  const [errorImageType, setErrorImageType] = useState(false)
   const [errorVideo, setErrorVideo] = useState(false)
+  const [errorVideoType, setErrorVideoType] = useState(false)
 
   const { t } = useTranslation()
-
-  const baseurl = import.meta.env.VITE_API_BASE_URL
 
   useEffect(() => {
     fetchProduct()
@@ -63,17 +64,24 @@ export default function Review() {
     //   maximun file was 5 MB
     if (file.size > 5 * 1000 * 1024) {
       setErrorImage(true)
-      console.log("File with maximum size of 1MB is allowed")
       return
     }
+    // Check file type
+    const allowedFileTypes = ["image/jpeg", "image/png"]
+    if (!allowedFileTypes.includes(file.type)) {
+      setErrorImageType(true)
+      return
+    }
+
     setErrorImage(false)
+    setErrorImageType(false)
     setImagePreview(URL.createObjectURL(file))
     setImage(file)
   }
 
-  const handleStarClick = (newRating) => {
-    setErrorRating(false)
-    setStarRating(newRating)
+  const handleStarClick = (newStar) => {
+    setErrorStar(false)
+    setStar(newStar)
   }
 
   const handleVideoInputChange = async (event) => {
@@ -81,23 +89,28 @@ export default function Review() {
     //   maximun file was 5 MB
     if (file.size > 10 * 1000 * 1024) {
       setErrorVideo(true)
-      console.log("File with maximum size of 5MB is allowed")
+      return
+    }
+
+    // Check file type
+    const allowedFileTypes = ["video/mp4"]
+    if (!allowedFileTypes.includes(file.type)) {
+      setErrorVideoType(true)
       return
     }
     setErrorVideo(false)
     setVideoPreview(URL.createObjectURL(file))
     setVideo(file)
-    console.log(file)
   }
 
   const createReview = async () => {
-    if (rating === 0 || comment === "") {
+    if (star === 0 || comment === "") {
       if (comment === "") {
         setErrorComment(true)
       }
 
-      if (rating === 0) {
-        setErrorRating(true)
+      if (star === 0) {
+        setErrorStar(true)
       }
       return
     }
@@ -115,7 +128,7 @@ export default function Review() {
       "rating/",
       {
         product: product?.id,
-        rating: rating,
+        star: star,
         review: comment,
         image: image,
         video: video,
@@ -127,11 +140,21 @@ export default function Review() {
   }
 
   const onSuccessCreateReview = (response) => {
-    console.log(response)
+    resetForm()
+    navigate("/")
   }
 
   const onErrorCreateReview = (error) => {
     console.log(error)
+  }
+
+  const resetForm = () => {
+    setStar(0)
+    setComment("")
+    setImage(null)
+    setImagePreview(null)
+    setVideo(null)
+    setVideoPreview(null)
   }
 
   return (
@@ -140,40 +163,39 @@ export default function Review() {
       <Navbar />
       <main>
         <div className="bg-white pt-[130px] lg:pt-[86px] mb-3">
-          <div className="mx-auto max-w-2xl px-4 pt-16  sm:px-6 sm:pt-24 lg:max-w-7xl lg:px-8">
-            <ul className=" bg-red-600">
-              <li className="p-4 sm:p-6">
-                <div className="flex items-center sm:items-start">
-                  <div className="h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg bg-gray-200 sm:h-40 sm:w-40">
-                    <img
-                      src={``}
-                      alt=""
-                      className="h-full w-full object-cover object-center"
-                      onError={(e) => {
-                        e.target.onerror = null
-                        e.target.src = nbDefaultImage
-                      }}
-                    />
-                  </div>
-                  <div className="ml-6 flex-1 text-sm">
-                    <div className="font-medium text-gray-900 sm:flex sm:justify-between">
-                      <h5>Order test</h5>
-                    </div>
+          <div className="mx-auto max-w-2xl px-4 pt-16  sm:px-6 sm:pt-24 lg:max-w-7xl lg:px-8 ">
+            <div className=" py-4 sm:py-6 ">
+              <div className="flex items-center sm:items-start">
+                <div className="h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg bg-gray-200 sm:h-40 sm:w-40">
+                  <img
+                    src={product?.cover}
+                    alt=""
+                    className="h-full w-full object-cover object-center"
+                    onError={(e) => {
+                      e.target.onerror = null
+                      e.target.src = nbDefaultImage
+                    }}
+                  />
+                </div>
+                <div className="ml-6 flex-1 text-sm">
+                  <div className="font-medium text-gray-900 sm:flex sm:justify-between">
+                    <h5>{product?.name}</h5>
                   </div>
                 </div>
-              </li>
-            </ul>
+              </div>
+            </div>
+
             {/* review form */}
             <div>
               <form>
                 <div className="space-y-5">
                   <div className=" border-gray-900/10 pb-1">
-                    <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-6">
+                    <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-6">
                       <div className="col-span-full">
                         <label className="block text-sm font-medium leading-6 text-gray-900">
                           Rating
                         </label>
-                        <div className="flex items-center bg-red-500">
+                        <div className="flex items-center ">
                           {[1, 2, 3, 4, 5].map((value) => (
                             <a
                               key={value}
@@ -181,7 +203,7 @@ export default function Review() {
                             >
                               <StarIcon
                                 className={`${
-                                  rating >= value
+                                  star >= value
                                     ? "text-yellow-500"
                                     : "text-gray-300"
                                 } h-7 w-7 flex-shrink-0`}
@@ -190,7 +212,7 @@ export default function Review() {
                             </a>
                           ))}
                         </div>
-                        {errorRating && (
+                        {errorStar && (
                           <small className="mt-2 text-sm text-red-300">
                             rating is required
                           </small>
@@ -259,7 +281,7 @@ export default function Review() {
                                 <div className="mt-4 flex justify-center text-sm leading-6 text-gray-600">
                                   <label
                                     htmlFor="file-upload"
-                                    className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
+                                    className="relative cursor-pointer rounded-md bg-white font-semibold text-yellow-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-yellow-600 focus-within:ring-offset-2 hover:text-yellow-500"
                                   >
                                     <span>Upload a file</span>
                                     <input
@@ -273,10 +295,17 @@ export default function Review() {
                                   <p className="pl-1"></p>
                                 </div>
                                 <p className="text-xs leading-5 text-gray-600">
-                                  PNG, JPG, GIF up to 5MB
+                                  PNG, JPG up to 5MB
                                 </p>
                                 {errorImage && (
-                                  <small className="mt-2 text-sm text-red-300"></small>
+                                  <small className="mt-2 text-sm text-red-300">
+                                    Image size is more than 5MB
+                                  </small>
+                                )}
+                                {errorImageType && (
+                                  <small className="mt-2 text-sm text-red-300">
+                                    file type is not supported
+                                  </small>
                                 )}
                               </div>
                             </>
@@ -320,7 +349,7 @@ export default function Review() {
                                 <div className="mt-4 flex text-sm leading-6 text-gray-600 justify-center">
                                   <label
                                     htmlFor="video-upload"
-                                    className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500 bg-green-500 text-center"
+                                    className="relative cursor-pointer rounded-md bg-white font-semibold text-yellow-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-yellow-600 focus-within:ring-offset-2 hover:text-yellow-600 text-center"
                                   >
                                     <span>Upload a file</span>
                                     <input
@@ -338,6 +367,11 @@ export default function Review() {
                                 {errorVideo && (
                                   <small className="mt-2 text-sm text-red-300">
                                     video is max 10MB
+                                  </small>
+                                )}
+                                {errorVideoType && (
+                                  <small className="mt-2 text-sm text-red-300">
+                                    file type is not supported
                                   </small>
                                 )}
                               </div>
