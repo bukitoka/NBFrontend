@@ -463,7 +463,92 @@ export default function ProductDetail() {
                     </button>
                   </div>
                 </form>
+                {/* Desktop version */}
+                <div className="hidden lg:block mt-5">
+                  <Tab.Group>
+                    <Tab.List className="flex space-x-1 rounded-lg bg-white p-1">
+                      <Tab
+                        className={({ selected }) =>
+                          classNames(
+                            "w-full rounded-md py-1.5 text-sm font-medium leading-5",
+                            "ring-white/60 ring-offset-2 ring-offset-yellow-500 focus:outline-none focus:ring-2",
+                            selected
+                              ? "bg-white text-yellow-500 shadow"
+                              : "text-zinc-800 hover:bg-zinc-100 hover:text-zinc-800"
+                          )
+                        }
+                      >
+                        Descriptions
+                      </Tab>
+                      <Tab
+                        className={({ selected }) =>
+                          classNames(
+                            "w-full rounded-md py-1.5 text-sm font-medium leading-5",
+                            "ring-white/60 ring-offset-2 ring-offset-yellow-500 focus:outline-none focus:ring-2",
+                            selected
+                              ? "bg-white text-yellow-500 shadow"
+                              : "text-zinc-800 hover:bg-zinc-100 hover:text-zinc-800"
+                          )
+                        }
+                      >
+                        Ingredient
+                      </Tab>
+                      <Tab
+                        className={({ selected }) =>
+                          classNames(
+                            "w-full rounded-lg py-1.5 text-sm font-medium leading-5",
+                            "ring-white/60 ring-offset-2 ring-offset-yellow-500 focus:outline-none focus:ring-2",
+                            selected
+                              ? "bg-white text-yellow-500 shadow"
+                              : "text-zinc-800 hover:bg-zinc-100 hover:text-zinc-800"
+                          )
+                        }
+                      >
+                        How To Use
+                      </Tab>
+                    </Tab.List>
+                    <Tab.Panels className="mt-2">
+                      <Tab.Panel
+                        className={classNames(
+                          "rounded-xl bg-white p-3",
+                          "ring-white/60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2"
+                        )}
+                      >
+                        <div className="mt-4 text-zinc-600 text-lg">
+                          {i18n.language == languageOptions.english
+                            ? newProduct.description
+                            : newProduct.description_id}
+                        </div>
+                      </Tab.Panel>
+                      <Tab.Panel
+                        className={classNames(
+                          "rounded-xl bg-white p-3",
+                          "ring-white/60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2"
+                        )}
+                      >
+                        <div className="mt-4 text-zinc-600 text-lg">
+                          {i18n.language == languageOptions.english
+                            ? newProduct.ingredients
+                            : newProduct.ingredients_id}
+                        </div>
+                      </Tab.Panel>
+                      <Tab.Panel
+                        className={classNames(
+                          "rounded-xl bg-white p-3",
+                          "ring-white/60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2"
+                        )}
+                      >
+                        <div className="mt-4 text-zinc-600 text-lg">
+                          {i18n.language == languageOptions.english
+                            ? newProduct.usage
+                            : newProduct.usage_id}
+                        </div>
+                      </Tab.Panel>
+                    </Tab.Panels>
+                  </Tab.Group>
+                </div>
 
+                {/* mobile version */}
                 {/* Description */}
                 <section
                   aria-labelledby="details-heading"
