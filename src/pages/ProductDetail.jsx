@@ -101,6 +101,7 @@ export default function ProductDetail() {
   const getProductdetail = async (slug) => {
     try {
       const productsData = await fetchProduct(slug)
+
       setProduct(productsData.product)
       setStock(productsData.stock)
       setFirstStock(productsData.stock)
@@ -463,7 +464,11 @@ export default function ProductDetail() {
                   </div>
                 </form>
 
-                <section aria-labelledby="details-heading" className="mt-12">
+                {/* Description */}
+                <section
+                  aria-labelledby="details-heading"
+                  className="mt-12 block lg:hidden"
+                >
                   <h2 id="details-heading" className="sr-only">
                     Additional details
                   </h2>
@@ -507,6 +512,112 @@ export default function ProductDetail() {
                                   {i18n.language == languageOptions.english
                                     ? newProduct.description
                                     : newProduct.description_id}
+                                </p>
+                              </ul>
+                            </Disclosure.Panel>
+                          </>
+                        )}
+                      </Disclosure>
+                    )}
+                  </div>
+                </section>
+
+                {/* Ingredients */}
+                <section aria-labelledby="details-heading" className="mt-12">
+                  <h2 id="details-heading" className="sr-only">
+                    Additional details
+                  </h2>
+
+                  <div className="divide-y divide-gray-200 border-t block lg:hidden">
+                    {newProduct.ingredients && (
+                      <Disclosure as="div">
+                        {({ open }) => (
+                          <>
+                            <h3>
+                              <Disclosure.Button className="group relative flex w-full items-center justify-between py-6 text-left">
+                                <span
+                                  className={classNames(
+                                    open ? "text-yellow-500" : "text-gray-900",
+                                    "text-sm font-medium"
+                                  )}
+                                >
+                                  {t("productDetail_Description")}
+                                </span>
+                                <span className="ml-6 flex items-center">
+                                  {open ? (
+                                    <FaChevronUp
+                                      className="block h-4 w-4 text-yellow-500 text-sm"
+                                      aria-hidden="true"
+                                    />
+                                  ) : (
+                                    <FaChevronDown
+                                      className="block h-4 w-4 text-gray-400 text-sm"
+                                      aria-hidden="true"
+                                    />
+                                  )}
+                                </span>
+                              </Disclosure.Button>
+                            </h3>
+                            <Disclosure.Panel
+                              as="div"
+                              className="prose prose-sm pb-6"
+                            >
+                              <ul role="list">
+                                <p>
+                                  {i18n.language == languageOptions.english
+                                    ? newProduct.ingredients
+                                    : newProduct.ingredients_id}
+                                </p>
+                              </ul>
+                            </Disclosure.Panel>
+                          </>
+                        )}
+                      </Disclosure>
+                    )}
+                  </div>
+                </section>
+
+                {/* How to use */}
+                <section aria-labelledby="details-heading" className="mt-12">
+                  <div className="divide-y divide-gray-200 border-t block lg:hidden">
+                    {newProduct.usage && (
+                      <Disclosure as="div">
+                        {({ open }) => (
+                          <>
+                            <h3>
+                              <Disclosure.Button className="group relative flex w-full items-center justify-between py-6 text-left">
+                                <span
+                                  className={classNames(
+                                    open ? "text-yellow-500" : "text-gray-900",
+                                    "text-sm font-medium"
+                                  )}
+                                >
+                                  {t("productDetail_Description")}
+                                </span>
+                                <span className="ml-6 flex items-center">
+                                  {open ? (
+                                    <FaChevronUp
+                                      className="block h-4 w-4 text-yellow-500 text-sm"
+                                      aria-hidden="true"
+                                    />
+                                  ) : (
+                                    <FaChevronDown
+                                      className="block h-4 w-4 text-gray-400 text-sm"
+                                      aria-hidden="true"
+                                    />
+                                  )}
+                                </span>
+                              </Disclosure.Button>
+                            </h3>
+                            <Disclosure.Panel
+                              as="div"
+                              className="prose prose-sm pb-6"
+                            >
+                              <ul role="list">
+                                <p>
+                                  {i18n.language == languageOptions.english
+                                    ? newProduct.usage
+                                    : newProduct.usage_id}
                                 </p>
                               </ul>
                             </Disclosure.Panel>

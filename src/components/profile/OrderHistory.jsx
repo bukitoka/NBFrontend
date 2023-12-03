@@ -27,7 +27,6 @@ export default function OrderHistory() {
   }
 
   function onGetOrdersSuccess(response) {
-    console.log("order data,", response)
     setOrders(response.results)
   }
 

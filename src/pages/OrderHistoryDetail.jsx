@@ -3,8 +3,9 @@ import { useParams } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { priceFormatter } from "@/tools/reformat"
 import dayjs from "dayjs"
-// import copy from 'copy-text-to-clipboard';
 const baseurl = import.meta.env.VITE_API_BASE_URL
+import { Link } from "react-router-dom"
+import { paymentStatus, orderStatus } from "@/tools/constants"
 
 // icons
 import { ShoppingBagIcon, CircleStackIcon } from "@heroicons/react/20/solid"
@@ -38,7 +39,6 @@ const OrderHistoryDetail = () => {
   }
 
   const onSuccessGetOrderDetail = (data) => {
-    console.log("order data", data)
     setOrders(data)
   }
 
@@ -92,7 +92,7 @@ const OrderHistoryDetail = () => {
                       <ul role="list" className="divide-y divide-gray-200">
                         {order.order_items.map((item) => (
                           <li key={item.id} className="p-4 sm:p-6">
-                            <div className="flex items-center sm:items-start bg-red-600">
+                            <div className="flex items-center sm:items-start ">
                               <div className="h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg bg-gray-200 sm:h-40 sm:w-40">
                                 <img
                                   src={`${baseurl}/media/${item.stock_image}`}
@@ -123,6 +123,27 @@ const OrderHistoryDetail = () => {
                                 <p className="hidden text-gray-500 sm:mt-2 sm:block">
                                   size : {item.stock_size}
                                 </p>
+                              </div>
+                            </div>
+                            <div className="mt-2 sm:flex sm:justify-end">
+                              <div className="mt-6 flex items-center space-x-4 divide-x divide-gray-200 border-t border-gray-200 pt-4 text-sm font-medium sm:ml-4 sm:mt-0 sm:border-none sm:pt-0">
+                                {order.payment_status ==
+                                  paymentStatus.settlement &&
+                                  order.status == orderStatus.complete &&
+                                  !item?.is_rated && (
+                                    <div className="flex flex-1 justify-center pl-4">
+                                      <Link
+                                        to={`/review/${item?.product_slug}`}
+                                      >
+                                        <button
+                                          type="button"
+                                          className="whitespace-nowrap text-indigo-600 hover:text-indigo-500"
+                                        >
+                                          Review
+                                        </button>
+                                      </Link>
+                                    </div>
+                                  )}
                               </div>
                             </div>
                           </li>
