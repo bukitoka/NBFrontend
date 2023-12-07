@@ -22,6 +22,9 @@ import useCartStore from "@/store/cartStore"
 // components
 import Navbar from "@/components/Navbar"
 import Footer from "@/components/Footer"
+import LongText from "@/components/LongText"
+
+// API service
 import { fetchProduct } from "@/api/ProductApi"
 
 function classNames(...classes) {
@@ -511,37 +514,49 @@ export default function ProductDetail() {
                       <Tab.Panel
                         className={classNames(
                           "rounded-xl bg-white p-3",
-                          "ring-white/60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2"
+                          "ring-white/60 ring-offset-2 "
                         )}
                       >
                         <div className="mt-4 text-zinc-600 text-lg">
-                          {i18n.language == languageOptions.english
-                            ? newProduct.description
-                            : newProduct.description_id}
+                          <LongText
+                            text={
+                              i18n.language == languageOptions.english
+                                ? newProduct.description
+                                : newProduct.description_id
+                            }
+                          />
                         </div>
                       </Tab.Panel>
                       <Tab.Panel
                         className={classNames(
                           "rounded-xl bg-white p-3",
-                          "ring-white/60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2"
+                          "ring-white/60 ring-offset-2 "
                         )}
                       >
                         <div className="mt-4 text-zinc-600 text-lg">
-                          {i18n.language == languageOptions.english
-                            ? newProduct.ingredients
-                            : newProduct.ingredients_id}
+                          <LongText
+                            text={
+                              i18n.language == languageOptions.english
+                                ? newProduct.ingredients
+                                : newProduct.ingredients_id
+                            }
+                          />
                         </div>
                       </Tab.Panel>
                       <Tab.Panel
                         className={classNames(
                           "rounded-xl bg-white p-3",
-                          "ring-white/60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2"
+                          "ring-white/60 ring-offset-2 "
                         )}
                       >
                         <div className="mt-4 text-zinc-600 text-lg">
-                          {i18n.language == languageOptions.english
-                            ? newProduct.usage
-                            : newProduct.usage_id}
+                          <LongText
+                            text={
+                              i18n.language == languageOptions.english
+                                ? newProduct.usage
+                                : newProduct.usage_id
+                            }
+                          />
                         </div>
                       </Tab.Panel>
                     </Tab.Panels>
@@ -593,11 +608,13 @@ export default function ProductDetail() {
                               className="prose prose-sm pb-6"
                             >
                               <ul role="list">
-                                <p>
-                                  {i18n.language == languageOptions.english
-                                    ? newProduct.description
-                                    : newProduct.description_id}
-                                </p>
+                                <LongText
+                                  text={
+                                    i18n.language == languageOptions.english
+                                      ? newProduct.description
+                                      : newProduct.description_id
+                                  }
+                                />
                               </ul>
                             </Disclosure.Panel>
                           </>
@@ -648,11 +665,13 @@ export default function ProductDetail() {
                               className="prose prose-sm pb-6"
                             >
                               <ul role="list">
-                                <p>
-                                  {i18n.language == languageOptions.english
-                                    ? newProduct.ingredients
-                                    : newProduct.ingredients_id}
-                                </p>
+                                <LongText
+                                  text={
+                                    i18n.language == languageOptions.english
+                                      ? newProduct.ingredients
+                                      : newProduct.ingredients_id
+                                  }
+                                />
                               </ul>
                             </Disclosure.Panel>
                           </>
@@ -699,11 +718,13 @@ export default function ProductDetail() {
                               className="prose prose-sm pb-6"
                             >
                               <ul role="list">
-                                <p>
-                                  {i18n.language == languageOptions.english
-                                    ? newProduct.usage
-                                    : newProduct.usage_id}
-                                </p>
+                                <LongText
+                                  text={
+                                    i18n.language == languageOptions.english
+                                      ? newProduct.usage
+                                      : newProduct.usage_id
+                                  }
+                                />
                               </ul>
                             </Disclosure.Panel>
                           </>
