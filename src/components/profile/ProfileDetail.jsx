@@ -54,7 +54,6 @@ const ProfileDetail = () => {
   const onGetUserDataSuccess = (data) => {
     setUserData(data)
     setTemporaryUser(data)
-    console.log(data)
   }
 
   const onGetUserDataError = (error) => {
@@ -121,7 +120,6 @@ const ProfileDetail = () => {
     const filterShipping = data.results.filter(
       (item) => item.is_default === true
     )
-    console.log(filterShipping)
     setShippingList(filterShipping[0] ?? null)
   }
 
@@ -143,11 +141,9 @@ const ProfileDetail = () => {
 
   const handleUpdateAdress = () => {
     setOpen(true)
-    console.log("update address")
   }
 
   useEffect(() => {
-    // fetchUserDetails();
     getUserData()
     getShippingData()
   }, [])

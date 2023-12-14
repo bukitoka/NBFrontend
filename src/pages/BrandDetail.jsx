@@ -4,17 +4,15 @@ import { useParams } from "react-router-dom"
 import { Link } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { priceFormatter } from "@/tools/reformat"
-import { languageOptions } from '@/constant/constant'
-
+import { languageOptions } from "@/tools/constants"
 
 // components
-import Navbar from "../components/Navbar"
-import Footer from "../components/Footer"
-import {
-  nbDefaultImage
-} from "@/assets/"
-import { FaChevronLeft, FaChevronRight } from "react-icons/fa"
+import Navbar from "@/components/Navbar"
+import Footer from "@/components/Footer"
+import LongText from "@/components/LongText"
 
+import { nbDefaultImage } from "@/assets/"
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa"
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ")
@@ -83,7 +81,6 @@ const BrandDetail = () => {
 
   return (
     <div className="bg-white">
-
       {/* Navbar */}
       <Navbar />
 
@@ -100,7 +97,6 @@ const BrandDetail = () => {
               src={brand?.cover_mobile}
               onError={(e) => (e.target.src = nbDefaultImage)}
             />
-
           </div>
 
           <div className="grid gap-2 lg:flex mt-2 px-6 py-2 lg:gap-4 ">
@@ -124,7 +120,15 @@ const BrandDetail = () => {
                       </div>
                     </div>
                     <div className="mt-2">
-                      <p className="text-sm">   {i18n.language == languageOptions.english ? brand.description : brand.description_id}</p>
+                      <p className="text-sm">
+                        <LongText
+                          text={
+                            i18n.language == languageOptions.english
+                              ? brand.description
+                              : brand.description_id
+                          }
+                        />
+                      </p>
                     </div>
                   </div>
                 ) : (

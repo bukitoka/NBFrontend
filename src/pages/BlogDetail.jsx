@@ -1,33 +1,33 @@
-import { useState, useEffect } from "react";
-import { nbDefaultImage } from "@/assets";
-import { apiGet } from "@/api/ApiService";
-import { useParams } from 'react-router-dom';
-const baseurl = import.meta.env.VITE_API_BASE_URL;
+import { useState, useEffect } from "react"
+import { nbDefaultImage } from "@/assets"
+import { apiGet } from "@/api/ApiService"
+import { useParams } from "react-router-dom"
+const baseurl = import.meta.env.VITE_API_BASE_URL
 import dayjs from "dayjs"
 import { useTranslation } from "react-i18next"
-import { languageOptions } from '@/constant/constant'
-import parse from 'html-react-parser';
+import { languageOptions } from "@/tools/constants"
+import parse from "html-react-parser"
 
 // components
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import { NewspaperIcon, ClockIcon } from '@heroicons/react/20/solid'
+import Navbar from "@/components/Navbar"
+import Footer from "@/components/Footer"
+import { NewspaperIcon, ClockIcon } from "@heroicons/react/20/solid"
 
 const BlogDetail = () => {
   const { slug } = useParams()
-  const [blog, setBlog] = useState(null);
+  const [blog, setBlog] = useState(null)
   const { t, i18n } = useTranslation()
 
   useEffect(() => {
-    fetchBlogDetail();
-  }, []);
+    fetchBlogDetail()
+  }, [])
 
   const fetchBlogDetail = async () => {
     await apiGet(
       `blogs/${slug}/`,
       (data) => onGetBlogSuccess(data),
       (error) => onGetBlogError(error)
-    );
+    )
   }
 
   const onGetBlogSuccess = (data) => {
@@ -66,17 +66,26 @@ const BlogDetail = () => {
               <div className=" flex flex-col mt-3">
                 <div className="flex flex-row">
                   <ClockIcon className="w-6 h-6 text-zinc-600" />
-                  <span className="text-sm text-zinc-600 ms-3">{dayjs(blog?.created_at).format('MMMM D, YYYY')}</span>
+                  <span className="text-sm text-zinc-600 ms-3">
+                    {dayjs(blog?.created_at).format("MMMM D, YYYY")}
+                  </span>
                 </div>
                 <div className="flex flex-row mt-2">
                   <NewspaperIcon className="w-6 h-6 text-zinc-600" />
-                  <span className="text-xl font-bold tracking-tight ms-3">  {i18n.language == languageOptions.english ? blog?.title : blog?.title_id}</span>
+                  <span className="text-xl font-bold tracking-tight ms-3">
+                    {" "}
+                    {i18n.language == languageOptions.english
+                      ? blog?.title
+                      : blog?.title_id}
+                  </span>
                 </div>
               </div>
               {/* content section */}
               <div>
                 <div className="mt-4 text-zinc-600 text-lg">
-                  {i18n.language == languageOptions.english ? parse(blog?.content ?? "") : parse(blog?.content_id ?? "")}
+                  {i18n.language == languageOptions.english
+                    ? parse(blog?.content ?? "")
+                    : parse(blog?.content_id ?? "")}
                 </div>
               </div>
             </div>
@@ -87,7 +96,7 @@ const BlogDetail = () => {
       {/* Footer */}
       <Footer />
     </div>
-  );
-};
+  )
+}
 
 export default BlogDetail
