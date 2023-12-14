@@ -28,28 +28,6 @@ const Search = () => {
   const [debouncedSearchQuery] = useDebounce(searchQuery, 500)
 
   useEffect(() => {
-    // trending
-    const fetchTrendingSearch = async () => {
-      await apiGet(
-        `search/trending/`,
-        (data) => onTrendingSuccess(data),
-        (error) => onTrendingError(error)
-      )
-    }
-
-    const onTrendingSuccess = (response) => {
-      // console.log(response)
-      setTrendingSearch(response)
-    }
-
-    const onTrendingError = (error) => {
-      // console.log(error)
-    }
-
-    fetchTrendingSearch()
-  }, [])
-
-  useEffect(() => {
     // search
     const fetchSearchResults = async () => {
       setIsLoading(true)
@@ -104,6 +82,26 @@ const Search = () => {
       setSearchResults([])
       setIsEmpty(true)
     }
+
+    // trending
+    const fetchTrendingSearch = async () => {
+      await apiGet(
+        `search/trending/`,
+        (data) => onTrendingSuccess(data),
+        (error) => onTrendingError(error)
+      )
+    }
+
+    const onTrendingSuccess = (response) => {
+      // console.log(response)
+      setTrendingSearch(response)
+    }
+
+    const onTrendingError = (error) => {
+      // console.log(error)
+    }
+
+    fetchTrendingSearch()
   }, [debouncedSearchQuery])
 
   const getSearchResults = () => {
