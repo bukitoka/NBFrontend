@@ -5,7 +5,7 @@ import { FaChevronLeft, FaChevronRight } from "react-icons/fa"
 import { apiGet } from "@/api/ApiService"
 const baseurl = import.meta.env.VITE_API_BASE_URL
 import { useTranslation } from "react-i18next"
-import { languageOptions } from "@/constant/constant"
+import { languageOptions } from "@/tools/constants"
 
 // components
 import Navbar from "@/components/Navbar"

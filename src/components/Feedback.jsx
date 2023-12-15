@@ -85,20 +85,22 @@ export default function Feedback() {
                               <Tab
                                 key={"feature"}
                                 onClick={() => setSelected("feature")}
-                                className={`w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-yellow-500  ring-white/60 ring-offset-1 ring-offset-yellow-500 focus:outline-none focus:ring-1 ${selected === "feature"
+                                className={`w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-yellow-500  ring-white/60 ring-offset-1 ring-offset-yellow-500 focus:outline-none focus:ring-1 ${
+                                  selected === "feature"
                                     ? "bg-white shadow"
                                     : " text-zinc-800 hover:bg-zinc-400 hover:text-white"
-                                  }`}
+                                }`}
                               >
                                 Feature
                               </Tab>
                               <Tab
                                 key={"product"}
                                 onClick={() => setSelected("product")}
-                                className={`w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-yellow-500  ring-white/60 ring-offset-2 ring-offset-yellow-500 focus:outline-none focus:ring-2 ${selected === "product"
+                                className={`w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-yellow-500  ring-white/60 ring-offset-2 ring-offset-yellow-500 focus:outline-none focus:ring-2 ${
+                                  selected === "product"
                                     ? "bg-white shadow"
                                     : " text-zinc-800 hover:bg-zinc-400 hover:text-white"
-                                  }`}
+                                }`}
                               >
                                 product
                               </Tab>

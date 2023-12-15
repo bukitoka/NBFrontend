@@ -11,8 +11,8 @@ import { priceFormatter } from "@/tools/reformat"
 import { CheckCircleIcon } from "@heroicons/react/20/solid"
 
 // components
-import Navbar from "../components/Navbar"
-import Footer from "../components/Footer"
+import Navbar from "@/components/Navbar"
+import Footer from "@/components/Footer"
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ")
