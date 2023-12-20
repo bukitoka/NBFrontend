@@ -1,34 +1,18 @@
-import {
-  CheckIcon,
-  ClockIcon,
-  QuestionMarkCircleIcon,
-  TrashIcon,
-} from "@heroicons/react/20/solid"
+import { TrashIcon } from "@heroicons/react/20/solid"
 import { useState, useEffect } from "react"
 import useAuthStore from "../store/authStore"
 import { useNavigate } from "react-router-dom"
 import { fetchCartItems } from "../api/CartApi"
-import { apiPatch, apiPost, apiDelete } from "../api/ApiService"
+import { apiPatch, apiDelete } from "../api/ApiService"
 import { useTranslation } from "react-i18next"
 import { nbDefaultImage } from "@/assets"
 import { priceFormatter } from "@/tools/reformat"
 
-// simple icons
-import {
-  SiWhatsapp,
-  SiInstagram,
-  SiFacebook,
-  SiTiktok,
-} from "@icons-pack/react-simple-icons"
-
 // components
-import Navbar from "../components/Navbar"
-import MobileMenu from "../components/MobileMenu"
-import Footer from "../components/Footer"
-
-function classNames(...classes) {
-  return classes.filter(Boolean).join(" ")
-}
+import Navbar from "@/components/Navbar"
+import Footer from "@/components/Footer"
+import Success from "@/components/messages/Success"
+import toast from "react-hot-toast"
 
 export default function Cart() {
   const navigate = useNavigate()
@@ -126,6 +110,13 @@ export default function Cart() {
   }
 
   function showCheckout() {
+    if (listSelectedId.length === 0) {
+      const status = "Whoops!"
+      const message = "Please select item before continue to checkout."
+
+      toast.custom((t) => <Success t={t} status={status} message={message} />)
+      return
+    }
     navigate("/checkout", { state: { listid: listid } })
   }
 
@@ -381,7 +372,6 @@ export default function Cart() {
                   <button
                     type="button"
                     onClick={showCheckout}
-                    disabled={listSelectedId.length === 0}
                     className={`w-full rounded-md border border-transparent ${
                       listSelectedId.length === 0
                         ? "bg-gray-300"

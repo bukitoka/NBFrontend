@@ -13,6 +13,8 @@ import { CheckCircleIcon } from "@heroicons/react/20/solid"
 // components
 import Navbar from "@/components/Navbar"
 import Footer from "@/components/Footer"
+import Success from "@/components/messages/Success"
+import toast from "react-hot-toast"
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ")
@@ -26,12 +28,10 @@ export default function Example() {
   const location = useLocation()
   const listId = location.state?.listid || []
   const [shippingList, setShippingList] = useState([])
-  const [selectectShipping, setSelectedShping] = useState(null)
   const [openConfirmOrder, setOpenConfirmOrder] = useState(false)
   const [tariffList, setTariffList] = useState([])
   const [allData, setAllData] = useState(null)
   const [totalPayment, setTotalPayment] = useState(0)
-  const baseurl = import.meta.env.VITE_API_BASE_URL
   const [coupon, setCoupon] = useState("")
   const [coupon2, setCoupon2] = useState("")
   const [discount, setDiscount] = useState(null)
@@ -48,8 +48,12 @@ export default function Example() {
     )
   }
 
+  /**
+   * Sets the received data to the state variables.
+   *
+   * @param {type} data - the data to be set to the state variables
+   */
   function onSuccessGetData(data) {
-    console.log("all data", data)
     setAllData(data)
     setCartItems(data.cart_items)
     setTotalPayment(data.total_price)
@@ -115,6 +119,23 @@ export default function Example() {
     // console.log(shippingList[0].id);
     // setOpenConfirmOrder(true);
     // console.log(selectedDeliveryMethod);
+
+    //   check if address is empty
+    if (shippingList.length === 0) {
+      const status = "Whoops!"
+      const message = "Please input address before continue to checkout."
+
+      toast.custom((t) => <Success t={t} status={status} message={message} />)
+      return
+    }
+
+    if (selectedDeliveryMethod === null) {
+      const status = "Whoops!"
+      const message =
+        "Please select delivery method before continue to checkout."
+      toast.custom((t) => <Success t={t} status={status} message={message} />)
+      return
+    }
 
     const shipping_type = selectedDeliveryMethod?.shipping_type
 
@@ -515,13 +536,10 @@ export default function Example() {
                       <button
                         onClick={() => createOrder()}
                         type="button"
-                        disabled={
-                          selectedDeliveryMethod === null ? true : false
-                        }
                         // className={`w-full rounded-md border border-transparent bg-zinc-800 px-4 py-3 text-base font-medium text-white shadow-sm hover:bg-yellow-500 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 focus:ring-offset-gray-50`}
                         className={classNames(
                           selectedDeliveryMethod === null
-                            ? "bg-gray-300 cursor-not-allowed"
+                            ? "bg-gray-300"
                             : "bg-zinc-800 hover:bg-yellow-500",
                           "w-full rounded-md border border-transparent px-4 py-3 text-base font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 focus:ring-offset-gray-50"
                         )}
