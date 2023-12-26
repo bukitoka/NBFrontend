@@ -84,7 +84,7 @@ export const apiDelete = async (path, data, onSuccess, onError) => {
       onSuccess(response.data)
       return
     }
-    onError(response.data)
+    onSuccess(response.data)
     return
   } catch (error) {
     onError(error)

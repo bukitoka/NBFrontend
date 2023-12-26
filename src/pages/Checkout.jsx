@@ -8,7 +8,9 @@ import NewAddressModal from "@/components/AddNewAddress"
 import ConfirmOrder from "../components/ConfirmOrder"
 import { nbDefaultImage } from "@/assets"
 import { priceFormatter } from "@/tools/reformat"
-import { CheckCircleIcon } from "@heroicons/react/20/solid"
+import { CheckCircleIcon, ArrowPathIcon } from "@heroicons/react/20/solid"
+import { ping } from "ldrs"
+import { useNavigate } from "react-router-dom"
 
 // components
 import Navbar from "@/components/Navbar"
@@ -35,8 +37,15 @@ export default function Example() {
   const [coupon, setCoupon] = useState("")
   const [coupon2, setCoupon2] = useState("")
   const [discount, setDiscount] = useState(null)
+  const [tariffLoading, setTariffLoading] = useState(false)
+  const navigate = useNavigate()
 
+  // register ldr
+  ping.register()
   const getShippingData = async (onSucces, onError) => {
+    //   reset value for shipping
+    setShippingList([])
+
     await apiGet("shipping/", onSucces, onError)
   }
 
@@ -69,29 +78,18 @@ export default function Example() {
       (shipping) => shipping.is_default === true
     )
     setShippingList(shippingList)
+    chekTariff()
   }
 
   function onShippingError(error) {
     // console.log(error);
   }
 
-  const getCartItems = async (onsucces, onError) => {
-    await fetchCartItems(onsucces, onError)
-  }
-
-  // handle when get cart items success
-  function onSuccess(data) {
-    const allCartItems = data.cart_items
-    const cartItems = allCartItems.filter((cartItem) =>
-      listId.includes(cartItem.id)
+  const handleNotificationChangeAddress = () => {
+    getShippingData(
+      (data) => onShippingSuccess(data),
+      (error) => onShippingError(error)
     )
-    setCartItems(cartItems)
-    console.log(cartItems)
-  }
-
-  // handle when get cart items error
-  function onError(error) {
-    console.log(error)
   }
 
   const handleOpenModalNewAddress = () => {
@@ -100,6 +98,8 @@ export default function Example() {
   }
 
   const chekTariff = () => {
+    setTariffLoading(true)
+    setTariffList([])
     apiGet(
       `tariff/`,
       (res) => onSuccessTariff(res),
@@ -108,11 +108,17 @@ export default function Example() {
   }
 
   function onSuccessTariff(data) {
+    setTariffLoading(false)
     setTariffList(data)
   }
 
   function onErrorTariff(error) {
+    setTariffLoading(false)
     console.log(error)
+  }
+
+  const handleTryTariffAgain = async () => {
+    chekTariff()
   }
 
   const createOrder = async () => {
@@ -215,9 +221,6 @@ export default function Example() {
     console.log("error", error)
   }
 
-  // open and close mobile menu
-  const [openMobile, setOpenMobile] = useState(false)
-
   const handleDeleveryMethod = (method) => {
     setSelectedDeliveryMethod(method)
     calculateTotalPrice(method.total_tariff)
@@ -242,6 +245,11 @@ export default function Example() {
         (error) => onErrorCoupon(error)
       )
     }
+  }
+
+  const handleAddVoucher = () => {
+    navigate("/redeem-coupon")
+    console.log("Test Data")
   }
 
   function onSuccessCoupon(data) {
@@ -269,7 +277,7 @@ export default function Example() {
       (data) => onShippingSuccess(data),
       (error) => onShippingError(error)
     )
-    chekTariff()
+
     getSelectedCartItems()
 
     // midtrans
@@ -342,73 +350,100 @@ export default function Example() {
                     </div>
                   </div>
 
-                  <div className="mt-10 border-t border-gray-200 pt-10">
+                  <div className="mt-10 border-t border-gray-200 pt-10 ">
                     <RadioGroup>
                       <RadioGroup.Label className="text-lg font-medium text-gray-900">
                         Delivery method
                       </RadioGroup.Label>
-
-                      <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
-                        {tariffList.map((tariff, index) => (
-                          <RadioGroup.Option
-                            key={index}
-                            onClick={() => handleDeleveryMethod(tariff)}
-                            value={tariff.shipping_type}
-                            className={({ checked, active }) =>
-                              classNames(
-                                checked
-                                  ? "border-transparent"
-                                  : "border-gray-300",
-                                active ? "ring-2 ring-yellow-500" : "",
-                                "relative flex cursor-pointer rounded-lg border bg-white p-4 shadow-sm focus:outline-none"
-                              )
-                            }
-                          >
-                            {({ checked, active }) => (
-                              <>
-                                <span className="flex flex-1">
-                                  <span className="flex flex-col">
-                                    <RadioGroup.Label
-                                      as="span"
-                                      className="block text-sm font-medium text-gray-900"
-                                    >
-                                      {tariff.shipping_type_name}
-                                    </RadioGroup.Label>
-                                    <RadioGroup.Description
-                                      as="span"
-                                      className="mt-1 flex items-center text-sm text-gray-500"
-                                    >
-                                      {tariff.shipping_type}
-                                    </RadioGroup.Description>
-                                    <RadioGroup.Description
-                                      as="span"
-                                      className="mt-6 text-sm font-medium text-gray-900"
-                                    >
-                                      Rp. {priceFormatter(tariff.total_tariff)}
-                                    </RadioGroup.Description>
+                      {tariffList.length > 0 && (
+                        <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4 ">
+                          {tariffList.map((tariff, index) => (
+                            <RadioGroup.Option
+                              key={index}
+                              onClick={() => handleDeleveryMethod(tariff)}
+                              value={tariff.shipping_type}
+                              className={({ checked, active }) =>
+                                classNames(
+                                  checked
+                                    ? "border-transparent"
+                                    : "border-gray-300",
+                                  active ? "ring-2 ring-yellow-500" : "",
+                                  "relative flex cursor-pointer rounded-lg border bg-white p-4 shadow-sm focus:outline-none"
+                                )
+                              }
+                            >
+                              {({ checked, active }) => (
+                                <>
+                                  <span className="flex flex-1">
+                                    <span className="flex flex-col">
+                                      <RadioGroup.Label
+                                        as="span"
+                                        className="block text-sm font-medium text-gray-900"
+                                      >
+                                        {tariff.shipping_type_name}
+                                      </RadioGroup.Label>
+                                      <RadioGroup.Description
+                                        as="span"
+                                        className="mt-1 flex items-center text-sm text-gray-500"
+                                      >
+                                        {tariff.shipping_type}
+                                      </RadioGroup.Description>
+                                      <RadioGroup.Description
+                                        as="span"
+                                        className="mt-6 text-sm font-medium text-gray-900"
+                                      >
+                                        Rp.{" "}
+                                        {priceFormatter(tariff.total_tariff)}
+                                      </RadioGroup.Description>
+                                    </span>
                                   </span>
-                                </span>
-                                {checked ? (
-                                  <CheckCircleIcon
-                                    className="h-5 w-5 text-yellow-500"
+                                  {checked ? (
+                                    <CheckCircleIcon
+                                      className="h-5 w-5 text-yellow-500"
+                                      aria-hidden="true"
+                                    />
+                                  ) : null}
+                                  <span
+                                    className={classNames(
+                                      active ? "border" : "border-2",
+                                      checked
+                                        ? "border-yellow-500"
+                                        : "border-transparent",
+                                      "pointer-events-none absolute -inset-px rounded-lg"
+                                    )}
                                     aria-hidden="true"
                                   />
-                                ) : null}
-                                <span
-                                  className={classNames(
-                                    active ? "border" : "border-2",
-                                    checked
-                                      ? "border-yellow-500"
-                                      : "border-transparent",
-                                    "pointer-events-none absolute -inset-px rounded-lg"
-                                  )}
-                                  aria-hidden="true"
-                                />
-                              </>
-                            )}
-                          </RadioGroup.Option>
-                        ))}
-                      </div>
+                                </>
+                              )}
+                            </RadioGroup.Option>
+                          ))}
+                        </div>
+                      )}
+                      {/* show  animation when loading */}
+                      {tariffLoading && (
+                        <div className="  flex justify-center">
+                          <l-ping size="60" speed="2" color="#eab308"></l-ping>
+                        </div>
+                      )}
+                      {!tariffLoading && !tariffList.length && (
+                        <div className="mt-2 ">
+                          <p className="text-md text-zinc-900">
+                            No shipping method found
+                          </p>
+
+                          <button
+                            type="button"
+                            className="inline-flex justify-center rounded-lg bg-zinc-700 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-yellow-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 mt-2"
+                            onClick={handleTryTariffAgain}
+                          >
+                            <ArrowPathIcon
+                              className="h-5 w-5 "
+                              aria-hidden="true"
+                            />
+                            Try Again
+                          </button>
+                        </div>
+                      )}
                     </RadioGroup>
                   </div>
                 </div>
@@ -499,6 +534,19 @@ export default function Example() {
                         />
                       </div>
                     </dl>
+                    {/* <dl className=" bg-red-500">
+                      <div>
+                        <p>Voucher</p>
+                        <div> list of voucher</div>
+                        <button
+                          type="button"
+                          onClick={handleAddVoucher}
+                          className="bg-blue-500 rounded-lg py-2 px-4"
+                        >
+                          add Voucher
+                        </button>
+                      </div>
+                    </dl> */}
 
                     <dl className="space-y-6 border-t border-gray-200 px-4 py-6 sm:px-6">
                       <div className="flex items-center justify-between">
@@ -558,6 +606,7 @@ export default function Example() {
             open={open}
             setOpen={setOpen}
             openModalNewAddress={handleOpenModalNewAddress}
+            notifyChangeDefaultAddress={handleNotificationChangeAddress}
           />
           <NewAddressModal
             open={openModalNewAdress}

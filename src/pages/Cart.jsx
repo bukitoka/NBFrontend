@@ -3,7 +3,7 @@ import { useState, useEffect } from "react"
 import useAuthStore from "../store/authStore"
 import { useNavigate } from "react-router-dom"
 import { fetchCartItems } from "../api/CartApi"
-import { apiPatch, apiDelete } from "../api/ApiService"
+import { apiPatch, apiDelete } from "@/api/ApiService"
 import { useTranslation } from "react-i18next"
 import { nbDefaultImage } from "@/assets"
 import { priceFormatter } from "@/tools/reformat"
@@ -51,7 +51,6 @@ export default function Cart() {
 
   // handle when get cart items success
   function onSuccess(data) {
-    console.log(data)
     setCartItems(data.cart_items)
     setLoading(false)
 
@@ -71,7 +70,6 @@ export default function Cart() {
     const selectAll = document.getElementById("select-all")
     selectAll.checked = checkAll
 
-    // console.log(listSelectedId)
     updateSummaryCart()
   }
 
@@ -131,8 +129,6 @@ export default function Cart() {
       }
     })
 
-    console.log(subTotal)
-
     // update subtotal
     setSubTotal(subTotal)
 
@@ -143,9 +139,6 @@ export default function Cart() {
     setTotalPayment(subTotal)
   }
 
-  // open and close mobile menu
-  const [open, setOpen] = useState(false)
-
   // incrase quantity
   const increaseQuantity = async (id) => {
     await apiPatch(
@@ -155,10 +148,9 @@ export default function Cart() {
       },
       (data) => {
         getCartItems()
-        // console.log(data);
       },
       (err) => {
-        // console.log(err);
+        console.log(err)
       }
     )
   }
@@ -174,7 +166,7 @@ export default function Cart() {
         getCartItems()
       },
       (err) => {
-        // console.log(err);
+        console.log(err)
       }
     )
   }
@@ -186,12 +178,10 @@ export default function Cart() {
         set_as_selected: isSelected,
       },
       (data) => {
-        console.log("test Dta ")
-        console.log(data)
         getCartItems()
       },
       (err) => {
-        // console.log(err);
+        console.log(err)
       }
     )
   }
@@ -202,10 +192,9 @@ export default function Cart() {
       {},
       (data) => {
         getCartItems()
-        // console.log(data);
       },
       (err) => {
-        // console.log(err);
+        console.log(err)
       }
     )
   }
@@ -251,7 +240,7 @@ export default function Cart() {
                   role="list"
                   className="divide-y divide-gray-200  border-t border-gray-200"
                 >
-                  {cartItems.map((cart, cartidx) => (
+                  {cartItems.map((cart) => (
                     <li key={cart.id} className="flex py-6 sm:py-10 ">
                       <div className="flex-shrink-0 ">
                         <div className="flex">
@@ -304,12 +293,11 @@ export default function Cart() {
                               >
                                 -
                               </span>
-                              <input
-                                className="h-8 w-12 border-gray-100 bg-transparent text-center text-xs appearance-none focus:outline-none"
-                                type="text"
-                                value={cart.quantity}
-                                min="1"
-                              />
+
+                              <span className="w-12 border-gray-100 bg-transparent text-center text-xs appearance-none focus:outline-none ">
+                                {cart.quantity}
+                              </span>
+
                               <span
                                 className="cursor-pointer w-12 rounded-r-lg bg-zinc-800 py-1 px-3 duration-100 hover:bg-yellow-500 hover:text-white text-white align-middle"
                                 onClick={() => increaseQuantity(cart.id)}
