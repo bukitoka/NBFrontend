@@ -33,7 +33,6 @@ import BlogDetail from "@/pages/BlogDetail"
 import PromoPage from "@/pages/PromoPage"
 import PageNotFound from "@/pages/PageNotFound"
 import ReviewPage from "@/pages/Review"
-import RedeemCoupon from "@/pages/RedeemCoupon"
 
 // payment
 import Finish from "@/pages/payment/Finish"
@@ -203,14 +202,6 @@ const App = () => {
             }
           />
 
-          <Route
-            path="/redeem-coupon"
-            element={
-              <PrivateRoute>
-                <RedeemCoupon />
-              </PrivateRoute>
-            }
-          />
           <Route path="*" element={<PageNotFound />} />
         </Routes>
       </MainWrapper>

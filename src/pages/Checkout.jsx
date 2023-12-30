@@ -5,6 +5,7 @@ import { fetchCartItems } from "../api/CartApi"
 import { apiGet, apiPost } from "../api/ApiService"
 import Modal from "@/components/Modal"
 import NewAddressModal from "@/components/AddNewAddress"
+import RedeemVoucherModal from "@/components/RedeemVoucherModal"
 import ConfirmOrder from "../components/ConfirmOrder"
 import { nbDefaultImage } from "@/assets"
 import { priceFormatter } from "@/tools/reformat"
@@ -24,6 +25,7 @@ function classNames(...classes) {
 
 export default function Example() {
   const [open, setOpen] = useState(false)
+  const [openRedeemVoucher, setOpenRedeemVoucher] = useState(false)
   const [openModalNewAdress, setModalNewAddress] = useState(false)
   const [selectedDeliveryMethod, setSelectedDeliveryMethod] = useState(null)
   const [selectedCartItems, setCartItems] = useState([])
@@ -248,8 +250,11 @@ export default function Example() {
   }
 
   const handleAddVoucher = () => {
-    navigate("/redeem-coupon")
-    console.log("Test Data")
+    setOpenRedeemVoucher(true)
+  }
+
+  const handleNotifyChangeVoucher = (data) => {
+    console.log("Data call back", data)
   }
 
   function onSuccessCoupon(data) {
@@ -534,7 +539,7 @@ export default function Example() {
                         />
                       </div>
                     </dl>
-                    {/* <dl className=" bg-red-500">
+                    <dl className=" bg-red-500">
                       <div>
                         <p>Voucher</p>
                         <div> list of voucher</div>
@@ -546,7 +551,7 @@ export default function Example() {
                           add Voucher
                         </button>
                       </div>
-                    </dl> */}
+                    </dl>
 
                     <dl className="space-y-6 border-t border-gray-200 px-4 py-6 sm:px-6">
                       <div className="flex items-center justify-between">
@@ -600,7 +605,6 @@ export default function Example() {
               </form>
             </div>
           </main>
-
           {/* Modal */}
           <Modal
             open={open}
@@ -613,6 +617,11 @@ export default function Example() {
             setOpen={setModalNewAddress}
           />
           <ConfirmOrder open={openConfirmOrder} setOpen={setOpenConfirmOrder} />
+          <RedeemVoucherModal
+            open={openRedeemVoucher}
+            setOpen={setOpenRedeemVoucher}
+            notifyChangeVoucher={(data) => handleNotifyChangeVoucher(data)}
+          />
         </div>
       </main>
       {/* Footer */}
