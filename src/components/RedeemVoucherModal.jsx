@@ -47,7 +47,6 @@ export default function RedeemVoucherModal({
   }
 
   const handleCouponChange = async () => {
-    console.log("Test Check Coupon")
     if (code.length == 16) {
       await apiGet(
         `coupon-checking/?coupon=${code}`,
@@ -67,11 +66,25 @@ export default function RedeemVoucherModal({
   const handleCancelAction = () => {}
 
   const handleAddVoucher = () => {
-    notifyChangeVoucher("Send Test 1")
+    const publicFullCode =
+      publicVoucher?.prefix_code + publicVoucher?.private_code
+
+    notifyChangeVoucher(publicFullCode, code)
+
+    // reset value
+    resetVoucherCode()
+
     setOpen(false)
   }
   const handlePublicVoucher = (event, item) => {
+    console.log(item)
     setPublicVoucher(event.target.checked ? item : null)
+  }
+
+  const resetVoucherCode = () => {
+    setCode("")
+    setPrivateVoucher(null)
+    setPublicVoucher(null)
   }
 
   return (
@@ -117,7 +130,7 @@ export default function RedeemVoucherModal({
                       as="h3"
                       className="text-base font-semibold leading-6 text-gray-900"
                     >
-                      Select Address
+                      Select Voucher
                     </Dialog.Title>
                     <div className="mt-2 w-full">
                       <div className="flex flex-col ">

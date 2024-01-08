@@ -9,7 +9,11 @@ import RedeemVoucherModal from "@/components/RedeemVoucherModal"
 import ConfirmOrder from "../components/ConfirmOrder"
 import { nbDefaultImage } from "@/assets"
 import { priceFormatter } from "@/tools/reformat"
-import { CheckCircleIcon, ArrowPathIcon } from "@heroicons/react/20/solid"
+import {
+  CheckCircleIcon,
+  ArrowPathIcon,
+  PlusCircleIcon,
+} from "@heroicons/react/20/solid"
 import { ping } from "ldrs"
 import { useNavigate } from "react-router-dom"
 
@@ -18,6 +22,9 @@ import Navbar from "@/components/Navbar"
 import Footer from "@/components/Footer"
 import Success from "@/components/messages/Success"
 import toast from "react-hot-toast"
+
+// icons
+import { TicketIcon, XCircleIcon } from "@heroicons/react/20/solid"
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ")
@@ -41,6 +48,10 @@ export default function Example() {
   const [discount, setDiscount] = useState(null)
   const [tariffLoading, setTariffLoading] = useState(false)
   const navigate = useNavigate()
+  // register private code and public code
+  const [privateCode, setPrivateCode] = useState()
+  const [publicCode, setPublicCode] = useState()
+  const [videoPreview, setVideoPreview] = useState(null)
 
   // register ldr
   ping.register()
@@ -253,8 +264,9 @@ export default function Example() {
     setOpenRedeemVoucher(true)
   }
 
-  const handleNotifyChangeVoucher = (data) => {
-    console.log("Data call back", data)
+  const handleNotifyChangeVoucher = (publicVoucher, privateVoucher) => {
+    setPublicCode(publicVoucher)
+    setPrivateCode(privateVoucher)
   }
 
   function onSuccessCoupon(data) {
@@ -397,7 +409,7 @@ export default function Example() {
                                         as="span"
                                         className="mt-6 text-sm font-medium text-gray-900"
                                       >
-                                        Rp.{" "}
+                                        Rp.
                                         {priceFormatter(tariff.total_tariff)}
                                       </RadioGroup.Description>
                                     </span>
@@ -505,44 +517,49 @@ export default function Example() {
                         </li>
                       ))}
                     </ul>
-                    <dl className="space-y-3 border-t border-gray-200 px-4 py-6 sm:px-6">
-                      <div className="flex items-center justify-between">
-                        <dt className="text-sm">Coupon </dt>
-                        <input
-                          id="coupon1"
-                          name="coupon1"
-                          type="text"
-                          required
-                          className="lg:col-span-2 text-sm p-1 border-2 border-zinc-100 rounded-md  bg-white pl-2  transition-all duration-300 focus:ring focus:border-yellow-500 focus:ring-yellow-500/20"
-                          placeholder="coupon"
-                          value={coupon}
-                          onChange={(e) => {
-                            setCoupon(e.target.value)
-                            handleCouponChange(e.target.value, "coupon1")
-                          }}
-                        />
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <dt className="text-sm">Coupon 2</dt>
-                        <input
-                          id="coupon2"
-                          name="coupon2"
-                          type="text"
-                          required
-                          className="lg:col-span-2 text-sm p-1 border-2 border-zinc-100 rounded-md  bg-white pl-2  transition-all duration-300 focus:ring focus:border-yellow-500 focus:ring-yellow-500/20"
-                          placeholder="Coupon 2"
-                          value={coupon2}
-                          onChange={(e) => {
-                            setCoupon2(e.target.value)
-                            handleCouponChange(e.target.value, "coupon2")
-                          }}
-                        />
-                      </div>
-                    </dl>
-                    <dl className=" bg-red-500">
-                      <div>
+                    <dl className=" px-4 py-6 sm:px-6">
+                      <div className="flex flex-row gap-3 ">
                         <p>Voucher</p>
-                        <div> list of voucher</div>
+                        <div className="grid gap-1 grid-flow-col">
+                          {publicCode && (
+                            <div className="grid grid-cols-5 max-w-sm rounded-lg border border-spacing-1 bg-zinc-300">
+                              <div className="col-span-1 flex justify-center items-center">
+                                <TicketIcon className="h-4/5 w-4/5 text-zinc-500 " />
+                              </div>
+                              <div className="col-span-4 relative bg-white px-2 rounded-r-lg">
+                                <p>Discount 90%</p>
+                                <div className="absolute right-0 top-0 pr-1 pt-1">
+                                  <button
+                                    type="button"
+                                    className=" text-red-800 hover:text-yellow-500"
+                                    onClick={() => setPublicCode(null)}
+                                  >
+                                    <XCircleIcon className="w-7 h-7" />
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          )}
+                          {privateCode && (
+                            <div className="grid grid-cols-5 max-w-sm rounded-lg border border-spacing-1 bg-zinc-300">
+                              <div className="col-span-1 flex justify-center items-center">
+                                <TicketIcon className="h-4/5 w-4/5 text-zinc-500 " />
+                              </div>
+                              <div className="col-span-4 relative bg-white px-2 rounded-r-lg">
+                                <p>Discount 90%</p>
+                                <div className="absolute right-0 top-0 pr-1 pt-1">
+                                  <button
+                                    type="button"
+                                    className=" text-red-800 hover:text-yellow-500"
+                                    onClick={() => setPrivateCode(null)}
+                                  >
+                                    <XCircleIcon className="w-7 h-7" />
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          )}
+                        </div>
                         <button
                           type="button"
                           onClick={handleAddVoucher}
@@ -620,7 +637,9 @@ export default function Example() {
           <RedeemVoucherModal
             open={openRedeemVoucher}
             setOpen={setOpenRedeemVoucher}
-            notifyChangeVoucher={(data) => handleNotifyChangeVoucher(data)}
+            notifyChangeVoucher={(publicVoucher, privateVoucher) =>
+              handleNotifyChangeVoucher(publicVoucher, privateVoucher)
+            }
           />
         </div>
       </main>
