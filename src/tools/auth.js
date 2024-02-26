@@ -30,7 +30,7 @@ export const signup = async (
   token
 ) => {
   try {
-    const { data } = await api.post("auth/registration/", {
+    const { status } = await api.post("auth/registration/", {
       first_name: first_name,
       last_name: last_name,
       email: email,
@@ -39,7 +39,14 @@ export const signup = async (
       recaptcha: token,
     })
 
-    return { data, error: null }
+    if (status === 201) {
+      return {
+        data: {
+          message: "Please check your email to verify your account",
+        },
+        error: null,
+      }
+    }
   } catch (error) {
     return {
       data: null,

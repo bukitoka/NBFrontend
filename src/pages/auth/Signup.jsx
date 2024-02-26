@@ -51,7 +51,7 @@ const Signup = () => {
   }
 
   const handleRegister = async (payload) => {
-    const { data, error } = await signup(
+    const { error } = await signup(
       payload.first_name,
       payload.last_name,
       payload.email,
